@@ -5,13 +5,11 @@ info:
     resources.
   version: "0.1.0"
   title: "Hermod - the Crowd sourcing API"
-  termsOfService: "http://to-be-defined/terms/"
   contact:
     email: "to-be-defined@navitia.io"
   license:
     name: "MIT"
     url: "https://opensource.org/licenses/MIT"
-host: "to-be-defined.io"
 tags:
 - name: "stop_point_patch"
   description: "Suggest patches to improve stop point information"
@@ -62,8 +60,6 @@ paths:
       responses:
         201:
           description: "Everything went fine"
-          schema:
-            $ref: "#/definitions/ResourceCreatedResponse"
         400:
           description: "Invalid request"
           schema:
@@ -112,8 +108,6 @@ paths:
       responses:
         201:
           description: "Everything went fine"
-          schema:
-            $ref: "#/definitions/ResourceCreatedResponse"
         400:
           description: "Invalid request"
           schema:
@@ -145,7 +139,7 @@ definitions:
   Coord:
     type: "object"
     description: "Coordinates - WGS84"
-    required: ['lat', 'lon']
+    required: ["lat", "lon"]
     properties:
       lat:
         type: "number"
@@ -153,18 +147,13 @@ definitions:
       lon:
         type: "number"
         format: "float"
-  ResourceCreatedResponse:
-    type: "object"
-    properties:
-      message:
-        type: "string"
-        example: "The resource has been successfully created"
   ErrorResponse:
     type: "object"
     properties:
       error:
         type: "string"
-        example: "missing_param"
+        enum: ["invalid_request"]
+        example: "invalid_request"
       message:
         type: "string"
         example: "param 'foo_bar' is missing"
