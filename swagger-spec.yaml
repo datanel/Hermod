@@ -13,8 +13,8 @@ info:
     url: "https://opensource.org/licenses/MIT"
 host: "to-be-defined.io"
 tags:
-- name: "stop_points"
-  description: "Suggesting patches to improve stop point location"
+- name: "stop_point_patch"
+  description: "Suggest patches to improve stop point information"
 - name: "status"
   description: "Verify the API status"
 schemes:
@@ -23,9 +23,8 @@ paths:
   /nav-1/v1/stop_point_patches:
     post:
       tags:
-        - "stop_points"
-      summary: "Suggest a new location for a stop point"
-      description: "Description"
+        - "stop_point_patch"
+      summary: "Create a stop point patch"
       consumes:
         - "application/json"
       produces:
@@ -74,8 +73,8 @@ paths:
   /nav-1/v1/stop_point_patches/gps:
     post:
       tags:
-      - "stop_points"
-      summary: "Suggest a new location for a stop point using the given GPS coord / accuracy"
+      - "stop_point_patch"
+      summary: "Create a stop point patch using the given GPS coord / accuracy"
       consumes:
       - "application/json"
       produces:
@@ -123,10 +122,11 @@ paths:
       - api_key: []
   /status:
     get:
+      summary: "Check if the service is up and running"
       tags:
       - "status"
       produces:
-        - "application/json"
+      - "application/json"
       responses:
         200:
           description: "The API is reachable"
@@ -136,8 +136,6 @@ paths:
               message:
                 type: "string"
                 example: "The API is up and running !"
-      
-      
 securityDefinitions:
   api_key:
     type: "apiKey"
