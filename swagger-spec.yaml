@@ -1,0 +1,172 @@
+swagger: "2.0"
+info:
+  description: >
+    This API aims to improve the transport data accuracy by allowing consumers to suggest patches for different
+    resources.
+  version: "0.1.0"
+  title: "Hermod - the Crowd sourcing API"
+  termsOfService: "http://to-be-defined/terms/"
+  contact:
+    email: "to-be-defined@navitia.io"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+host: "to-be-defined.io"
+tags:
+- name: "stop_points"
+  description: "Suggesting patches to improve stop point location"
+- name: "status"
+  description: "Verify the API status"
+schemes:
+- "https"
+paths:
+  /nav-1/v1/stop_point_patches:
+    post:
+      tags:
+        - "stop_points"
+      summary: "Suggest a new location for a stop point"
+      description: "Description"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            type: "object"
+            required:
+            - stop_point_id
+            - stop_point_name
+            - stop_point_current_location
+            - route_id
+            properties:
+              stop_point_id:
+                type: "string"
+                description: "Stop point id"
+              stop_point_name:
+                type: "string"
+                description: "Stop point name"
+              stop_point_current_location:
+                $ref: "#/definitions/Coord"
+              stop_point_patched_location:
+                $ref: "#/definitions/Coord"
+              route_id:
+                type: "string"
+                description: "Route id"
+              user_gps_location:
+                $ref: "#/definitions/Coord"
+              user_gps_accuracy:
+                type: "number"
+                format: "float"
+                description: "User GPS accuracy in meters"
+      responses:
+        201:
+          description: "Everything went fine"
+          schema:
+            $ref: "#/definitions/ResourceCreatedResponse"
+        400:
+          description: "Invalid request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      security:
+      - api_key: []
+  /nav-1/v1/stop_point_patches/gps:
+    post:
+      tags:
+      - "stop_points"
+      summary: "Suggest a new location for a stop point using the given GPS coord / accuracy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            type: "object"
+            required:
+            - stop_point_id
+            - stop_point_name
+            - stop_point_current_location
+            - route_id
+            - user_gps_location
+            - user_gps_accuracy
+            properties:
+              stop_point_id:
+                type: "string"
+                description: "Stop point id"
+              stop_point_name:
+                type: "string"
+                description: "Stop point name"
+              stop_point_current_location:
+                $ref: "#/definitions/Coord"
+              route_id:
+                type: "string"
+                description: "Route id"
+              user_gps_location:
+                $ref: "#/definitions/Coord"
+              user_gps_accuracy:
+                type: "number"
+                format: "float"
+                description: "User GPS accuracy in meters"
+      responses:
+        201:
+          description: "Everything went fine"
+          schema:
+            $ref: "#/definitions/ResourceCreatedResponse"
+        400:
+          description: "Invalid request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      security:
+      - api_key: []
+  /status:
+    get:
+      tags:
+      - "status"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "The API is reachable"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                example: "The API is up and running !"
+      
+      
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+definitions:
+  Coord:
+    type: "object"
+    description: "Coordinates - WGS84"
+    required: ['lat', 'lon']
+    properties:
+      lat:
+        type: "number"
+        format: "float"
+      lon:
+        type: "number"
+        format: "float"
+  ResourceCreatedResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        example: "The resource has been successfully created"
+  ErrorResponse:
+    type: "object"
+    properties:
+      error:
+        type: "string"
+        example: "missing_param"
+      message:
+        type: "string"
+        example: "param 'foo_bar' is missing"
