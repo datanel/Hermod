@@ -18,7 +18,7 @@ tags:
 schemes:
 - "https"
 paths:
-  /nav-1/v1/stop_point_patches:
+  /v1/stop_point_patches:
     post:
       tags:
         - "stop_point_patch"
@@ -33,40 +33,33 @@ paths:
           schema:
             type: "object"
             required:
-            - stop_point_id
-            - stop_point_name
+            - source
+            - stop_point
             - stop_point_current_location
-            - route_id
+            - route
             properties:
-              stop_point_id:
-                type: "string"
-                description: "Stop point id"
-              stop_point_name:
-                type: "string"
-                description: "Stop point name"
+              source:
+                $ref: "#/definitions/Source"
+              stop_point:
+                $ref: "#/definitions/StopPoint"
               stop_point_current_location:
                 $ref: "#/definitions/Coord"
               stop_point_patched_location:
                 $ref: "#/definitions/Coord"
-              route_id:
-                type: "string"
-                description: "Route id"
-              user_gps_location:
-                $ref: "#/definitions/Coord"
-              user_gps_accuracy:
-                type: "number"
-                format: "float"
-                description: "User GPS accuracy in meters"
+              route:
+                $ref: "#/definitions/Route"
+              gps:
+                $ref: "#/definitions/Gps"
       responses:
         201:
           description: "Everything went fine"
         400:
           description: "Invalid request"
           schema:
-            $ref: "#/definitions/ErrorResponse"
+            $ref: "#/definitions/Errors"
       security:
       - api_key: []
-  /nav-1/v1/stop_point_patches/gps:
+  /v1/stop_point_patches/gps:
     post:
       tags:
       - "stop_point_patch"
@@ -81,42 +74,35 @@ paths:
           schema:
             type: "object"
             required:
-            - stop_point_id
-            - stop_point_name
+            - source
+            - stop_point
             - stop_point_current_location
             - route_id
-            - user_gps_location
-            - user_gps_accuracy
+            - gps
             properties:
-              stop_point_id:
-                type: "string"
-                description: "Stop point id"
-              stop_point_name:
-                type: "string"
-                description: "Stop point name"
+              source:
+                $ref: "#/definitions/Source"
+              stop_point:
+                $ref: "#/definitions/StopPoint"
               stop_point_current_location:
                 $ref: "#/definitions/Coord"
               route_id:
                 type: "string"
                 description: "Route id"
-              user_gps_location:
-                $ref: "#/definitions/Coord"
-              user_gps_accuracy:
-                type: "number"
-                format: "float"
-                description: "User GPS accuracy in meters"
+              gps:
+                $ref: "#/definitions/Gps"
       responses:
         201:
           description: "Everything went fine"
         400:
           description: "Invalid request"
           schema:
-            $ref: "#/definitions/ErrorResponse"
+            $ref: "#/definitions/Errors"
       security:
       - api_key: []
-  /status:
+  /v1/status:
     get:
-      summary: "Check if the service is up and running"
+      summary: "Utility endpoint to check if the service is up and running"
       tags:
       - "status"
       produces:
@@ -127,15 +113,52 @@ paths:
           schema:
             type: "object"
             properties:
-              message:
+              status:
                 type: "string"
-                example: "The API is up and running !"
+                enum: ["OK", "KO"]
 securityDefinitions:
   api_key:
     type: "apiKey"
     name: "Authorization"
     in: "header"
 definitions:
+  Source:
+    type: "object"
+    required: ["type", "instance_name"]
+    properties:
+      type:
+        type: "string"
+        enum: ["nav_1", "nav_2"]
+        description: "The navitia version to use"
+      instance_name:
+        type: "string"
+        description: "Stop point name"
+  StopPoint:
+    type: "object"
+    required: ["id", "name"]
+    properties:
+      id:
+        type: "string"
+        description: "Stop point id"
+      name:
+        type: "string"
+        description: "Stop point name"
+  Route:
+    type: "object"
+    required: ["id"]
+    properties:
+      id:
+        type: "string"
+        description: "Route id"
+  Gps:
+    type: "object"
+    properties:
+      location:
+        $ref: '#/definitions/Coord'
+      accuracy:
+        type: "number"
+        format: "float"
+        description: "GPS accuracy (in meters)"
   Coord:
     type: "object"
     description: "Coordinates - WGS84"
@@ -147,13 +170,16 @@ definitions:
       lon:
         type: "number"
         format: "float"
-  ErrorResponse:
-    type: "object"
-    properties:
-      error:
-        type: "string"
-        enum: ["invalid_request"]
-        example: "invalid_request"
-      message:
-        type: "string"
-        example: "param 'foo_bar' is missing"
+  Errors:
+    type: "array"
+    title: "Errors"
+    items:
+      type: "object"
+      properties:
+        error:
+          type: "string"
+          enum: ["invalid_request"]
+          example: "invalid_request"
+        message:
+          type: "string"
+          example: "param 'foo_bar' is missing"
