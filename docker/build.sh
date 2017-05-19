@@ -22,4 +22,4 @@ docker run --rm --interactive --tty \
     --workdir /app \
     --label "traefik.enable=false" \
     composer:latest \
-    composer install --ignore-platform-reqs --no-interaction --no-scripts --prefer-dist
+    composer install --ignore-platform-reqs --no-interaction --no-scripts --prefer-dist --no-dev --no-scripts
