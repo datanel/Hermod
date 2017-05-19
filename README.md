@@ -6,7 +6,7 @@ Crowd sourcing API for Navitia
 ## For production env (with traefik)
 
 In this example, we suppose `hermod.localhost` should be your host
-Configuration of Docker: Swarm mode
+Configuration of Docker: Swarm mode (If not you need to do this `docker swarm init` in your shell)
 
 ### Configurations
 
@@ -48,7 +48,7 @@ parameters:
 
 ### Traefik
 
-Create network for treafik and run it
+Create network for treafik and run it (Be careful, port: 80 should be free)
 
 ```
 docker network create traefik_proxy --driver overlay --attachable
