@@ -25,8 +25,14 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get autoremove -y
 
-RUN echo 'date.timezone = "Europe/Paris"' > /usr/local/etc/php/php.ini
-RUN echo 'short_open_tag = Off' > /usr/local/etc/php/php.ini
+# Install xdebug extension
+RUN pecl install \
+		xdebug \
+	&& docker-php-ext-enable \
+		xdebug
+
+RUN echo 'date.timezone = "UTC"' >> /usr/local/etc/php/php.ini
+RUN echo 'short_open_tag = Off' >> /usr/local/etc/php/php.ini
 RUN echo 'opcache.max_accelerated_files = 20000' >> /usr/local/etc/php/conf.d/docker-php-ext-pgsql.ini
 
 VOLUME ["/srv/hermod"]

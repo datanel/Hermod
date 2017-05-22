@@ -5,7 +5,6 @@ setfacl -dR -m u:www-data:rwX -m u:`whoami`:rwX var/cache var/logs var/sessions
 
 ./bin/console cache:clear --env prod
 ./bin/console cache:warmup --env prod
-./bin/console assets:install --symlink --relative --env prod
 
 ./docker/wait-for-it.sh -t 0 database:5432 && \
 

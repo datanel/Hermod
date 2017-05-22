@@ -3,7 +3,7 @@ Crowd sourcing API for Navitia
 
 ## Docker
 
-## For production env (with traefik)
+## For development env (with traefik)
 
 In this example, we suppose `hermod.localhost` should be your host
 Configuration of Docker: Swarm mode (If not you need to do this `docker swarm init` in your shell)
@@ -15,10 +15,10 @@ Run only this command with `root` user
 echo -e "127.0.0.1\thermod.localhost" >> /etc/hosts
 ```
 
-Create `docker/database.prod.env` file (see [docker/database.prod.env.dist](docker/database.prod.env.dist) for example) for database docker
+Create `docker/postgres/development.env` file (see [docker/postgres/development.env.dist](docker/postgres/development.env.dist) for example) for database docker
 
 ```
-# docker/database.prod.env
+# docker/postgres/development.env
 POSTGRES_DB=hermod_api
 POSTGRES_USER=hermod_user
 POSTGRES_PASSWORD=hermod_user_password
@@ -67,7 +67,7 @@ This command will build `hermod:php_7.1-fpm` image and run `composer install`
 
 Now you can create hermod stack
 ```
-docker stack deploy -c docker/docker-compose.prod.yml hermod
+docker stack deploy -c docker/docker-compose.dev.yml hermod
 ```
 
 Go to `http://hermod.localhost`, the api should works

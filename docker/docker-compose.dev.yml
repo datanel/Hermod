@@ -21,7 +21,7 @@ services:
         - "traefik.frontend.entryPoints=http"
 
   php-fpm:
-    image: hermod:php_7.1-fpm
+    image: hermod_php:master
     volumes:
       - ${PWD}:/srv/hermod:rw
       - ${PWD}/docker/php/php-fpm.d:/usr/local/etc/php-fpm.d:ro
@@ -34,8 +34,10 @@ services:
 
   database:
     image: postgres:9.6
+    volumes:
+      - ${PWD}/docker/postgres/data:/var/lib/postgresql/data:rw
     env_file:
-      - docker/database.prod.env
+      - docker/postgres/development.env
     networks:
       - network
     labels:
