@@ -5,8 +5,6 @@ info:
     resources.
   version: "0.1.0"
   title: "Hermod - the Crowd sourcing API"
-  contact:
-    email: "to-be-defined@navitia.io"
   license:
     name: "MIT"
     url: "https://opensource.org/licenses/MIT"
@@ -18,7 +16,7 @@ tags:
 schemes:
 - "https"
 paths:
-  /v1/stop_point_patches:
+  /v1/location_patches:
     post:
       tags:
         - "stop_point_patch"
@@ -36,6 +34,7 @@ paths:
             - source
             - stop_point
             - stop_point_current_location
+            - stop_point_patched_location
             - route
             properties:
               source:
@@ -59,11 +58,11 @@ paths:
             $ref: "#/definitions/Errors"
       security:
       - api_key: []
-  /v1/stop_point_patches/gps:
+  /v1/location_patches/from_user_location:
     post:
       tags:
       - "stop_point_patch"
-      summary: "Create a stop point patch using the given GPS coord / accuracy"
+      summary: "Create a stop point patch using the given end-user GPS coord / accuracy"
       consumes:
       - "application/json"
       produces:
@@ -77,7 +76,7 @@ paths:
             - source
             - stop_point
             - stop_point_current_location
-            - route_id
+            - route
             - gps
             properties:
               source:
@@ -86,9 +85,8 @@ paths:
                 $ref: "#/definitions/StopPoint"
               stop_point_current_location:
                 $ref: "#/definitions/Coord"
-              route_id:
-                type: "string"
-                description: "Route id"
+              route:
+                $ref: "#/definitions/Route"
               gps:
                 $ref: "#/definitions/Gps"
       responses:
@@ -124,15 +122,11 @@ securityDefinitions:
 definitions:
   Source:
     type: "object"
-    required: ["type", "instance_name"]
+    required: ["name"]
     properties:
-      type:
+      name:
         type: "string"
-        enum: ["nav_1", "nav_2"]
-        description: "The navitia version to use"
-      instance_name:
-        type: "string"
-        description: "Stop point name"
+        description: "The data source name"
   StopPoint:
     type: "object"
     required: ["id", "name"]
@@ -150,6 +144,9 @@ definitions:
       id:
         type: "string"
         description: "Route id"
+      name:
+        type: "string"
+        description: "Route name"
   Gps:
     type: "object"
     properties:
@@ -171,15 +168,13 @@ definitions:
         type: "number"
         format: "float"
   Errors:
-    type: "array"
-    title: "Errors"
-    items:
-      type: "object"
-      properties:
-        error:
+    properties:
+      error:
+        type: "string"
+        enum: ["invalid_params"]
+        example: "invalid_params"
+      messages:
+        type: "array"
+        items:
           type: "string"
-          enum: ["invalid_request"]
-          example: "invalid_request"
-        message:
-          type: "string"
-          example: "param 'foo_bar' is missing"
+          example: "invalid coordinates"
