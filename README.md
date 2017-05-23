@@ -6,7 +6,6 @@ Crowd sourcing API for Navitia
 ## For development env (with traefik)
 
 In this example, we suppose `hermod.localhost` should be your host
-Configuration of Docker: Swarm mode (If not you need to do this `docker swarm init` in your shell)
 
 ### Configurations
 
@@ -51,11 +50,11 @@ parameters:
 Create network for treafik and run it (Be careful, port: 80 should be free)
 
 ```
-docker network create traefik_proxy --driver overlay --attachable
+docker network create traefik_proxy --driver bridge --attachable
 ```
 
 ```
-docker run --rm -d --name traefik --network traefik_proxy --publish 80:80 --volume /var/run/docker.sock:/var/run/docker.sock containous/traefik:v1.3.0-rc2 --docker --docker.swarmmode --docker.watch --docker.domain=localhost
+docker run --rm -d --name traefik --network traefik_proxy --publish 80:80 --volume /var/run/docker.sock:/var/run/docker.sock containous/traefik:v1.3.0-rc2 --docker --docker.watch --docker.domain=localhost
 ```
 
 ### Build & Run Hermod api
@@ -65,16 +64,18 @@ This command will build `hermod:php_7.1-fpm` image and run `composer install`
 ./docker/build.sh
 ```
 
-Now you can create hermod stack
+Now you can up hermod
 ```
-docker stack deploy -c docker/docker-compose.dev.yml hermod
+docker-compose -f docker/docker-compose.dev.yml up -d
 ```
+
+To see logs remove `-d` option or use `docker logs ...` command
 
 Go to `http://hermod.localhost`, the api should works
 
 When you finished
 ```
-docker stack rm hermod
+docker-compose -f docker/docker-compose.dev.yml down
 docker stop traefik
 docker network rm traefik_proxy
 ```

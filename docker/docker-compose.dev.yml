@@ -11,14 +11,13 @@ services:
       - ${PWD}:/srv/hermod:rw
       - ${PWD}/docker/nginx/conf.d:/etc/nginx/conf.d:ro
     networks:
-      - network
+      - hermod
       - traefik_proxy
-    deploy:
-      labels:
-        - "traefik.frontend.rule=Host:hermod.localhost"
-        - "traefik.docker.network=traefik_proxy"
-        - "traefik.port=80"
-        - "traefik.frontend.entryPoints=http"
+    labels:
+      - "traefik.frontend.rule=Host:hermod.localhost"
+      - "traefik.docker.network=traefik_proxy"
+      - "traefik.port=80"
+      - "traefik.frontend.entryPoints=http"
 
   php-fpm:
     image: hermod_php:master
@@ -28,7 +27,7 @@ services:
     depends_on:
       - database
     networks:
-      - network
+      - hermod
     labels:
       - "traefik.enable=false"
 
@@ -37,14 +36,14 @@ services:
     volumes:
       - ${PWD}/docker/postgres/data:/var/lib/postgresql/data:rw
     env_file:
-      - docker/postgres/development.env
+      - ${PWD}/docker/postgres/development.env
     networks:
-      - network
+      - hermod
     labels:
       - "traefik.enable=false"
 
 networks:
-  network:
-    driver: overlay
+  hermod:
+    driver: bridge
   traefik_proxy:
     external: true
