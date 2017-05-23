@@ -5,6 +5,13 @@ if [ ! -f 'app/config/parameters.yml' ]; then
     exit 66 # EX_NOINPUT
 fi
 
+if [ ! -f 'docker/postgres/development.env' ]; then
+    echo "'docker/postgres/development.env' environment file is missing. Please create it, see docker/postgres/development.env.dist for example"
+    exit 66 # EX_NOINPUT
+fi
+
+mkdir -p docker/postgres/data
+
 docker run --rm --interactive --tty \
     --user $(id -u) \
     --volume /etc/passwd:/etc/passwd:ro \
@@ -15,7 +22,6 @@ docker run --rm --interactive --tty \
     --workdir /app \
     --label "traefik.enable=false" \
     composer:latest \
-    composer install --ignore-platform-reqs --no-interaction --no-scripts --prefer-dist --no-dev
+    composer install --ignore-platform-reqs --no-interaction --no-scripts --prefer-dist
 
-docker build --rm -t hermod_php:master -f docker/php/Dockerfile .
-docker build --rm -t hermod_nginx:master -f docker/nginx/Dockerfile .
+docker build --rm -t hermod_php:dev -f docker/php/Dockerfile.dev .

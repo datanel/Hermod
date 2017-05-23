@@ -2,14 +2,6 @@ FROM php:7.1-fpm
 
 WORKDIR /srv/hermod
 
-# Install pdo extension for Postgre
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
-    libpq-dev \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pdo pdo_pgsql pgsql \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get autoremove -y
-
 # Install opcache extension for PHP accelerator
 RUN docker-php-ext-install opcache \
     && docker-php-ext-enable opcache \
@@ -17,24 +9,23 @@ RUN docker-php-ext-install opcache \
     && apt-get autoremove -y
 
 # Install internationalization extension
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
-    g++ \
-    libicu-dev \
+RUN BUILD_DEPS="g++ libicu-dev" && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+    $BUILD_DEPS \
+    libicu52 \
 	&& docker-php-ext-configure intl \
     && docker-php-ext-install intl \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get autoremove -y
-
-# Install xdebug extension
-RUN pecl install \
-		xdebug \
-	&& docker-php-ext-enable \
-		xdebug
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $BUILD_DEPS \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN echo 'date.timezone = "UTC"' >> /usr/local/etc/php/php.ini
-RUN echo 'short_open_tag = Off' >> /usr/local/etc/php/php.ini
 RUN echo 'opcache.max_accelerated_files = 20000' >> /usr/local/etc/php/conf.d/docker-php-ext-pgsql.ini
 
-VOLUME ["/srv/hermod"]
+COPY docker/php/php-fpm.d/hermod.conf /usr/local/etc/php-fpm.d/hermod.conf
 
-CMD ["/srv/hermod/docker/php/run.sh"]
+COPY docker/php/run.sh /run.sh
+
+COPY . /srv/hermod/
+
+CMD ["/run.sh"]
