@@ -21,6 +21,8 @@ services:
 
   php-fpm:
     image: hermod_php:dev
+    volumes:
+      - ${PWD}:/srv/hermod:rw
     depends_on:
       - database
     networks:

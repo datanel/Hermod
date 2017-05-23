@@ -20,8 +20,9 @@ docker run --rm --interactive --tty \
     --volume ${HOME}/.ssh:$HOME/.ssh:ro \
     --volume ${PWD}:/app \
     --workdir /app \
+    --env SYMFONY_ENV=dev \
     --label "traefik.enable=false" \
     composer:latest \
-    composer install --ignore-platform-reqs --no-interaction --no-scripts --prefer-dist
+    composer install --ignore-platform-reqs --no-interaction --prefer-dist
 
 docker build --rm -t hermod_php:dev -f docker/php/Dockerfile.dev .
