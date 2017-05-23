@@ -71,7 +71,7 @@ docker-compose -f docker/docker-compose.dev.yml up -d
 
 To see logs remove `-d` option or use `docker logs ...` command
 
-Go to `http://hermod.localhost`, the api should works
+Go to `http://hermod.localhost/v1/status`, the api should work
 
 When you finished
 ```
