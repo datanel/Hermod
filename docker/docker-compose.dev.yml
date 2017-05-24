@@ -3,7 +3,7 @@ version: '3'
 services:
   nginx:
     image: nginx:1.12
-    command: ['/srv/hermod/docker/nginx/run.sh']
+    command: ['/srv/hermod/docker/nginx/run_dev.sh']
     working_dir: /srv/hermod
     depends_on:
       - php-fpm

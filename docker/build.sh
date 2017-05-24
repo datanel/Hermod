@@ -18,5 +18,7 @@ docker run --rm --interactive --tty \
     composer:latest \
     composer install --ignore-platform-reqs --no-interaction --prefer-dist --no-dev
 
+rm -rf var/cache/* var/logs/* var/sessions/*
+
 docker build --rm -t hermod_php:master -f docker/php/Dockerfile .
 docker build --rm -t hermod_nginx:master -f docker/nginx/Dockerfile .

@@ -28,4 +28,15 @@ COPY docker/php/run.sh /run.sh
 
 COPY . /srv/hermod/
 
+RUN useradd --home-dir /srv/hermod/ hermod
+RUN chown -R hermod:hermod /srv/hermod/
+RUN chown -R www-data:www-data var/cache var/logs var/sessions
+
+RUN setfacl -R -m u:www-data:rwX -m u:hermod:rwX var/cache var/logs var/sessions
+RUN setfacl -dR -m u:www-data:rwX -m u:hermod:rwX var/cache var/logs var/sessions
+
+USER www-data
+
+RUN ./bin/console cache:clear --env prod
+
 CMD ["/run.sh"]
