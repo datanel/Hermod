@@ -4,7 +4,7 @@ namespace AppBundle\Controller\v1;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Http\ResourceCreatedResponse;
-use AppBundle\Entity\StopPointLocationPatch;
+use AppBundle\Entity\LocationPatch;
 use AppBundle\Validator\{
     Collection, Wgs84Coord
 };
@@ -18,21 +18,21 @@ use Symfony\Component\Validator\Constraints\{
 };
 
 /**
- * @Route("/stop_point_location_patches")
+ * @Route("/location_patches")
  */
-class StopPointLocationPatchController extends BaseController
+class LocationPatchController extends BaseController
 {
     /**
-     * @Route("", name="v1_get_all_stop_point_location_patches")
+     * @Route("/_all", name="v1_get_all_location_patches")
      * @Method("GET")
      */
     public function getAllAction()
     {
-        return new JsonResponse($this->getDoctrine()->getRepository('AppBundle:StopPointLocationPatch')->findAll());
+        return new JsonResponse($this->getDoctrine()->getRepository('AppBundle:LocationPatch')->findAll());
     }
 
     /**
-     * @Route("", name="v1_create_stop_point_location_patch")
+     * @Route("", name="v1_create_location_patch")
      * @Method("POST")
      */
     public function createPatchAction(Request $request)
@@ -41,7 +41,7 @@ class StopPointLocationPatchController extends BaseController
     }
 
     /**
-     * @Route("/with_user_location", name="v1_create_stop_point_location_patch_with_user_location")
+     * @Route("/from_user_location", name="v1_create_location_patch_from_user_location")
      * @Method("POST")
      */
     public function createPatchUsingGeolocation(Request $request)
@@ -50,7 +50,7 @@ class StopPointLocationPatchController extends BaseController
     }
 
     /**
-     * Validates the given information and creates a stop point location patch in database
+     * Validates the given information and creates a location patch in database
      *
      * @param Request $request
      * @param bool $usingUserGeolocation
@@ -61,7 +61,7 @@ class StopPointLocationPatchController extends BaseController
     {
         $inputData = $this->getInputContent($request);
         $this->validOr400($inputData, $this->createPatchConstraint($usingUserGeolocation));
-        $stopPointLocationPatch = StopPointLocationPatch::createFromApiInput($inputData);
+        $stopPointLocationPatch = LocationPatch::createFromApiInput($inputData);
         $this->getDoctrine()->getManager()->persist($stopPointLocationPatch);
         $this->getDoctrine()->getManager()->flush();
 
@@ -69,22 +69,15 @@ class StopPointLocationPatchController extends BaseController
     }
 
     /**
-     * @param bool $usingUserGeolocation whether to expect the user to give his position
+     * @param bool $fromUserLocation whether to create the patch from the user geolocation
      *
      * @return Constraint the constraint validating the user input
      */
-    private function createPatchConstraint(bool $usingUserGeolocation) : Constraint
+    private function createPatchConstraint(bool $fromUserLocation) : Constraint
     {
         $constraints = [
             'source' => new Collection([
-                'type' => new Required([
-                    new NotBlank(),
-                    new Choice([
-                        'choices' => ['nav_1'],
-                        'message' => '{{ value }} is not a valid source type'
-                    ])
-                ]),
-                'instance_name' => new NotBlank()
+                'name' => new NotBlank()
             ]),
             'stop_point' => new Collection([
                 'id' => new NotBlank(),
@@ -103,7 +96,7 @@ class StopPointLocationPatchController extends BaseController
                 new Range(['min' => 0])
             ]),
         ]);
-        if ($usingUserGeolocation) {
+        if ($fromUserLocation) {
             $constraints = array_merge($constraints, ['gps' => new Required($gpsConstraint)]);
         } else {
             $constraints = array_merge($constraints, [

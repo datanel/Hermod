@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="stop_point_location_patch")
+ * @ORM\Table(name="location_patch")
  */
-class StopPointLocationPatch implements \JsonSerializable
+class LocationPatch implements \JsonSerializable
 {
     /**
      * @ORM\Column(type="integer")
@@ -16,6 +16,13 @@ class StopPointLocationPatch implements \JsonSerializable
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string The name of the source system
+     */
+    protected $sourceName;
 
     /**
      * @ORM\Column(type="datetimetz")
@@ -126,6 +133,7 @@ class StopPointLocationPatch implements \JsonSerializable
     public static function createFromApiInput(array $apiInput)
     {
         $spLocationPatch = new self;
+        $spLocationPatch->sourceName = $apiInput['source']['name'];
         $spLocationPatch->usingUserGeolocation = !isset($apiInput['stop_point_patched_location']);
         $spLocationPatch->stopPointId = $apiInput['stop_point']['id'];
         $spLocationPatch->stopPointName = $apiInput['stop_point']['name'];
@@ -155,6 +163,7 @@ class StopPointLocationPatch implements \JsonSerializable
     {
         return [
             'created_at' => $this->createdAt->format(\DateTime::ISO8601),
+            'source_name' => $this->sourceName,
             'patched_using_geoloc' => $this->usingUserGeolocation,
             'stop_point' => [
                 'id' => $this->stopPointId,
