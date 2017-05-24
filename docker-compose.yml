@@ -8,8 +8,8 @@ services:
     depends_on:
       - php-fpm
     volumes:
-      - ${PWD}:/srv/hermod:rw
-      - ${PWD}/docker/nginx/conf.d:/etc/nginx/conf.d:ro
+      - .:/srv/hermod:rw
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
     networks:
       - hermod
       - traefik_proxy
@@ -22,9 +22,11 @@ services:
   php-fpm:
     image: hermod_php:dev
     volumes:
-      - ${PWD}:/srv/hermod:rw
+      - .:/srv/hermod:rw
     depends_on:
       - database
+    env_file:
+      - docker/development.env
     networks:
       - hermod
     labels:
@@ -33,9 +35,9 @@ services:
   database:
     image: postgres:9.6
     volumes:
-      - ${PWD}/docker/postgres/data:/var/lib/postgresql/data:rw
+      - ./docker/postgres/data:/var/lib/postgresql/data:rw
     env_file:
-      - ${PWD}/docker/postgres/development.env
+      - ./docker/development.env
     networks:
       - hermod
     labels:
