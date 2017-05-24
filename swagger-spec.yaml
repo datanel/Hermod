@@ -1,0 +1,180 @@
+swagger: "2.0"
+info:
+  description: >
+    This API aims to improve the transport data accuracy by allowing consumers to suggest patches for different
+    resources.
+  version: "0.1.0"
+  title: "Hermod - the Crowd sourcing API"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+tags:
+- name: "stop_point_patch"
+  description: "Suggest patches to improve stop point information"
+- name: "status"
+  description: "Verify the API status"
+schemes:
+- "https"
+paths:
+  /v1/location_patches:
+    post:
+      tags:
+        - "stop_point_patch"
+      summary: "Create a stop point patch"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            type: "object"
+            required:
+            - source
+            - stop_point
+            - stop_point_current_location
+            - stop_point_patched_location
+            - route
+            properties:
+              source:
+                $ref: "#/definitions/Source"
+              stop_point:
+                $ref: "#/definitions/StopPoint"
+              stop_point_current_location:
+                $ref: "#/definitions/Coord"
+              stop_point_patched_location:
+                $ref: "#/definitions/Coord"
+              route:
+                $ref: "#/definitions/Route"
+              gps:
+                $ref: "#/definitions/Gps"
+      responses:
+        201:
+          description: "Everything went fine"
+        400:
+          description: "Invalid request"
+          schema:
+            $ref: "#/definitions/Errors"
+      security:
+      - api_key: []
+  /v1/location_patches/from_user_location:
+    post:
+      tags:
+      - "stop_point_patch"
+      summary: "Create a stop point patch using the given end-user GPS coord / accuracy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            type: "object"
+            required:
+            - source
+            - stop_point
+            - stop_point_current_location
+            - route
+            - gps
+            properties:
+              source:
+                $ref: "#/definitions/Source"
+              stop_point:
+                $ref: "#/definitions/StopPoint"
+              stop_point_current_location:
+                $ref: "#/definitions/Coord"
+              route:
+                $ref: "#/definitions/Route"
+              gps:
+                $ref: "#/definitions/Gps"
+      responses:
+        201:
+          description: "Everything went fine"
+        400:
+          description: "Invalid request"
+          schema:
+            $ref: "#/definitions/Errors"
+      security:
+      - api_key: []
+  /v1/status:
+    get:
+      summary: "Utility endpoint to check if the service is up and running"
+      tags:
+      - "status"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "The API is reachable"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                enum: ["OK", "KO"]
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+definitions:
+  Source:
+    type: "object"
+    required: ["name"]
+    properties:
+      name:
+        type: "string"
+        description: "The data source name"
+  StopPoint:
+    type: "object"
+    required: ["id", "name"]
+    properties:
+      id:
+        type: "string"
+        description: "Stop point id"
+      name:
+        type: "string"
+        description: "Stop point name"
+  Route:
+    type: "object"
+    required: ["id"]
+    properties:
+      id:
+        type: "string"
+        description: "Route id"
+      name:
+        type: "string"
+        description: "Route name"
+  Gps:
+    type: "object"
+    properties:
+      location:
+        $ref: '#/definitions/Coord'
+      accuracy:
+        type: "number"
+        format: "float"
+        description: "GPS accuracy (in meters)"
+  Coord:
+    type: "object"
+    description: "Coordinates - WGS84"
+    required: ["lat", "lon"]
+    properties:
+      lat:
+        type: "number"
+        format: "float"
+      lon:
+        type: "number"
+        format: "float"
+  Errors:
+    properties:
+      error:
+        type: "string"
+        enum: ["invalid_params"]
+        example: "invalid_params"
+      messages:
+        type: "array"
+        items:
+          type: "string"
+          example: "invalid coordinates"
