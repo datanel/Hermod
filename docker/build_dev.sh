@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ ! -f 'docker/development.env' ]; then
+    echo "'docker/development.env' environment file is missing. Please create it, see docker/default.env for example"
+    exit 66 # EX_NOINPUT
+fi
+
 mkdir -p docker/postgres/data
 
 docker run --rm --interactive --tty \

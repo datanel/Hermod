@@ -28,7 +28,7 @@ docker run --rm -d --name traefik --network traefik_proxy --publish 80:80 --volu
 
 ### Build & Run Hermod api
 
-This command will build `hermod:php_7.1-fpm` image and run `composer install`
+This command will build `hermod_php:dev` image and run `composer install`
 ```
 ./docker/build_dev.sh
 ```
@@ -61,27 +61,7 @@ Run only this command with `root` user
 echo -e "127.0.0.1\thermod.localhost" >> /etc/hosts
 ```
 
-Create `app/config/parameters.yml` file (see [app/config/parameters.yml.dist](app/config/parameters.yml.dist) for example) for symfony environment
-
-```
-# app/config/parameters.yml
-parameters:
-    database_host: 127.0.0.1
-    database_port: ~
-    database_name: hermod_api
-    database_user: hermod_user
-    database_password: hermod_password
-    # You should uncomment this if you want to use pdo_sqlite
-    #database_path: '%kernel.project_dir%/var/data/data.sqlite'
-
-    mailer_transport: smtp
-    mailer_host: 127.0.0.1
-    mailer_user: ~
-    mailer_password: ~
-
-    # A secret key that's used to generate certain security-related tokens
-    secret: ThisTokenIsNotSoSecretChangeIt
-```
+Create `docker/production.env` file (see [docker/default.env](docker/default.env) for example) for symfony environment
 
 ### Traefik
 
@@ -97,17 +77,17 @@ docker run --rm -d --name traefik --network traefik_proxy --publish 80:80 --volu
 
 ### Build & Run Hermod api
 
-This command will build `hermod:php_7.1-fpm` image and run `composer install`
+This command will build `hermod_php:master` and `hermod_nginx:master` images and run `composer install`
 ```
 ./docker/build.sh
 ```
 
 Now you can create hermod stack
 ```
-docker stack deploy -c docker/docker-compose.yml hermod
+docker stack deploy -c docker/docker-compose.prod.yml hermod
 ```
 
-Go to `http://hermod.localhost`, the api should works
+Go to `http://hermod.localhost/v1/status`, the api should works
 
 When you finished
 ```

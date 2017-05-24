@@ -1,7 +1,7 @@
 #!/bin/sh
 
-if [ ! -f 'app/config/parameters.yml' ]; then
-    echo "'app/config/parameters.yml' environment file is missing. Please create it, see app/config/parameters.yml.dist for example"
+if [ ! -f 'docker/production.env' ]; then
+    echo "'docker/production.env' environment file is missing. Please create it, see docker/default.env for example"
     exit 66 # EX_NOINPUT
 fi
 
@@ -13,6 +13,8 @@ docker run --rm --interactive --tty \
     --volume ${HOME}/.ssh:$HOME/.ssh:ro \
     --volume ${PWD}:/app \
     --workdir /app \
+    --env-file ./docker/defaults.env \
+    --env-file ./docker/production.env \
     --label "traefik.enable=false" \
     --env SYMFONY_ENV=prod \
     composer:latest \

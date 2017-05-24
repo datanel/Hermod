@@ -37,6 +37,4 @@ RUN setfacl -dR -m u:www-data:rwX -m u:hermod:rwX var/cache var/logs var/session
 
 USER www-data
 
-RUN ./bin/console cache:clear --env prod
-
 CMD ["/run.sh"]
