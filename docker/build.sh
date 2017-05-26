@@ -1,7 +1,7 @@
 #!/bin/sh
 
-if [ ! -f 'docker/production.env' ]; then
-    echo "'docker/production.env' environment file is missing. Please create it, see docker/default.env for example"
+if [ ! -f 'docker/config.env' ]; then
+    echo "'docker/config.env' environment file is missing. Please create it, see docker/config.env.dist for example"
     exit 66 # EX_NOINPUT
 fi
 
@@ -13,12 +13,11 @@ docker run --rm --interactive --tty \
     --volume ${HOME}/.ssh:$HOME/.ssh:ro \
     --volume ${PWD}:/app \
     --workdir /app \
-    --env-file ./docker/defaults.env \
-    --env-file ./docker/production.env \
-    --label "traefik.enable=false" \
+    --env-file ./docker/config.env \
     --env SYMFONY_ENV=prod \
+    --label "traefik.enable=false" \
     composer:latest \
-    composer install --ignore-platform-reqs --no-interaction --prefer-dist --no-dev
+    composer install --ignore-platform-reqs --no-interaction --prefer-dist --no-scripts --no-dev
 
 rm -rf var/cache/* var/logs/* var/sessions/*
 

@@ -17,6 +17,8 @@ services:
 
   php-fpm:
     image: hermod_php:master
+    env_file:
+      - docker/config.env
     networks:
       - network
     deploy:

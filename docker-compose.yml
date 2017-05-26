@@ -26,7 +26,7 @@ services:
     depends_on:
       - database
     env_file:
-      - docker/development.env
+      - docker/config.env
     networks:
       - hermod
     labels:
@@ -37,7 +37,7 @@ services:
     volumes:
       - ./docker/postgres/data:/var/lib/postgresql/data:rw
     env_file:
-      - ./docker/development.env
+      - docker/config.env
     networks:
       - hermod
     labels:

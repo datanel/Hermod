@@ -1,7 +1,7 @@
 #!/bin/sh
 
-if [ ! -f 'docker/development.env' ]; then
-    echo "'docker/development.env' environment file is missing. Please create it, see docker/default.env for example"
+if [ ! -f 'docker/config.env' ]; then
+    echo "'docker/config.env' environment file is missing. Please create it, see docker/config.env.dist for example"
     exit 66 # EX_NOINPUT
 fi
 
@@ -15,8 +15,7 @@ docker run --rm --interactive --tty \
     --volume ${HOME}/.ssh:$HOME/.ssh:ro \
     --volume ${PWD}:/app \
     --workdir /app \
-    --env-file ./docker/defaults.env \
-    --env-file ./docker/development.env \
+    --env-file ./docker/config.env \
     --env SYMFONY_ENV=dev \
     --label "traefik.enable=false" \
     composer:latest \
