@@ -21,5 +21,5 @@ docker run --rm --interactive --tty \
 
 rm -rf var/cache/* var/logs/* var/sessions/*
 
-docker build --rm -t hermod_php:master -f docker/php/Dockerfile .
-docker build --rm -t hermod_nginx:master -f docker/nginx/Dockerfile .
+docker build --rm -t par-vm232.srv.canaltp.fr:5000/hermod_php:master -f docker/php/Dockerfile .
+docker build --rm -t par-vm232.srv.canaltp.fr:5000/hermod_nginx:master -f docker/nginx/Dockerfile .

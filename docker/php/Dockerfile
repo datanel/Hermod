@@ -30,10 +30,6 @@ RUN BUILD_DEPS="g++ libicu-dev" && \
 RUN echo 'date.timezone = "UTC"' >> /usr/local/etc/php/php.ini
 RUN echo 'opcache.max_accelerated_files = 20000' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 
-COPY docker/php/php-fpm.d/hermod.conf /usr/local/etc/php-fpm.d/hermod.conf
-
-COPY docker/php/run.sh /run.sh
-
 COPY . /srv/hermod/
 
 RUN useradd --home-dir /srv/hermod/ hermod
@@ -45,4 +41,4 @@ RUN setfacl -dR -m u:www-data:rwX -m u:hermod:rwX var/cache var/logs var/session
 
 USER www-data
 
-CMD ["/run.sh"]
+CMD ["/srv/hermod/docker/php/run.sh"]
