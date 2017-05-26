@@ -3,13 +3,13 @@ version: '3'
 services:
   nginx:
     image: nginx:1.12
-    command: ['/srv/hermod/docker/nginx/run.sh']
+    command: ['/srv/hermod/docker/nginx/run_dev.sh']
     working_dir: /srv/hermod
     depends_on:
       - php-fpm
     volumes:
-      - ${PWD}:/srv/hermod:rw
-      - ${PWD}/docker/nginx/conf.d:/etc/nginx/conf.d:ro
+      - .:/srv/hermod:rw
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
     networks:
       - hermod
       - traefik_proxy
@@ -20,12 +20,13 @@ services:
       - "traefik.frontend.entryPoints=http"
 
   php-fpm:
-    image: hermod_php:master
+    image: hermod_php:dev
     volumes:
-      - ${PWD}:/srv/hermod:rw
-      - ${PWD}/docker/php/php-fpm.d:/usr/local/etc/php-fpm.d:ro
+      - .:/srv/hermod:rw
     depends_on:
       - database
+    env_file:
+      - docker/config.env
     networks:
       - hermod
     labels:
@@ -34,9 +35,9 @@ services:
   database:
     image: postgres:9.6
     volumes:
-      - ${PWD}/docker/postgres/data:/var/lib/postgresql/data:rw
+      - ./docker/postgres/data:/var/lib/postgresql/data:rw
     env_file:
-      - ${PWD}/docker/postgres/development.env
+      - docker/config.env
     networks:
       - hermod
     labels:

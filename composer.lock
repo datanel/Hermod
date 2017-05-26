@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8349382cdca06cbc66110331204211b6",
+    "content-hash": "55d6b5cad391880fc12578977693e193",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -2295,7 +2295,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/symfony/zipball/aef39bcee5c19bb9aa20e542716a1e63c3a9b015",
                 "reference": "aef39bcee5c19bb9aa20e542716a1e63c3a9b015",
-
                 "shasum": ""
             },
             "require": {
@@ -2435,7 +2434,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2017-05-24 05:58:03"
+            "time": "2017-05-23 12:42:40"
         },
         {
             "name": "twig/twig",
