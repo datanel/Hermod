@@ -136,7 +136,7 @@ class LocationPatch implements \JsonSerializable
         $spLocationPatch->sourceName = $apiInput['source']['name'];
         $spLocationPatch->usingUserGeolocation = !isset($apiInput['stop_point_patched_location']);
         $spLocationPatch->stopPointId = $apiInput['stop_point']['id'];
-        $spLocationPatch->stopPointName = $apiInput['stop_point']['name'];
+        $spLocationPatch->stopPointName = $apiInput['stop_point']['name'] ?? '';
 
         $spLocationPatch->stopPointCurrentLat = $apiInput['stop_point_current_location']['lat'];
         $spLocationPatch->stopPointCurrentLon = $apiInput['stop_point_current_location']['lon'];
@@ -148,7 +148,7 @@ class LocationPatch implements \JsonSerializable
             $apiInput['gps']['location']['lon'];
 
         $spLocationPatch->routeId = $apiInput['route']['id'];
-        $spLocationPatch->routeName = $apiInput['route']['name'];
+        $spLocationPatch->routeName = $apiInput['route']['name'] ?? '';
 
         $spLocationPatch->userGeolocationLat = $apiInput['gps']['location']['lat'] ??
             $spLocationPatch->userGeolocationLat;
