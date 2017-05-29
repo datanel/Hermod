@@ -4,7 +4,6 @@ namespace AppBundle\Security;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -14,9 +13,9 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
 
-class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
+class TokenAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
 {
-    public function createToken(Request $request, $providerKey)
+    public function createToken(Request $request, $providerKey) : PreAuthenticatedToken
     {
         $apiKey = $request->headers->get('Authorization');
 
@@ -29,16 +28,21 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, Authentica
         return new PreAuthenticatedToken('anon.', $apiKey, $providerKey);
     }
 
-    public function supportsToken(TokenInterface $token, $providerKey)
+    public function supportsToken(TokenInterface $token, $providerKey) : boolean
     {
         return $token instanceof PreAuthenticatedToken && $token->getProviderKey() === $providerKey;
     }
-    public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
-    {
-        if (!$userProvider instanceof ApiKeyUserProvider) {
+
+    public function authenticateToken(
+        TokenInterface $token,
+        UserProviderInterface $userProvider,
+        $providerKey
+    ) : PreAuthenticatedToken {
+        if (!$userProvider instanceof TokenUserProvider) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'The user provider must be an instance of ApiKeyUserProvider (%s was given).',
+                    'The user provider must be an instance of %s (%s was given).',
+                    TokenUserProvider::class,
                     get_class($userProvider)
                 )
             );
@@ -49,7 +53,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, Authentica
 
         if (!$username) {
             throw new CustomUserMessageAuthenticationException(
-                sprintf('API Key %s does not exist.', $token)
+                sprintf('Token %s does not exist.', $token)
             );
         }
 
@@ -62,8 +66,11 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, Authentica
             $user->getRoles()
         );
     }
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
-    {
+
+    public function onAuthenticationFailure(
+        Request $request,
+        AuthenticationException $exception
+    ) : JsonResponse {
         return new JsonResponse(
             ['error' => 'invalid_credentials', 'message' => $exception->getMessage()],
             401

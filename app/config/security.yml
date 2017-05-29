@@ -3,8 +3,8 @@
 security:
 
     providers:
-        api_key_user_provider:
-            id: AppBundle\Security\ApiKeyUserProvider
+        token_user_provider:
+            id: AppBundle\Security\TokenUserProvider
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -15,8 +15,8 @@ security:
             pattern: ^/v1/location_patches
             stateless: true
             simple_preauth:
-                authenticator: AppBundle\Security\ApiKeyAuthenticator
-            provider: api_key_user_provider
+                authenticator: AppBundle\Security\TokenAuthenticator
+            provider: token_user_provider
 
     access_control:
         - { path: ^/v1/location_patches, roles: ROLE_API }

@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-class ApiKeyUserProvider implements UserProviderInterface
+class TokenUserProvider implements UserProviderInterface
 {
     /** @var EntityManagerInterface  */
     private $entityManager;
@@ -19,7 +19,7 @@ class ApiKeyUserProvider implements UserProviderInterface
         $this->entityManager = $entityManager;
     }
 
-    public function getUsernameForToken($token)
+    public function getUsernameForToken($token) : string
     {
         $user = $this->entityManager->getRepository('AppBundle:User')->findOneBy(['token' => $token]);
 
@@ -30,14 +30,14 @@ class ApiKeyUserProvider implements UserProviderInterface
         return $user->getUsername();
     }
 
-    public function loadUserByUsername($username)
+    public function loadUserByUsername($username) : User
     {
         return new User(
             $username,
             null,
             // the roles for the user - you may choose to determine
             // these dynamically somehow based on the user
-            array('ROLE_API')
+            ['ROLE_API']
         );
     }
 
@@ -46,7 +46,7 @@ class ApiKeyUserProvider implements UserProviderInterface
         throw new UnsupportedUserException();
     }
 
-    public function supportsClass($class)
+    public function supportsClass($class) : boolean
     {
         return User::class === $class;
     }

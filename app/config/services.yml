@@ -35,9 +35,9 @@ services:
             $twig: '@twig'
             $debug: '%kernel.debug%'
             $env: '%kernel.environment%'
-    AppBundle\Security\ApiKeyUserProvider:
+    AppBundle\Security\TokenUserProvider:
         public: true
         arguments:
             $entityManager: '@doctrine.orm.entity_manager'
-    AppBundle\Security\ApiKeyAuthenticator:
+    AppBundle\Security\TokenAuthenticator:
         public: false
