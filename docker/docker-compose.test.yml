@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  hermod_api:
+    image: hermod_php:test
+    build:
+      context: ..
+      dockerfile: docker/php/Dockerfile.dev
+    command: ["/srv/hermod/docker/php/run_test.sh"]
+    user: "$USER_ID:$GROUP_ID"
+    volumes:
+      - ..:/srv/hermod:rw
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+    depends_on:
+      - database
+    env_file:
+      - config_test.env
+    networks:
+      - hermod_test
+
+  database:
+    image: postgres:9.6
+    env_file:
+      - config_test.env
+    networks:
+      - hermod_test
+
+networks:
+  hermod_test:
+    driver: bridge
