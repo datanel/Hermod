@@ -28,7 +28,11 @@ class LocationPatchController extends BaseController
      */
     public function getAllAction()
     {
-        return new JsonResponse($this->getDoctrine()->getRepository('AppBundle:LocationPatch')->findAll());
+        return new JsonResponse(
+            $this->getDoctrine()
+                ->getRepository('AppBundle:LocationPatch')
+                ->findBy(['user' => $this->getCurrentUser()])
+        );
     }
 
     /**
@@ -88,6 +92,7 @@ class LocationPatchController extends BaseController
                 'id' => new NotBlank(),
                 'name' => new Optional(new NotBlank()),
             ]),
+            'user' => new Required(),
         ];
         $gpsConstraint = new Collection([
             'location' => new Wgs84Coord(),

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,10 +32,18 @@ class User
      */
     protected $token;
 
+    /**
+     * @ORM\OneToMany(targetEntity="LocationPatch", mappedBy="user")
+     *
+     * @var ArrayCollection User patches
+     */
+    protected $patches;
+
     public function __construct($username, $token)
     {
         $this->username = $username;
         $this->token = $token;
+        $this->patches = new ArrayCollection();
     }
 
     public function getId()
@@ -44,7 +53,7 @@ class User
 
     public function getRoles() : array
     {
-        return ['ROLE_API'];
+        return ['ROLE_USER'];
     }
 
     public function getToken() : string
@@ -67,5 +76,10 @@ class User
     {
         $this->username = $username;
         return $this;
+    }
+
+    public function getPatches()
+    {
+        return $this->patches;
     }
 }

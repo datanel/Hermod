@@ -118,6 +118,16 @@ class LocationPatch implements \JsonSerializable
      */
     protected $userGpsAccuracy = 0;
 
+    /**
+     * Many Patches have One User.
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="patches")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *
+     * @var User The user submitting the patch
+     */
+    protected $user;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime;
@@ -155,6 +165,8 @@ class LocationPatch implements \JsonSerializable
         $spLocationPatch->userGeolocationLon = $apiInput['gps']['location']['lon'] ??
             $spLocationPatch->userGeolocationLon;
         $spLocationPatch->userGpsAccuracy = $apiInput['gps']['accuracy'] ?? $spLocationPatch->userGpsAccuracy;
+
+        $spLocationPatch->user = $apiInput['user'];
 
         return $spLocationPatch;
     }

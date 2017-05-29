@@ -19,4 +19,4 @@ security:
             provider: token_user_provider
 
     access_control:
-        - { path: ^/v1/location_patches, roles: ROLE_API }
+        - { path: ^/v1/location_patches, roles: ROLE_USER }

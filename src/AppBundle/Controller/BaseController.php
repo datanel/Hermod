@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use AppBundle\Entity\User;
 
 abstract class BaseController extends Controller
 {
@@ -37,7 +38,29 @@ abstract class BaseController extends Controller
      */
     public function getInputContent(Request $request) : array
     {
-        return (array)json_decode($request->getContent(), true);
+        $inputContent = (array)json_decode($request->getContent(), true);
+
+        // We add here the current user to the payload
+        $inputContent['user'] = $this->getCurrentUser();
+
+        return $inputContent;
+    }
+
+    /**
+     * Get the current connected user and
+     * retrieve the AppUser entity related
+     *
+     * @return User
+     */
+    public function getCurrentUser() : User
+    {
+        $currentUser = $this->get('security.token_storage')
+            ->getToken()
+            ->getUser();
+
+        return $this->getDoctrine()
+            ->getRepository('AppBundle:User')
+            ->findOneBy(['username' => $currentUser->getUsername()]);
     }
 
     /**

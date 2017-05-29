@@ -35,9 +35,7 @@ class TokenUserProvider implements UserProviderInterface
         return new User(
             $username,
             null,
-            // the roles for the user - you may choose to determine
-            // these dynamically somehow based on the user
-            ['ROLE_API']
+            ['ROLE_USER']
         );
     }
 
