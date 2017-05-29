@@ -2,9 +2,9 @@
 
 namespace AppBundle\Security;
 
+use AppBundle\Http\Exception\UnauthorizedException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -24,7 +24,7 @@ class TokenUserProvider implements UserProviderInterface
         $user = $this->entityManager->getRepository('AppBundle:User')->findOneBy(['token' => $token]);
 
         if (!$user) {
-            throw new UsernameNotFoundException(sprintf('No user found with token %s', $token));
+            throw new UnauthorizedException(sprintf('No user found with token %s', $token), 'invalid_credentials');
         }
 
         return $user->getUsername();
@@ -46,7 +46,7 @@ class TokenUserProvider implements UserProviderInterface
         throw new UnsupportedUserException();
     }
 
-    public function supportsClass($class) : boolean
+    public function supportsClass($class) : bool
     {
         return User::class === $class;
     }

@@ -2,13 +2,12 @@
 
 namespace AppBundle\Security;
 
+use AppBundle\Http\Exception\UnauthorizedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
@@ -20,15 +19,16 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
         $apiKey = $request->headers->get('Authorization');
 
         if (!$apiKey) {
-            throw new BadCredentialsException(
-                'You must provide a token under the Authorization header to access this resource'
+            throw new UnauthorizedException(
+                'You must provide a token under the Authorization header to access this resource',
+                'invalid_credentials'
             );
         }
 
         return new PreAuthenticatedToken('anon.', $apiKey, $providerKey);
     }
 
-    public function supportsToken(TokenInterface $token, $providerKey) : boolean
+    public function supportsToken(TokenInterface $token, $providerKey) : bool
     {
         return $token instanceof PreAuthenticatedToken && $token->getProviderKey() === $providerKey;
     }
@@ -52,8 +52,9 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
         $username = $userProvider->getUsernameForToken($token);
 
         if (!$username) {
-            throw new CustomUserMessageAuthenticationException(
-                sprintf('Token %s does not exist.', $token)
+            throw new UnauthorizedException(
+                sprintf('Token %s does not exist.', $token),
+                'invalid_credentials'
             );
         }
 
@@ -71,9 +72,6 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
         Request $request,
         AuthenticationException $exception
     ) : JsonResponse {
-        return new JsonResponse(
-            ['error' => 'invalid_credentials', 'message' => $exception->getMessage()],
-            401
-        );
+        throw new UnauthorizedException($exception->getMessage(), 'invalid_credentials');
     }
 }
