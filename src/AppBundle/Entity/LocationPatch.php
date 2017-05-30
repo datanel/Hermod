@@ -118,6 +118,16 @@ class LocationPatch implements \JsonSerializable
      */
     protected $userGpsAccuracy = 0;
 
+    /**
+     * Many Patches have One User.
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="patches")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *
+     * @var User The user submitting the patch
+     */
+    protected $user;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime;
@@ -128,9 +138,10 @@ class LocationPatch implements \JsonSerializable
      * CAUTION: the input data must be validated BEFORE calling this, or it will crash badly
      *
      * @param $apiInput array a valid json_decoded api input
+     * @param $user User The current user
      * @return self
      */
-    public static function createFromApiInput(array $apiInput)
+    public static function createFromApiInput(array $apiInput, User $user)
     {
         $spLocationPatch = new self;
         $spLocationPatch->sourceName = $apiInput['source']['name'];
@@ -155,6 +166,8 @@ class LocationPatch implements \JsonSerializable
         $spLocationPatch->userGeolocationLon = $apiInput['gps']['location']['lon'] ??
             $spLocationPatch->userGeolocationLon;
         $spLocationPatch->userGpsAccuracy = $apiInput['gps']['accuracy'] ?? $spLocationPatch->userGpsAccuracy;
+
+        $spLocationPatch->user = $user;
 
         return $spLocationPatch;
     }

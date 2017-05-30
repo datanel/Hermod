@@ -2,23 +2,24 @@
 # http://symfony.com/doc/current/security.html
 security:
 
-    # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        in_memory:
-            memory: ~
+        token_user_provider:
+            id: AppBundle\Security\TokenUserProvider
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        unsecured_area:
+            pattern: ^/v1/status
+            security: false
+        secured_area:
+            pattern: ^/v1/
+            stateless: true
+            simple_preauth:
+                authenticator: AppBundle\Security\TokenAuthenticator
+            provider: token_user_provider
 
-        main:
-            anonymous: ~
-            # activate different ways to authenticate
-
-            # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
-            #form_login: ~
+    access_control:
+        - { path: ^/v1/, roles: ROLE_USER }

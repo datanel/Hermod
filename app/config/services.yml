@@ -35,3 +35,9 @@ services:
             $twig: '@twig'
             $debug: '%kernel.debug%'
             $env: '%kernel.environment%'
+    AppBundle\Security\TokenUserProvider:
+        public: true
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+    AppBundle\Security\TokenAuthenticator:
+        public: false
