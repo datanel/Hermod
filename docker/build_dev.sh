@@ -5,6 +5,8 @@ if [ ! -f 'docker/config.env' ]; then
     exit 66 # EX_NOINPUT
 fi
 
+mkdir -p docker/postgres/data
+
 docker run --rm --interactive --tty \
     --user $(id -u) \
     --volume /etc/passwd:/etc/passwd:ro \
@@ -14,12 +16,11 @@ docker run --rm --interactive --tty \
     --volume ${PWD}:/app \
     --workdir /app \
     --env-file ./docker/config.env \
-    --env SYMFONY_ENV=prod \
+    --env SYMFONY_ENV=dev \
     --label "traefik.enable=false" \
     composer:latest \
-    composer install --ignore-platform-reqs --no-interaction --prefer-dist --no-scripts --no-dev
+    composer install --ignore-platform-reqs --no-interaction --prefer-dist
 
 rm -rf var/cache/* var/logs/* var/sessions/*
 
-docker build --rm -t par-vm232.srv.canaltp.fr:5000/hermod_php:master -f docker/php/Dockerfile .
-docker build --rm -t par-vm232.srv.canaltp.fr:5000/hermod_nginx:master -f docker/nginx/Dockerfile .
+docker build --rm -t hermod_php:dev -f docker/php/Dockerfile.dev .

@@ -15,5 +15,5 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
-/docker/postgres/*.env
 /docker/postgres/data
+/docker/*.env

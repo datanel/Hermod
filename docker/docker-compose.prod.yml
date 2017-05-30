@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  nginx:
+    image: par-vm232.srv.canaltp.fr:5000/hermod_nginx:master
+    depends_on:
+      - php-fpm
+    networks:
+      - network
+      - traefik_proxy
+    deploy:
+      labels:
+        - "traefik.frontend.rule=Host:hermod.localhost"
+        - "traefik.docker.network=traefik_proxy"
+        - "traefik.port=80"
+        - "traefik.frontend.entryPoints=http"
+
+  php-fpm:
+    image: par-vm232.srv.canaltp.fr:5000/hermod_php:master
+    env_file:
+      - docker/config.env
+    networks:
+      - network
+    deploy:
+      labels:
+        - "traefik.enable=false"
+
+networks:
+  network:
+    driver: overlay
+  traefik_proxy:
+    external: true
