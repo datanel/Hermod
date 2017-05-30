@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  composer_install:
+    image: composer:latest
+    user: "$UID:$GID"
+    command: [composer, install, --ignore-platform-reqs, --no-interaction, --prefer-dist]
+    working_dir: /app
+    volumes:
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+      - ${HOME}/.composer/.config/composer:/composer:rw
+      - ${HOME}/.ssh:$HOME/.ssh:ro
+      - ${PWD}:/app
+    env_file:
+      - ./config_test.env
+
+  hermod_api:
+    image: hermod_php:test
+    build:
+      context: ..
+      dockerfile: docker/php/Dockerfile.dev
+    command: ["/srv/hermod/docker/php/run_test.sh"]
+    user: "$UID:$GID"
+    volumes:
+      - ..:/srv/hermod:rw
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+    depends_on:
+      - database
+    env_file:
+      - config_test.env
+    networks:
+      - hermod_test
+
+  database:
+    image: postgres:9.6
+#    volumes:
+#      - tests/fixtures:/docker-entrypoint-initdb.d:ro
+    env_file:
+      - config_test.env
+    networks:
+      - hermod_test
+
+networks:
+  hermod_test:
+    driver: bridge

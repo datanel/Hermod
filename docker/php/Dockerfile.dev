@@ -31,6 +31,12 @@ RUN pecl install \
 	&& docker-php-ext-enable \
 		xdebug
 
+# Install pcntl extension
+RUN docker-php-ext-install \
+		pcntl \
+	&& docker-php-ext-enable \
+		pcntl
+
 RUN echo 'date.timezone = "UTC"' >> /usr/local/etc/php/php.ini
 RUN echo 'short_open_tag = Off' >> /usr/local/etc/php/php.ini
 RUN echo 'opcache.max_accelerated_files = 20000' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
