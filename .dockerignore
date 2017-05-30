@@ -2,3 +2,4 @@ docker/postgres/data
 .git
 .gitignore
 .dockerignore
+junit.xml

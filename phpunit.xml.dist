@@ -1,0 +1,7 @@
+<phpunit bootstrap="src/autoload.php">
+    <testsuites>
+        <testsuite name="status">
+            <file>tests/AppBundle/Controller/v1/AppController.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
