@@ -9,8 +9,8 @@ info:
     name: "MIT"
     url: "https://opensource.org/licenses/MIT"
 tags:
-- name: "stop_point_patch"
-  description: "Suggest patches to improve stop point information"
+- name: "location_patch"
+  description: "Suggest patches to improve stop information"
 - name: "status"
   description: "Verify the API status"
 schemes:
@@ -19,7 +19,7 @@ paths:
   /v1/location_patches:
     post:
       tags:
-        - "stop_point_patch"
+        - "location_patch"
       summary: "Create a stop point patch"
       consumes:
         - "application/json"
@@ -61,7 +61,7 @@ paths:
   /v1/location_patches/from_user_location:
     post:
       tags:
-      - "stop_point_patch"
+      - "location_patch"
       summary: "Create a stop point patch using the given end-user GPS coord / accuracy"
       consumes:
       - "application/json"
