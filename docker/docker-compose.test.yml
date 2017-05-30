@@ -35,6 +35,8 @@ services:
 
   database:
     image: postgres:9.6
+#    volumes:
+#      - tests/fixtures:/docker-entrypoint-initdb.d:ro
     env_file:
       - config_test.env
     networks:

@@ -9,8 +9,7 @@
 ./docker/wait-for-it.sh -t 0 ${POSTGRES_HOST}:${POSTGRES_PORT} && \
 
 ./bin/console doctrine:migrations:migrate --env dev --no-interaction
-
-php-fpm --daemonize
+./bin/console doctrine:fixtures:load --no-interaction
 
 ./bin/console server:start 127.0.0.1:8080
 

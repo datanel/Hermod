@@ -16,7 +16,8 @@ class AbstractControllerTest extends TestCase
         $this->client = new Client(
             [
                 'base_uri' => 'http://127.0.0.1:8080',
-                'http_errors' => false
+                'http_errors' => false,
+                'headers' => ['Authorization' => 'a2540dc6-5b0b-45b9-8a7d-8c6fcf03e1df']
             ]
         );
     }
