@@ -82,4 +82,9 @@ class User
     {
         return $this->patches;
     }
+
+    public function __toString()
+    {
+        return $this->username;
+    }
 }

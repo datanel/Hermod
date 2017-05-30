@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8349382cdca06cbc66110331204211b6",
+    "content-hash": "5b50769e90c2bceb0d3450fc7b5db392",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -2285,17 +2285,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "3.3.x-dev",
+            "version": "v3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "aef39bcee5c19bb9aa20e542716a1e63c3a9b015"
+                "reference": "5a7e31c48e7cd4831efa409fffb661beb9995174"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/aef39bcee5c19bb9aa20e542716a1e63c3a9b015",
-                "reference": "aef39bcee5c19bb9aa20e542716a1e63c3a9b015",
-
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/5a7e31c48e7cd4831efa409fffb661beb9995174",
+                "reference": "5a7e31c48e7cd4831efa409fffb661beb9995174",
                 "shasum": ""
             },
             "require": {
@@ -2435,7 +2434,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2017-05-24 05:58:03"
+            "time": "2017-05-29T21:02:32+00:00"
         },
         {
             "name": "twig/twig",
@@ -2728,13 +2727,11 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "symfony/symfony": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5.9"
+        "php": ">=7.1"
     },
     "platform-dev": []
 }

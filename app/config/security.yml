@@ -11,12 +11,15 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        unsecured_area:
+            pattern: ^/v1/status
+            security: false
         secured_area:
-            pattern: ^/v1/location_patches
+            pattern: ^/v1/
             stateless: true
             simple_preauth:
                 authenticator: AppBundle\Security\TokenAuthenticator
             provider: token_user_provider
 
     access_control:
-        - { path: ^/v1/location_patches, roles: ROLE_USER }
+        - { path: ^/v1/, roles: ROLE_USER }

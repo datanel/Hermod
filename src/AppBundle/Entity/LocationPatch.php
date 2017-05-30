@@ -138,9 +138,10 @@ class LocationPatch implements \JsonSerializable
      * CAUTION: the input data must be validated BEFORE calling this, or it will crash badly
      *
      * @param $apiInput array a valid json_decoded api input
+     * @param $user User The current user
      * @return self
      */
-    public static function createFromApiInput(array $apiInput)
+    public static function createFromApiInput(array $apiInput, User $user)
     {
         $spLocationPatch = new self;
         $spLocationPatch->sourceName = $apiInput['source']['name'];
@@ -166,7 +167,7 @@ class LocationPatch implements \JsonSerializable
             $spLocationPatch->userGeolocationLon;
         $spLocationPatch->userGpsAccuracy = $apiInput['gps']['accuracy'] ?? $spLocationPatch->userGpsAccuracy;
 
-        $spLocationPatch->user = $apiInput['user'];
+        $spLocationPatch->user = $user;
 
         return $spLocationPatch;
     }

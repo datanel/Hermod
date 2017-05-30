@@ -11,9 +11,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class AddUserCommand extends ContainerAwareCommand
 {
-    /** @var SymfonyStyle $io */
-    private $io;
-
     protected function configure()
     {
         $this
@@ -26,20 +23,20 @@ class AddUserCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->io = new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
 
-        $this->io->title('User Creation');
+        $io->title('User Creation');
 
         $username = $input->getArgument('username');
 
         if (!$username) {
-            $username = $this->io->ask('Please choose a username for the new user');
+            $username = $io->ask('Please choose a username for the new user');
         }
 
         $token = $input->getArgument('token');
 
         if (!$token) {
-            $token = $this->io->ask('Please choose a token for the new user');
+            $token = $io->ask('Please choose a token for the new user');
         }
 
         $user = new User($username, $token);
@@ -47,6 +44,6 @@ class AddUserCommand extends ContainerAwareCommand
         $em->persist($user);
         $em->flush();
 
-        $this->io->success(sprintf('User "%s" created successfully!', $username));
+        $io->success(sprintf('User "%s" created successfully!', $username));
     }
 }

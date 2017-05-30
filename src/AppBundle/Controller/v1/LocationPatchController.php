@@ -31,7 +31,7 @@ class LocationPatchController extends BaseController
         return new JsonResponse(
             $this->getDoctrine()
                 ->getRepository('AppBundle:LocationPatch')
-                ->findBy(['user' => $this->getCurrentUser()])
+                ->findBy(['user' => $this->getUser()])
         );
     }
 
@@ -65,7 +65,7 @@ class LocationPatchController extends BaseController
     {
         $inputData = $this->getInputContent($request);
         $this->validOr400($inputData, $this->createPatchConstraint($usingUserGeolocation));
-        $stopPointLocationPatch = LocationPatch::createFromApiInput($inputData);
+        $stopPointLocationPatch = LocationPatch::createFromApiInput($inputData, $this->getUser());
         $this->getDoctrine()->getManager()->persist($stopPointLocationPatch);
         $this->getDoctrine()->getManager()->flush();
 
@@ -92,7 +92,6 @@ class LocationPatchController extends BaseController
                 'id' => new NotBlank(),
                 'name' => new Optional(new NotBlank()),
             ]),
-            'user' => new Required(),
         ];
         $gpsConstraint = new Collection([
             'location' => new Wgs84Coord(),

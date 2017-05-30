@@ -5,9 +5,9 @@ namespace AppBundle\Security;
 use AppBundle\Http\Exception\UnauthorizedException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use AppBundle\Entity\User;
 
 class TokenUserProvider implements UserProviderInterface
 {
@@ -32,11 +32,7 @@ class TokenUserProvider implements UserProviderInterface
 
     public function loadUserByUsername($username) : User
     {
-        return new User(
-            $username,
-            null,
-            ['ROLE_USER']
-        );
+        return $this->entityManager->getRepository('AppBundle:User')->findOneBy(['username' => $username]);
     }
 
     public function refreshUser(UserInterface $user)
