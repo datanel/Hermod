@@ -89,9 +89,27 @@ docker stack deploy -c docker/docker-compose.prod.yml hermod
 
 Go to `http://hermod.localhost/v1/status`, the api should works
 
+## Authentication
+
+You need to be authenticated to use this API. We are using a token authentication.
+
+You can add a new user by using the following command:
+
+```
+bin/console app:create-user <username>
+```
+
+This command will give you a token, and on every request, you will need to provide this token in the `Authorization` header.
+
+## Stop application
+
 When you finished
 ```
 docker stack rm hermod
 docker stop traefik
 docker network rm traefik_proxy
 ```
+
+## License
+
+This application is under [AGPL-3.0](LICENSE).
