@@ -6,6 +6,54 @@ use Tests\AppBundle\Controller\AbstractControllerTest;
 
 class LocationPatchControllerTest extends AbstractControllerTest
 {
+    public function testPostLocationPatchesWithoutAuthorization()
+    {
+        $request = $this->client->request(
+            'POST',
+            '/v1/location_patches/from_user_location',
+            ['headers' => ['Authorization' => null]]
+        );
+
+        $this->assertEquals(401, $request->getStatusCode());
+    }
+
+    public function testPostLocationPatchesWithWrongAuthorization()
+    {
+        $request = $this->client->request(
+            'POST',
+            '/v1/location_patches/from_user_location',
+            ['headers' => ['Authorization' => '42']]
+        );
+
+        $this->assertEquals(401, $request->getStatusCode());
+    }
+
+    public function testPostLocationPatchesWithoutData()
+    {
+        $requiredFields = [
+            'source',
+            'stop_point',
+            'stop_point_current_location',
+            'route',
+            'stop_point_patched_location'
+        ];
+        $request = $this->client->request('POST', '/v1/location_patches');
+
+        $this->assertEquals(400, $request->getStatusCode());
+        $data = json_decode($request->getBody(true), true);
+        $this->assertArrayHasKey('error', $data);
+        $this->assertEquals($data['error'], 'invalid_params');
+        $this->assertArrayHasKey('messages', $data);
+        $this->assertEquals(count($data['messages']), 5);
+
+        foreach ($data['messages'] as $key => $message) {
+            $this->assertEquals(
+                $message,
+                'Error at [' . $requiredFields[$key] . ']: This field is missing.'
+            );
+        }
+    }
+
     public function testPostLocationPatches()
     {
         $data = [
