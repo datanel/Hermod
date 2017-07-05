@@ -7,11 +7,11 @@ services:
       - php-fpm
     networks:
       - network
-      - traefik_proxy
+      - traefik-net
     deploy:
       labels:
         - "traefik.frontend.rule=Host:hermod.localhost"
-        - "traefik.docker.network=traefik_proxy"
+        - "traefik.docker.network=traefik-net"
         - "traefik.port=80"
         - "traefik.frontend.entryPoints=http"
 
@@ -28,5 +28,5 @@ services:
 networks:
   network:
     driver: overlay
-  traefik_proxy:
+  traefik-net:
     external: true
