@@ -44,18 +44,18 @@ Run only this command with `root` user
 echo -e "127.0.0.1\thermod.localhost" >> /etc/hosts
 ```
 
-Create `docker/production.env` file (see [docker/default.env](docker/default.env) for example) for symfony environment
+Create `docker/config.env` file (see [docker/config.env.dist](docker/config.env.dist) for example) for symfony environment
 
 ### Traefik
 
 Create network for treafik and run it (Be careful, port: 80 should be free)
 
 ```
-docker network create traefik_proxy --driver overlay --attachable
+docker network create traefik-net --driver overlay --attachable
 ```
 
 ```
-docker run --rm -d --name traefik --network traefik_proxy --publish 80:80 --volume /var/run/docker.sock:/var/run/docker.sock containous/traefik:v1.3.0-rc2 --docker --docker.swarmmode --docker.watch --docker.domain=localhost
+docker run --rm -d --name traefik --network traefik-net --publish 80:80 --volume /var/run/docker.sock:/var/run/docker.sock containous/traefik:v1.3.0-rc2 --docker --docker.swarmmode --docker.watch --docker.domain=localhost
 ```
 
 ### Build & Run Hermod api
@@ -67,7 +67,7 @@ This command will build `hermod_php:master` and `hermod_nginx:master` images and
 
 Now you can create hermod stack
 ```
-docker stack deploy -c docker/docker-compose.prod.yml hermod
+VERSION=0.1.0 HOST=hermod.localhost docker stack deploy -c docker/docker-compose.prod.yml hermod
 ```
 
 Go to `http://hermod.localhost/v1/status`, the api should works
@@ -90,7 +90,7 @@ When you finished
 ```
 docker stack rm hermod
 docker stop traefik
-docker network rm traefik_proxy
+docker network rm traefik-net
 ```
 
 ## License
