@@ -23,24 +23,9 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
 
     public function showAction(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null)
     {
-        $responseFormats = [
-            'html' => 'text/html',
-            'json' => 'application/json'
-        ];
-        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
-            $request->setRequestFormat($this->getRequestedFormat($request));
-        }
-        $response = parent::showAction($request, $exception, $logger);
-        $response->headers->add(
-            ['Content-Type' => $responseFormats[$this->getRequestedFormat($request)]]
-        );
+        $request->setRequestFormat($this->getRequestedFormat($request));
 
-        return $response;
-    }
-
-    protected function findTemplate(Request $request, $format, $code, $showException)
-    {
-        return parent::findTemplate($request, $this->getRequestedFormat($request), $code, $showException);
+        return parent::showAction($request, $exception, $logger);
     }
 
     /**
