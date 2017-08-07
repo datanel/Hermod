@@ -55,14 +55,14 @@ class EquipmentController extends BaseController
 
     /**
      * Saves a collection of equipments in the database.
-     * If the equipment already exist, we update it only if his information differ
+     * If the equipment already exists, we update it only if his information differ
      * from the provided ones. If it does not exist, we just create it
      *
      * @param array $equipments
      *
      * @return array an associative array containing the created and updated records
      */
-    private function createOrUpdateEach(array $equipments)
+    private function createOrUpdateEach(array $equipments) : array
     {
         $created = $updated = [];
         $em = $this->getDoctrine()->getManager();
@@ -72,7 +72,7 @@ class EquipmentController extends BaseController
         foreach ($equipments as $equipment) {
             /** @var Equipment $equipmentInDb */
             $equipmentInDb = $existingEquipments[$equipment->getId()] ?? null;
-            if ($equipmentInDb) { // this equipment already exists in DB
+            if ($equipmentInDb) {
                 if (!$equipment->equals($equipmentInDb)) {
                     $equipmentInDb->updateFrom($equipment);
                     $em->persist($equipmentInDb);

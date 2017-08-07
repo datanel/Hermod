@@ -11,7 +11,6 @@ use AppBundle\Validator\{
 };
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\{
@@ -29,7 +28,7 @@ class EquipmentStatusController extends BaseController
      */
     public function getAllAction()
     {
-        return new JsonResponse(
+        return $this->json(
             $this->getDoctrine()
                 ->getRepository('AppBundle:EquipmentStatus')
                 ->findBy(['user' => $this->getUser()])
@@ -53,11 +52,11 @@ class EquipmentStatusController extends BaseController
      * Create an EquipmentStatus from the given input data
      * CAUTION: the input data must be validated BEFORE calling this, or it will crash badly
      *
-     * @param $inputData array a valid json_decoded api input
+     * @param array $inputData a valid json_decoded api input
      *
      * @return EquipmentStatus
      */
-    private function createFromInput($inputData)
+    private function createFromInput(array $inputData) : EquipmentStatus
     {
         return (new EquipmentStatus())
             ->setUser($this->getUser())

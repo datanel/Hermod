@@ -71,7 +71,7 @@ class LocationPatchController extends BaseController
         return new ResourceCreatedResponse();
     }
 
-    private function createFromInput($inputData)
+    private function createFromInput(array $inputData)
     {
         return (new LocationPatch())
             ->setUser($this->getUser())
