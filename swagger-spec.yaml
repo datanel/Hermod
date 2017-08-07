@@ -116,13 +116,13 @@ paths:
             type: "object"
             required:
             - source
-            - reported_by
+            - type
             - equipment
             - status
             properties:
               source:
                 $ref: "#/definitions/Source"
-              reported_by:
+              type:
                 type: string
                 enum: ["traveler", "employee"]
               equipment:
@@ -192,11 +192,15 @@ definitions:
         description: "Route name"
   Equipment:
     type: "object"
-    required: ["id"]
+    required: ["id", "type"]
     properties:
       id:
-        type: "string"
+        type: "integer"
         description: "Equipment id"
+      type:
+        type: "string"
+        description: "Equipment type"
+        enum: ["elevator"]
   Gps:
     type: "object"
     properties:
@@ -227,4 +231,4 @@ definitions:
         type: "array"
         items:
           type: "string"
-          example: "invalid coordinates"
+          example: "some input params are invalid"
