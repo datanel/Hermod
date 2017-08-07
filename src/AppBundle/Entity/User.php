@@ -16,34 +16,42 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 
     /**
      * @ORM\Column(type="string")
      *
      * @var string The user name
      */
-    protected $username;
+    private $username;
 
     /**
      * @ORM\Column(type="string")
      *
      * @var string The user token
      */
-    protected $token;
+    private $token;
 
     /**
      * @ORM\OneToMany(targetEntity="LocationPatch", mappedBy="user")
      *
      * @var ArrayCollection User patches
      */
-    protected $patches;
+    private $patches;
+
+    /**
+     * @ORM\OneToMany(targetEntity="EquipmentStatus", mappedBy="user")
+     *
+     * @var ArrayCollection User status reports
+     */
+    private $equipmentStatus;
 
     public function __construct($username, $token)
     {
         $this->username = $username;
         $this->token = $token;
         $this->patches = new ArrayCollection();
+        $this->equipmentStatus = new ArrayCollection();
     }
 
     public function getId()
@@ -81,6 +89,11 @@ class User
     public function getPatches()
     {
         return $this->patches;
+    }
+
+    public function getStatusReports()
+    {
+        return $this->equipmentStatus;
     }
 
     public function __toString()

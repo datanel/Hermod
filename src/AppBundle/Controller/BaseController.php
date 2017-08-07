@@ -11,6 +11,16 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 abstract class BaseController extends Controller
 {
     /**
+     * Shortcut method
+     * @param $entity
+     */
+    public function save($entity)
+    {
+        $this->getDoctrine()->getManager()->persist($entity);
+        $this->getDoctrine()->getManager()->flush();
+    }
+
+    /**
      * Utility method allowing early return in case of bad request from the client.
      *
      * @param mixed $value the value to validate against the given constraints
@@ -33,11 +43,16 @@ abstract class BaseController extends Controller
      *
      * @param Request $request
      *
-     * @return array the json decoded input or an empty array if the input is invalid
+     * @return array the json decoded input
+     * @throws BadRequestException when the content of the request is not a valid json string
      */
     public function getInputContent(Request $request) : array
     {
-        return (array)json_decode($request->getContent(), true);
+        $inputContent = json_decode($request->getContent(), true);
+        if ($inputContent === null) {
+            throw new BadRequestException('The provided input content is not a valid json string', 'invalid_params');
+        }
+        return $inputContent;
     }
 
     /**
@@ -46,7 +61,7 @@ abstract class BaseController extends Controller
      *
      * TODO: This is a naive implementation as it just outputs a slightly modified property path for
      * each violation (ex: [field_a->field_b]).
-     * This is highly tied with the PropertyAccessor notation
+     * This is highly tied to the PropertyAccessor notation
      *
      * @param ConstraintViolationListInterface $violationList
      *
