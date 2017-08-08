@@ -11,6 +11,8 @@ info:
 tags:
 - name: "location_patch"
   description: "Suggest patches to improve stop information"
+- name: "equipment_status"
+  description: "Report and retrieve status of various equipments"
 - name: "status"
   description: "Verify the API status"
 schemes:
@@ -98,6 +100,47 @@ paths:
             $ref: "#/definitions/Errors"
       security:
       - api_key: []
+  /v1/equipment_status:
+    post:
+      tags:
+      - "equipment_status"
+      summary: "Report the status of an equipment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            type: "object"
+            required:
+            - source
+            - type
+            - equipment
+            - status
+            properties:
+              source:
+                $ref: "#/definitions/Source"
+              type:
+                type: string
+                enum: ["traveler", "employee"]
+              equipment:
+                $ref: "#/definitions/Equipment"
+              status:
+                type: string
+                enum: ["OK", "KO"]
+              gps:
+                $ref: "#/definitions/Gps"
+      responses:
+        201:
+          description: "Everything went fine"
+        400:
+          description: "Invalid request"
+          schema:
+            $ref: "#/definitions/Errors"
+      security:
+      - api_key: []
   /v1/status:
     get:
       summary: "Utility endpoint to check if the service is up and running"
@@ -147,6 +190,17 @@ definitions:
       name:
         type: "string"
         description: "Route name"
+  Equipment:
+    type: "object"
+    required: ["id", "type"]
+    properties:
+      id:
+        type: "integer"
+        description: "Equipment id"
+      type:
+        type: "string"
+        description: "Equipment type"
+        enum: ["elevator"]
   Gps:
     type: "object"
     properties:
@@ -177,4 +231,4 @@ definitions:
         type: "array"
         items:
           type: "string"
-          example: "invalid coordinates"
+          example: "some input params are invalid"
