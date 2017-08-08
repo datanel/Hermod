@@ -2,16 +2,14 @@
 
 namespace Tests\AppBundle\Controller\v1;
 
-use Tests\AppBundle\Controller\AbstractControllerTest;
-
-class AppControllerTest extends AbstractControllerTest
+class AppControllerTest extends ApiTestCase
 {
     public function testStatus()
     {
-        $request = $this->client->get('/v1/status');
+        $response = $this->client->get('status');
 
-        $this->assertEquals(200, $request->getStatusCode());
-        $data = json_decode($request->getBody(true), true);
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = $this->getBody($response);
         $this->assertArrayHasKey('status', $data);
         $this->assertEquals($data['status'], 'OK');
     }

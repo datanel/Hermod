@@ -6,7 +6,7 @@ use AppBundle\Controller\BaseController;
 use AppBundle\Http\ResourceCreatedResponse;
 use AppBundle\Entity\LocationPatch;
 use AppBundle\Validator\{
-    Collection, Wgs84Coord
+    Collection, CommonConstraints, Wgs84Coord
 };
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -65,11 +65,30 @@ class LocationPatchController extends BaseController
     {
         $inputData = $this->getInputContent($request);
         $this->validOr400($inputData, $this->createPatchConstraint($usingUserGeolocation));
-        $stopPointLocationPatch = LocationPatch::createFromApiInput($inputData, $this->getUser());
-        $this->getDoctrine()->getManager()->persist($stopPointLocationPatch);
-        $this->getDoctrine()->getManager()->flush();
+        $stopPointLocationPatch = $this->createFromInput($inputData);
+        $this->save($stopPointLocationPatch);
 
         return new ResourceCreatedResponse();
+    }
+
+    private function createFromInput(array $inputData)
+    {
+        return (new LocationPatch())
+            ->setUser($this->getUser())
+            ->setSourceName($inputData['source']['name'])
+            ->setUsingUserGeolocation(!isset($inputData['stop_point_patched_location']))
+            ->setStopPointId($inputData['stop_point']['id'])
+            ->setStopPointName($inputData['stop_point']['name'] ?? '')
+            ->setStopPointCurrentLat($inputData['stop_point_current_location']['lat'])
+            ->setStopPointCurrentLon($inputData['stop_point_current_location']['lon'])
+            // if this patch is a "using geolocation" patch, we copy the gps coords in the patched location
+            ->setStopPointPatchedLat($inputData['stop_point_patched_location']['lat'] ?? $inputData['gps']['location']['lat'])
+            ->setStopPointPatchedLon($inputData['stop_point_patched_location']['lon'] ?? $inputData['gps']['location']['lon'])
+            ->setRouteId($inputData['route']['id'])
+            ->setRouteName($inputData['route']['name'] ?? '')
+            ->setUserGeolocationLat($inputData['gps']['location']['lat'] ?? 0)
+            ->setUserGeolocationLon($inputData['gps']['location']['lon'] ?? 0)
+            ->setUserGpsAccuracy($inputData['gps']['accuracy'] ?? 0);
     }
 
     /**
@@ -93,13 +112,7 @@ class LocationPatchController extends BaseController
                 'name' => new Optional(new NotBlank()),
             ]),
         ];
-        $gpsConstraint = new Collection([
-            'location' => new Wgs84Coord(),
-            'accuracy' => new Required([
-                new NotBlank(),
-                new Range(['min' => 0])
-            ]),
-        ]);
+        $gpsConstraint = CommonConstraints::Gps();
         if ($fromUserLocation) {
             $constraints = array_merge($constraints, ['gps' => new Required($gpsConstraint)]);
         } else {

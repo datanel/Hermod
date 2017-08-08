@@ -10,7 +10,6 @@ stage("Unit tests") {
             export UID=$(id -u)
             export GID=$(id -g)
 
-            cp phpunit.xml.dist phpunit.xml
             cp docker/config.env.dist docker/config_test.env
             echo "SYMFONY_ENV=dev" >> docker/config_test.env
             docker-compose -f docker/docker-compose.test.yml run composer_install
