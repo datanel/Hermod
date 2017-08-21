@@ -4,6 +4,7 @@ namespace AppBundle\Controller\v1;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Entity\Equipment;
+use AppBundle\Entity\EquipmentRepository;
 use AppBundle\Http\Exception\BadRequestException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -32,7 +33,7 @@ class EquipmentController extends BaseController
      */
     public function csvUpdateAction(Request $request)
     {
-        $mandatoryHeaders = ['ID', 'Code metier', 'ID Gare', 'Gare', 'Situation', 'Direction'];
+        $mandatoryHeaders = ['id', 'code', 'station_id', 'station', 'status', 'direction'];
         try {
             $csv = Csv::parse($request->getContent(), $mandatoryHeaders);
         } catch (\InvalidArgumentException $e) {
@@ -41,51 +42,15 @@ class EquipmentController extends BaseController
         $equipments = [];
 
         foreach ($csv as $row) {
-            $equipments[] = (new Equipment($row['ID']))
-                ->setCode($row['Code metier'])
+            $equipments[] = (new Equipment($row['id']))
+                ->setCode($row['code'])
                 ->setType(Equipment::TYPE_ELEVATOR)
-                ->setStationId($row['ID Gare'])
-                ->setStationName($row['Gare'])
-                ->setLocation($row['Situation'])
-                ->setDirection($row['Direction']);
+                ->setStationId($row['station_id'])
+                ->setStationName($row['station'])
+                ->setLocation($row['status'])
+                ->setDirection($row['direction']);
         }
 
-        return $this->json($this->createOrUpdateEach($equipments));
-    }
-
-    /**
-     * Saves a collection of equipments in the database.
-     * If the equipment already exists, we update it only if his information differ
-     * from the provided ones. If it does not exist, we just create it
-     *
-     * @param array $equipments
-     *
-     * @return array an associative array containing the created and updated records
-     */
-    private function createOrUpdateEach(array $equipments) : array
-    {
-        $created = $updated = [];
-        $em = $this->getDoctrine()->getManager();
-        $existingEquipments = $em->createQuery('SELECT e FROM AppBundle:Equipment e INDEX BY e.id')->getResult();
-
-        /** @var Equipment $equipment */
-        foreach ($equipments as $equipment) {
-            /** @var Equipment $equipmentInDb */
-            $equipmentInDb = $existingEquipments[$equipment->getId()] ?? null;
-            if ($equipmentInDb) {
-                if (!$equipment->equals($equipmentInDb)) {
-                    $equipmentInDb->updateFrom($equipment);
-                    $em->persist($equipmentInDb);
-                    $updated[] = $equipmentInDb;
-                }
-            } else {
-                $em->persist($equipment);
-                $created[] = $equipment;
-            }
-        }
-
-        $em->flush();
-
-        return ['created' => $created, 'updated' => $updated];
+        return $this->json($this->getDoctrine()->getRepository(Equipment::class)->createOrUpdateEach($equipments));
     }
 }

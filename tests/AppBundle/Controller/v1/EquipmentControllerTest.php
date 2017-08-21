@@ -5,11 +5,11 @@ namespace Tests\AppBundle\Controller\v1;
 class EquipmentControllerTest extends ApiTestCase
 {
     private $missingHeadersCsv = <<<CSV
-Code metier;ID Gare;Situation;Direction
+code;station_id;status;direction
 CSV;
 
     private $csv4Equipments = <<<CSV
-ID;Code metier;ID Gare;Gare;Gare Active;Situation;Direction;maj
+id;code;station_id;station;active_station;status;direction;maj
 435;"NAP PBS3 ILOT 13";8775802;"GARE DE NANTERRE PREFECTURE";"Oui";"Voirie - Quai";"saint germain en laye";"2013-05-27"
 437;"NAP PBS6 (Nord)";8775802;"GARE DE NANTERRE PREFECTURE";"Oui";"Salle des Echanges - Quai 1/1C - Quai 2";"St-Germain-en-Laye et Boissy - Chessy";
 436;"NAP PBS5 (Sud)";8775802;"GARE DE NANTERRE PREFECTURE";"Oui";"Salle des Echanges - Quai 2c";"Cergy-Poissy";
@@ -24,7 +24,7 @@ CSV;
     public function testMandatoryCsvHeadersAreEnforced()
     {
         $response = $this->client->request('POST', 'equipments/csv_update', ['body' => $this->missingHeadersCsv]);
-        $this->assertError($response, 400, 'bad_request', 'missing headers: \'ID\', \'Gare\'');
+        $this->assertError($response, 400, 'bad_request', 'missing headers: \'id\', \'station\'');
     }
 
     public function testCreateEquipmentsWithCsv()
