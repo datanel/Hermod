@@ -36,9 +36,6 @@ RUN useradd --home-dir /srv/hermod/ hermod
 RUN chown -R hermod:hermod /srv/hermod/
 RUN chown -R www-data:www-data var/cache var/logs var/sessions
 
-RUN setfacl -R -m u:www-data:rwX -m u:hermod:rwX var/cache var/logs var/sessions
-RUN setfacl -dR -m u:www-data:rwX -m u:hermod:rwX var/cache var/logs var/sessions
-
 USER www-data
 
 CMD ["/srv/hermod/docker/php/run.sh"]
