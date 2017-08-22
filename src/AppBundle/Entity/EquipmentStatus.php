@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
@@ -37,13 +38,6 @@ class EquipmentStatus implements \JsonSerializable
      * @var string the reported status, either 'OK' or 'KO'
      */
     private $reportedStatus;
-
-    /**
-     * @ORM\Column(type="datetimetz")
-     *
-     * @var \DateTime The date and time at which this report was created
-     */
-    private $createdAt;
 
     /**
      * @ORM\Column(type="boolean")
@@ -82,17 +76,28 @@ class EquipmentStatus implements \JsonSerializable
     private $user;
 
     /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
+     */
+    private $updatedAt;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Equipment", inversedBy="status")
      * @ORM\JoinColumn(name="equipment_id", referencedColumnName="id")
      *
      * @var Equipment
      */
     private $equipment;
-
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime;
-    }
 
     /**
      * @return mixed
@@ -163,24 +168,6 @@ class EquipmentStatus implements \JsonSerializable
     public function setReportedStatus(string $reportedStatus): EquipmentStatus
     {
         $this->reportedStatus = $reportedStatus;
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     * @return EquipmentStatus
-     */
-    public function setCreatedAt(\DateTime $createdAt): EquipmentStatus
-    {
-        $this->createdAt = $createdAt;
         return $this;
     }
 
@@ -292,10 +279,57 @@ class EquipmentStatus implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return EquipmentStatus
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return EquipmentStatus
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
     public function jsonSerialize() : array
     {
         $return = [
             'created_at' => $this->createdAt->format(\DateTime::ISO8601),
+            'updated_at' => $this->updatedAt->format(\DateTime::ISO8601),
             'source_name' => $this->sourceName,
             'equipment' => $this->equipment,
             'type' => $this->type,

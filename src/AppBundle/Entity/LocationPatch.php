@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
@@ -23,13 +24,6 @@ class LocationPatch implements \JsonSerializable
      * @var string The name of the source system
      */
     private $sourceName;
-
-    /**
-     * @ORM\Column(type="datetimetz")
-     *
-     * @var \DateTime The date and time on which this patch has been created
-     */
-    private $createdAt;
 
     /**
      * @ORM\Column(type="boolean")
@@ -128,10 +122,21 @@ class LocationPatch implements \JsonSerializable
      */
     private $user;
 
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime;
-    }
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
+     */
+    private $updatedAt;
 
     /**
      * @return mixed
@@ -166,24 +171,6 @@ class LocationPatch implements \JsonSerializable
     public function setSourceName(string $sourceName): LocationPatch
     {
         $this->sourceName = $sourceName;
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     * @return LocationPatch
-     */
-    public function setCreatedAt(\DateTime $createdAt): LocationPatch
-    {
-        $this->createdAt = $createdAt;
         return $this;
     }
 
@@ -421,10 +408,57 @@ class LocationPatch implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return LocationPatch
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return LocationPatch
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
     public function jsonSerialize() : array
     {
         return [
             'created_at' => $this->createdAt->format(\DateTime::ISO8601),
+            'updated_at' => $this->updatedAt->format(\DateTime::ISO8601),
             'source_name' => $this->sourceName,
             'patched_using_geoloc' => $this->usingUserGeolocation,
             'stop_point' => [
