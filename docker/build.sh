@@ -1,5 +1,10 @@
 #!/bin/sh
 
+set -ex
+
+# You should be on origin/release
+VERSION=$(git describe --tags --exact-match)
+
 if [ ! -f 'docker/config.env' ]; then
     echo "'docker/config.env' environment file is missing. Please create it, see docker/config.env.dist for example"
     exit 66 # EX_NOINPUT
@@ -21,5 +26,5 @@ docker run --rm --interactive --tty \
 
 rm -rf var/cache/* var/logs/* var/sessions/*
 
-docker build --rm -t par-vm232.srv.canaltp.fr:5000/hermod_php:master -f docker/php/Dockerfile .
-docker build --rm -t par-vm232.srv.canaltp.fr:5000/hermod_nginx:master -f docker/nginx/Dockerfile .
+docker build --rm -t par-vm232.srv.canaltp.fr:5000/hermod_php:${VERSION} -f docker/php/Dockerfile .
+docker build --rm -t par-vm232.srv.canaltp.fr:5000/hermod_nginx:${VERSION} -f docker/nginx/Dockerfile .
