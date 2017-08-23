@@ -62,12 +62,12 @@ docker run --rm -d --name traefik --network traefik-net --publish 80:80 --volume
 
 This command will build `hermod_php:master` and `hermod_nginx:master` images and run `composer install`
 ```
-./docker/build.sh
+DOCKER_REGISTRY_HOST=YOUR_DOCKER_REGISTRY_HOST:5000 ./docker/build.sh
 ```
 
 Now you can create hermod stack
 ```
-VERSION=0.1.0 HOST=hermod.localhost docker stack deploy -c docker/docker-compose.prod.yml hermod
+DOCKER_REGISTRY_HOST=YOUR_DOCKER_REGISTRY_HOST:5000 VERSION=0.1.0 HOST=hermod.localhost docker stack deploy -c docker/docker-compose.prod.yml hermod
 ```
 
 Go to `http://hermod.localhost/v1/status`, the api should works

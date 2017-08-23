@@ -2,7 +2,7 @@ version: '3'
 
 services:
   nginx:
-    image: par-vm232.srv.canaltp.fr:5000/hermod_nginx:${VERSION}
+    image: ${DOCKER_REGISTRY_HOST}/hermod_nginx:${VERSION}
     depends_on:
       - php-fpm
     networks:
@@ -16,7 +16,7 @@ services:
         - "traefik.frontend.entryPoints=http"
 
   php-fpm:
-    image: par-vm232.srv.canaltp.fr:5000/hermod_php:${VERSION}
+    image: ${DOCKER_REGISTRY_HOST}/hermod_php:${VERSION}
     env_file:
       - docker/config.env
     networks:

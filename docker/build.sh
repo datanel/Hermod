@@ -26,5 +26,5 @@ docker run --rm --interactive --tty \
 
 rm -rf var/cache/* var/logs/* var/sessions/*
 
-docker build --rm -t par-vm232.srv.canaltp.fr:5000/hermod_php:${VERSION} -f docker/php/Dockerfile .
-docker build --rm -t par-vm232.srv.canaltp.fr:5000/hermod_nginx:${VERSION} -f docker/nginx/Dockerfile .
+docker build --rm -t ${DOCKER_REGISTRY_HOST}/hermod_php:${VERSION} -f docker/php/Dockerfile .
+docker build --rm -t ${DOCKER_REGISTRY_HOST}/hermod_nginx:${VERSION} -f docker/nginx/Dockerfile .
