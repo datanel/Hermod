@@ -17,7 +17,7 @@ docker run --rm \
     --volume /etc/group:/etc/group:ro \
     --volume ${HOME}/.composer/.config/composer:/composer:rw \
     --volume ${HOME}/.ssh:$HOME/.ssh:ro \
-    --volume ${PWD}:/app \
+    --volume "${PWD}:/app" \
     --workdir /app \
     --env-file ./docker/config.env \
     --env SYMFONY_ENV=prod \
