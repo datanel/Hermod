@@ -8,6 +8,11 @@ services:
     networks:
       - network
       - traefik-net
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: local7
+        tag: hermod-nginx
     deploy:
       labels:
         - "traefik.frontend.rule=Host:${HOST}"
@@ -23,8 +28,15 @@ services:
     image: ${DOCKER_REGISTRY_HOST}/hermod_php:${VERSION}
     env_file:
       - docker/config.env
+    environment:
+      LOG_PATH: "php://stderr"
     networks:
       - network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: local6
+        tag: hermod-php-fpm
     deploy:
       labels:
         - "traefik.enable=false"
