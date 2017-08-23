@@ -10,7 +10,8 @@ if [ ! -f 'docker/config.env' ]; then
     exit 66 # EX_NOINPUT
 fi
 
-docker run --rm --interactive --tty \
+cp app/config/parameters.yml.dist app/config/parameters.yml
+docker run --rm \
     --user $(id -u) \
     --volume /etc/passwd:/etc/passwd:ro \
     --volume /etc/group:/etc/group:ro \
