@@ -14,6 +14,10 @@ services:
         - "traefik.docker.network=traefik-net"
         - "traefik.port=80"
         - "traefik.frontend.entryPoints=http"
+      update_config:
+        parallelism: 1
+        delay: 10s
+      replicas: 2
 
   php-fpm:
     image: ${DOCKER_REGISTRY_HOST}/hermod_php:${VERSION}
@@ -24,6 +28,10 @@ services:
     deploy:
       labels:
         - "traefik.enable=false"
+      update_config:
+        parallelism: 1
+        delay: 10s
+      replicas: 2
 
 networks:
   network:
