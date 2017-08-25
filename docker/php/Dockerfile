@@ -47,7 +47,8 @@ USER www-data
 
 CMD ["/srv/hermod/docker/php/run.sh"]
 
-HEALTHCHECK CMD SCRIPT_NAME=/ping \
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD SCRIPT_NAME=/ping \
     SCRIPT_FILENAME=/ping \
     REQUEST_METHOD=GET \
     cgi-fcgi -bind -connect 127.0.0.1:9000 | grep -c pong || exit 1
