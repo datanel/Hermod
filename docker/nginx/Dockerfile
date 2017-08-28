@@ -18,5 +18,5 @@ COPY web/favicon.ico /srv/hermod/web/favicon.ico
 
 CMD ["/run.sh"]
 
-HEALTHCHECK --interval=30s --timeout=3s \
+HEALTHCHECK --interval=5s --timeout=3s \
   CMD curl -s http://127.0.0.1/robots.txt | grep -c www.robotstxt.org || exit 1

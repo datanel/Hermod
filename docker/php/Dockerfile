@@ -47,7 +47,7 @@ USER www-data
 
 CMD ["/srv/hermod/docker/php/run.sh"]
 
-HEALTHCHECK --interval=30s --timeout=3s \
+HEALTHCHECK --interval=5s --timeout=3s \
   CMD SCRIPT_NAME=/ping \
     SCRIPT_FILENAME=/ping \
     REQUEST_METHOD=GET \
