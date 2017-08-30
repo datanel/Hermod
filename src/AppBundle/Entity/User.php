@@ -34,18 +34,18 @@ class User
     private $token;
 
     /**
-     * @ORM\OneToMany(targetEntity="LocationPatch", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Location", mappedBy="user")
      *
-     * @var ArrayCollection User patches
+     * @var ArrayCollection User locationPatches
      */
-    private $patches;
+    private $locationPatches;
 
     /**
-     * @ORM\OneToMany(targetEntity="EquipmentStatus", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Status", mappedBy="user")
      *
      * @var ArrayCollection User status reports
      */
-    private $equipmentStatus;
+    private $statusPatches;
 
     /**
      * @var \DateTime
@@ -67,8 +67,8 @@ class User
     {
         $this->username = $username;
         $this->token = $token;
-        $this->patches = new ArrayCollection();
-        $this->equipmentStatus = new ArrayCollection();
+        $this->locationPatches = new ArrayCollection();
+        $this->statusPatches = new ArrayCollection();
     }
 
     public function getId()
@@ -103,14 +103,14 @@ class User
         return $this;
     }
 
-    public function getPatches()
+    public function getLocationPatches()
     {
-        return $this->patches;
+        return $this->locationPatches;
     }
 
     public function getStatusReports()
     {
-        return $this->equipmentStatus;
+        return $this->statusPatches;
     }
 
     /**

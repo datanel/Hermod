@@ -7,68 +7,34 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="equipment")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\EquipmentRepository")
+ * Equipment
+ *
+ * @ORM\MappedSuperclass
  */
-class Equipment implements \JsonSerializable
+abstract class Equipment implements EquipmentInterface, \JsonSerializable
 {
     const TYPE_ELEVATOR = 'elevator';
+    const TYPE_STOP_POINT = 'stop_point';
 
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      */
-    private $id;
+    protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @var string a reference of equipment object
      *
-     * @var string code
+     * @ORM\Column(name="code", type="string", length=255, unique=true)
      */
-    private $code;
+    protected $code;
 
     /**
-     * @ORM\Column(type="string")
-     *
-     * @var string type of this equipment
-     */
-    private $type;
-
-    /**
-     * @ORM\Column(type="string")
-     *
-     * @var string id of the station where this equipment is located
-     */
-    private $stationId;
-
-    /**
-     * @ORM\Column(type="string")
-     *
-     * @var string name of the station where this equipment is located
-     */
-    private $stationName;
-
-    /**
-     * @ORM\Column(type="string")
-     *
-     * @var string a human readable string indicating where is this equipment
-     */
-    private $location;
-
-    /**
-     * @ORM\Column(type="string")
-     *
      * @var string
-     */
-    private $direction;
-
-    /**
-     * @ORM\OneToMany(targetEntity="EquipmentStatus", mappedBy="equipment")
      *
-     * @var ArrayCollection the reported status for this equipment
+     * @ORM\Column(name="source_name", type="string", length=255)
      */
-    private $status;
+    protected $sourceName;
 
     /**
      * @var \DateTime
@@ -76,7 +42,7 @@ class Equipment implements \JsonSerializable
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var \DateTime
@@ -84,7 +50,7 @@ class Equipment implements \JsonSerializable
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     public function __construct($id)
     {
@@ -98,6 +64,30 @@ class Equipment implements \JsonSerializable
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set sourceName
+     *
+     * @param string $sourceName
+     *
+     * @return StopPoint
+     */
+    public function setSourceName(string $sourceName) : StopPoint
+    {
+        $this->sourceName = $sourceName;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceName
+     *
+     * @return string
+     */
+    public function getSourceName() : string
+    {
+        return $this->sourceName;
     }
 
     /**
@@ -119,125 +109,18 @@ class Equipment implements \JsonSerializable
     }
 
     /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     * @return Equipment
-     */
-    public function setType(string $type): Equipment
-    {
-        $this->type = $type;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStationId(): string
-    {
-        return $this->stationId;
-    }
-
-    /**
-     * @param string $stationId
-     * @return Equipment
-     */
-    public function setStationId(string $stationId): Equipment
-    {
-        $this->stationId = $stationId;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStationName(): string
-    {
-        return $this->stationName;
-    }
-
-    /**
-     * @param string $stationName
-     * @return Equipment
-     */
-    public function setStationName(string $stationName): Equipment
-    {
-        $this->stationName = $stationName;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocation(): string
-    {
-        return $this->location;
-    }
-
-    /**
-     * @param string $location
-     * @return Equipment
-     */
-    public function setLocation(string $location): Equipment
-    {
-        $this->location = $location;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDirection(): string
-    {
-        return $this->direction;
-    }
-
-    /**
-     * @param string $direction
-     * @return Equipment
-     */
-    public function setDirection(string $direction): Equipment
-    {
-        $this->direction = $direction;
-        return $this;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getStatus(): ArrayCollection
-    {
-        return $this->status;
-    }
-
-    /**
-     * @return array the list of available equipment types
+     * @return array the list of available equipmentId types
      */
     public static function getAvailableTypes()
     {
         return [
-            self::TYPE_ELEVATOR
+            self::TYPE_ELEVATOR,
+            self::TYPE_STOP_POINT
         ];
     }
 
     /**
-     * @param ArrayCollection $status
-     * @return Equipment
-     */
-    public function setStatus(ArrayCollection $status): Equipment
-    {
-        $this->status = $status;
-        return $this;
-    }
-
-    /**
-     * Tells whether or not the given equipment values are the same as $this.
+     * Tells whether or not the given equipmentId values are the same as $this.
      * Some properties (such as the creation datetime)
      *
      * @param Equipment $equipment
@@ -254,7 +137,7 @@ class Equipment implements \JsonSerializable
     }
 
     /**
-     * Updates the current instance from the given equipment
+     * Updates the current instance from the given equipmentId
      *
      * @param Equipment $equipment
      * @return $this
@@ -332,22 +215,5 @@ class Equipment implements \JsonSerializable
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    public function jsonSerialize() : array
-    {
-        return [
-            'id' => $this->id,
-            'code' => $this->code,
-            'type' => $this->type,
-            'station' => [
-                'id' => $this->stationId,
-                'name' => $this->stationName
-            ],
-            'location' => $this->location,
-            'direction' => $this->direction,
-            'created_at' => $this->createdAt->format(\DateTime::ISO8601),
-            'updated_at' => $this->updatedAt->format(\DateTime::ISO8601)
-        ];
     }
 }

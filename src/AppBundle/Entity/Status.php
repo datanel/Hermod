@@ -7,9 +7,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="equipment_status")
+ * @ORM\Table(name="status", indexes={@ORM\Index(name="status_equipment_id_idx", columns={"equipment_id"})})
  */
-class EquipmentStatus implements \JsonSerializable
+class Status implements \JsonSerializable
 {
     /**
      * @ORM\Column(type="integer")
@@ -21,54 +21,12 @@ class EquipmentStatus implements \JsonSerializable
     /**
      * @ORM\Column(type="string")
      *
-     * @var string name of the source system
-     */
-    private $sourceName;
-
-    /**
-     * @ORM\Column(type="string")
-     *
-     * @var string whether this report was done by a traveler or by an employee
-     */
-    private $type;
-
-    /**
-     * @ORM\Column(type="string")
-     *
-     * @var string the reported status, either 'OK' or 'KO'
+     * @var string the reported status, either 'available', 'unavailable', 'coming_soon' or 'disturbed'
      */
     private $reportedStatus;
 
     /**
-     * @ORM\Column(type="boolean")
-     *
-     * @var bool whether or not this status report includes user geolocation
-     */
-    private $includeUserGeolocation = false;
-
-    /**
-     * @ORM\Column(type="float")
-     *
-     * @var float the end-user geolocation latitude
-     */
-    private $userGeolocationLat = 0;
-
-    /**
-     * @ORM\Column(type="float")
-     *
-     * @var float the end-user geolocation longitude
-     */
-    private $userGeolocationLon = 0;
-
-    /**
-     * @ORM\Column(type="float")
-     *
-     * @var float accuracy (in meters) of the end-user GPS device
-     */
-    private $userGpsAccuracy = 0;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="equipmentStatus")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="statusPatches")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      *
      * @var User The user submitting the report
@@ -92,12 +50,11 @@ class EquipmentStatus implements \JsonSerializable
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Equipment", inversedBy="status")
-     * @ORM\JoinColumn(name="equipment_id", referencedColumnName="id")
+     * @ORM\Column(type="integer")
      *
-     * @var Equipment
+     * @var EquipmentId
      */
-    private $equipment;
+    private $equipmentId;
 
     /**
      * @return mixed
@@ -109,7 +66,7 @@ class EquipmentStatus implements \JsonSerializable
 
     /**
      * @param mixed $id
-     * @return EquipmentStatus
+     * @return Status
      */
     public function setId($id)
     {
@@ -127,9 +84,9 @@ class EquipmentStatus implements \JsonSerializable
 
     /**
      * @param string $sourceName
-     * @return EquipmentStatus
+     * @return Status
      */
-    public function setSourceName(string $sourceName): EquipmentStatus
+    public function setSourceName(string $sourceName): Status
     {
         $this->sourceName = $sourceName;
         return $this;
@@ -145,9 +102,9 @@ class EquipmentStatus implements \JsonSerializable
 
     /**
      * @param string $type
-     * @return EquipmentStatus
+     * @return Status
      */
-    public function setType(string $type): EquipmentStatus
+    public function setType(string $type): Status
     {
         $this->type = $type;
         return $this;
@@ -163,9 +120,9 @@ class EquipmentStatus implements \JsonSerializable
 
     /**
      * @param string $reportedStatus
-     * @return EquipmentStatus
+     * @return Status
      */
-    public function setReportedStatus(string $reportedStatus): EquipmentStatus
+    public function setReportedStatus(string $reportedStatus): Status
     {
         $this->reportedStatus = $reportedStatus;
         return $this;
@@ -180,70 +137,6 @@ class EquipmentStatus implements \JsonSerializable
     }
 
     /**
-     * @param boolean $includeUserGeolocation
-     * @return EquipmentStatus
-     */
-    public function setIncludeUserGeolocation(bool $includeUserGeolocation): EquipmentStatus
-    {
-        $this->includeUserGeolocation = $includeUserGeolocation;
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getUserGeolocationLat(): float
-    {
-        return $this->userGeolocationLat;
-    }
-
-    /**
-     * @param float $userGeolocationLat
-     * @return EquipmentStatus
-     */
-    public function setUserGeolocationLat(float $userGeolocationLat): EquipmentStatus
-    {
-        $this->userGeolocationLat = $userGeolocationLat;
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getUserGeolocationLon(): float
-    {
-        return $this->userGeolocationLon;
-    }
-
-    /**
-     * @param float $userGeolocationLon
-     * @return EquipmentStatus
-     */
-    public function setUserGeolocationLon(float $userGeolocationLon): EquipmentStatus
-    {
-        $this->userGeolocationLon = $userGeolocationLon;
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getUserGpsAccuracy(): float
-    {
-        return $this->userGpsAccuracy;
-    }
-
-    /**
-     * @param float $userGpsAccuracy
-     * @return EquipmentStatus
-     */
-    public function setUserGpsAccuracy(float $userGpsAccuracy): EquipmentStatus
-    {
-        $this->userGpsAccuracy = $userGpsAccuracy;
-        return $this;
-    }
-
-    /**
      * @return User
      */
     public function getUser(): User
@@ -253,29 +146,30 @@ class EquipmentStatus implements \JsonSerializable
 
     /**
      * @param User $user
-     * @return EquipmentStatus
+     * @return Status
      */
-    public function setUser(User $user): EquipmentStatus
+    public function setUser(User $user): Status
     {
         $this->user = $user;
         return $this;
     }
 
+
     /**
-     * @return Equipment
+     * @return int
      */
-    public function getEquipment(): Equipment
+    public function getEquipmentId(): int
     {
-        return $this->equipment;
+        return $this->equipmentId;
     }
 
     /**
-     * @param Equipment $equipment
-     * @return EquipmentStatus
+     * @param int $equipmentId
+     * @return Location
      */
-    public function setEquipment(Equipment $equipment): EquipmentStatus
+    public function setEquipmentId(int $equipmentId): Status
     {
-        $this->equipment = $equipment;
+        $this->equipmentId = $equipmentId;
         return $this;
     }
 
@@ -283,7 +177,7 @@ class EquipmentStatus implements \JsonSerializable
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return EquipmentStatus
+     * @return Status
      */
     public function setCreatedAt($createdAt)
     {
@@ -306,7 +200,7 @@ class EquipmentStatus implements \JsonSerializable
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return EquipmentStatus
+     * @return Status
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -331,7 +225,7 @@ class EquipmentStatus implements \JsonSerializable
             'created_at' => $this->createdAt->format(\DateTime::ISO8601),
             'updated_at' => $this->updatedAt->format(\DateTime::ISO8601),
             'source_name' => $this->sourceName,
-            'equipment' => $this->equipment,
+            'equipmentId' => $this->equipment,
             'type' => $this->type,
             'status' => $this->reportedStatus
         ];
@@ -339,7 +233,7 @@ class EquipmentStatus implements \JsonSerializable
             $return = array_merge(
                 $return,
                 ['gps' => [
-                    'location' => [
+                    'humanLocation' => [
                         'lat' => $this->userGeolocationLat,
                         'lon' => $this->userGeolocationLon
                     ],
