@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="stop_point")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\StopPointRepository")
  */
-class StopPoint extends Equipment
+class StopPoint extends Equipment implements \JsonSerializable
 {
     /**
      * @var string

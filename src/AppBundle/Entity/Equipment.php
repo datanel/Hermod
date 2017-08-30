@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\MappedSuperclass
  */
-abstract class Equipment implements EquipmentInterface, \JsonSerializable
+class Equipment implements EquipmentInterface
 {
     const TYPE_ELEVATOR = 'elevator';
     const TYPE_STOP_POINT = 'stop_point';

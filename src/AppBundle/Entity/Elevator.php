@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="elevator")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ElevatorRepository")
  */
-class Elevator extends Equipment
+class Elevator extends Equipment implements \JsonSerializable
 {
     /**
      * @ORM\Column(type="string")
