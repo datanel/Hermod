@@ -18,7 +18,6 @@ class Version20170830115111 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('TRUNCATE TABLE equipment, equipment_status, location_patch');
         $this->addSql('ALTER TABLE equipment_status DROP CONSTRAINT fk_dc8e1a5c517fe9fe');
         $this->addSql('DROP SEQUENCE location_patch_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE equipment_status_id_seq CASCADE');
