@@ -54,6 +54,13 @@ class Elevator extends Equipment implements \JsonSerializable
      */
     private $locations;
 
+    public function __construct($id)
+    {
+        parent::__construct($id);
+        $this->status = new ArrayCollection();
+        $this->locations = new ArrayCollection();
+    }
+
     /**
      * Set name
      *
