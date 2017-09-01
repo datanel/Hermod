@@ -67,7 +67,7 @@ abstract class BaseController extends Controller
      *
      * @return array
      */
-    private function flattenViolations(ConstraintViolationListInterface $violationList) : array
+    protected function flattenViolations(ConstraintViolationListInterface $violationList) : array
     {
         $errors = array();
         foreach ($violationList as $violation) {
