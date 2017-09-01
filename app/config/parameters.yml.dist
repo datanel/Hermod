@@ -9,3 +9,6 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    # Default value if env vars does not exist
+    env(LOG_PATH): "%kernel.logs_dir%/%kernel.environment%.log"
