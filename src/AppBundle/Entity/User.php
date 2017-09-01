@@ -51,7 +51,7 @@ class User
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="created_at", type="datetime", options={"default"="now()"})
      */
     private $createdAt;
 
@@ -59,7 +59,7 @@ class User
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="updated_at", type="datetime", options={"default"="now()"})
      */
     private $updatedAt;
 

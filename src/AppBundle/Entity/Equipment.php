@@ -40,7 +40,7 @@ class Equipment implements EquipmentInterface
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="created_at", type="datetime", options={"default"="now()"})
      */
     protected $createdAt;
 
@@ -48,7 +48,7 @@ class Equipment implements EquipmentInterface
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="updated_at", type="datetime", options={"default"="now()"})
      */
     protected $updatedAt;
 
