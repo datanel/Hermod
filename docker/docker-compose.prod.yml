@@ -11,7 +11,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        syslog-facility: local7
+        syslog-facility: local6
         tag: hermod-nginx
     deploy:
       labels:
