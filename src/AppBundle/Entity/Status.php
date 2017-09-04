@@ -37,7 +37,7 @@ class Status implements \JsonSerializable
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime", options={"default"="now()"})
+     * @ORM\Column(name="created_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
      */
     private $createdAt;
 
@@ -45,7 +45,7 @@ class Status implements \JsonSerializable
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at", type="datetime", options={"default"="now()"})
+     * @ORM\Column(name="updated_at", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
      */
     private $updatedAt;
 
