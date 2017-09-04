@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -53,11 +52,6 @@ class Equipment implements EquipmentInterface
      */
     protected $updatedAt;
 
-    public function __construct($id)
-    {
-        $this->id = $id;
-    }
-
     /**
      * @return mixed
      */
@@ -73,7 +67,7 @@ class Equipment implements EquipmentInterface
      *
      * @return StopPoint
      */
-    public function setSourceName(string $sourceName) : StopPoint
+    public function setSourceName(string $sourceName) : Equipment
     {
         $this->sourceName = $sourceName;
 

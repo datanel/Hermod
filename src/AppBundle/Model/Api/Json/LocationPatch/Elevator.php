@@ -6,11 +6,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
 use AppBundle\Validator as AppAssert;
 use AppBundle\Model\Api\Json\Document\Elevator as ElevatorDocument;
+use AppBundle\Model\Api\Json\LocationPatch\Gps;
 
 class Elevator
 {
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Regex("/^elevator/")
      * @Assert\Type("string")
      * @Jms\Type("string")
@@ -18,23 +19,24 @@ class Elevator
     private $type;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
+     * @Assert\Valid()
      * @Assert\Type("AppBundle\Model\Api\Json\Document\Elevator")
      * @JMS\Type("AppBundle\Model\Api\Json\Document\Elevator")
      */
     private $elevator;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Valid()
-     * @JMS\SerializedName("current_location")
      * @Assert\Type("AppBundle\Model\Api\Json\LocationPatch\Location")
      * @JMS\Type("AppBundle\Model\Api\Json\LocationPatch\Location")
+     * @JMS\SerializedName("current_location")
      */
     private $currentLocation;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Valid()
      * @JMS\SerializedName("patched_location")
      * @Assert\Type("AppBundle\Model\Api\Json\LocationPatch\Location")
@@ -43,7 +45,7 @@ class Elevator
     private $patchedLocation;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Valid()
      * @JMS\SerializedName("reported_location")
      * @Assert\Type("AppBundle\Model\Api\Json\LocationPatch\Gps")

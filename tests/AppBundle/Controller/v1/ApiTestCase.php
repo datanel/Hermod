@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle\Controller\v1;
 
+use AppBundle\DataFixtures\ORM\LoadElevatorData;
 use AppBundle\Entity\User;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
@@ -37,6 +38,9 @@ abstract class ApiTestCase extends KernelTestCase
 
         $this->purgeDatabase();
         $this->createUser('bob', 'a2540dc6-5b0b-45b9-8a7d-8c6fcf03e1df');
+
+        $fixture = new LoadElevatorData();
+        $fixture->load($this->getEntityManager());
     }
 
     private function purgeDatabase()
@@ -96,6 +100,10 @@ abstract class ApiTestCase extends KernelTestCase
 
     protected function assertResourceCreated(ResponseInterface $response)
     {
+        if ($response->getStatusCode() == 500){
+//            dump($response->getBody()->getContents());
+            die;
+        }
         $this->assertEquals(201, $response->getStatusCode());
     }
 

@@ -359,30 +359,22 @@ class Location implements \JsonSerializable
         return [
             'created_at' => $this->createdAt->format(\DateTime::ISO8601),
             'updated_at' => $this->updatedAt->format(\DateTime::ISO8601),
-            'source_name' => $this->sourceName,
-            'patched_using_geoloc' => $this->usingReporterGeolocation,
-            'stop_point' => [
-                'id' => $this->stopPointId,
-                'name' => $this->stopPointName
+            'patched_using_geoloc' => $this->isUsingReporterGeolocation(),
+            'equipment_id' => $this->getEquipmentId(),
+            'current_location' => [
+                'lat' => $this->getCurrentLat(),
+                'lon' => $this->getCurrentLon(),
             ],
-            'stop_point_current_location' => [
-                'lat' => $this->currentLat,
-                'lon' => $this->currentLon,
+            'patched_location' => [
+                'lat' => $this->getPatchedLat(),
+                'lon' => $this->getPatchedLon(),
             ],
-            'stop_point_patched_location' => [
-                'lat' => $this->patchedLat,
-                'lon' => $this->patchedLon,
-            ],
-            'route' => [
-                'id' => $this->routeId,
-                'name' => $this->routeName
-            ],
-            'gps' => [
-                'humanLocation' => [
-                    'lat' => $this->reporterLat,
-                    'lon' => $this->ReporterLon
+            'reported_location' => [
+                'location' => [
+                    'lat' => $this->getReporterLat(),
+                    'lon' => $this->getReporterLon()
                 ],
-                'accuracy' => $this->reporterAccuracy
+                'accuracy' => $this->getReporterAccuracy()
             ],
         ];
     }

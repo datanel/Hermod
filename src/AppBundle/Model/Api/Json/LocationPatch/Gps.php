@@ -5,11 +5,11 @@ namespace AppBundle\Model\Api\Json\LocationPatch;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
 use AppBundle\Validator as AppAssert;
+use AppBundle\Model\Api\Json\LocationPatch\Location;
 
 class Gps
 {
     /**
-     * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Type("float")
      * @JMS\Type("float")
@@ -17,7 +17,6 @@ class Gps
     private $accuracy;
 
     /**
-     * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Valid()
      * @Assert\Type("AppBundle\Model\Api\Json\LocationPatch\Location")
@@ -37,7 +36,7 @@ class Gps
         return $this;
     }
 
-    public function getLocation() : ?float
+    public function getLocation() : Location
     {
         return $this->location;
     }

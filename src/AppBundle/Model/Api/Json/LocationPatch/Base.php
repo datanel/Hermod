@@ -17,7 +17,7 @@ use JMS\Serializer\Annotation as JMS;
 class Base
 {
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Regex("/^stop_point|elevator/")
      * @Assert\Type("string")
      */

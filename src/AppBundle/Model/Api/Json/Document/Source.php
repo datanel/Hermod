@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation as JMS;
 class Source
 {
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Type("string")
      * @JMS\Type("string")
      */

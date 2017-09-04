@@ -8,14 +8,14 @@ use JMS\Serializer\Annotation as JMS;
 class Route
 {
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Type("string")
      * @JMS\Type("string")
      */
     private $id;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Type("string")
      * @JMS\Type("string")
      */

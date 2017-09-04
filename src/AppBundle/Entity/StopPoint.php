@@ -42,9 +42,8 @@ class StopPoint extends Equipment implements \JsonSerializable
      */
     private $locations;
 
-    public function __construct($id)
+    public function __construct()
     {
-        parent::__construct($id);
         $this->locations = new ArrayCollection();
     }
 

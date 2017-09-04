@@ -4,11 +4,12 @@ namespace AppBundle\Model\Api\Json\LocationPatch;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
+use AppBundle\Model\Api\Json\Document\StopPoint as StopPointDocument;
 
 class StopPoint
 {
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Regex("/^stop_point/")
      * @Assert\Type("string")
      * @JMS\Type("string")
@@ -16,7 +17,8 @@ class StopPoint
     private $type;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
+     * @Assert\Valid()
      * @Assert\Type("AppBundle\Model\Api\Json\Document\StopPoint")
      * @JMS\Type("AppBundle\Model\Api\Json\Document\StopPoint")
      * @JMS\SerializedName("stop_point")
@@ -24,21 +26,7 @@ class StopPoint
     private $stopPoint;
 
     /**
-     * @Assert\NotBlank()
-     * @Assert\Type("AppBundle\Model\Api\Json\Document\Source")
-     * @JMS\Type("AppBundle\Model\Api\Json\Document\Source")
-     */
-    private $source;
-
-    /**
-     * @Assert\NotBlank()
-     * @Assert\Type("AppBundle\Model\Api\Json\Document\Route")
-     * @JMS\Type("AppBundle\Model\Api\Json\Document\Route")
-     */
-    private $route;
-
-    /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Valid()
      * @Assert\Type("AppBundle\Model\Api\Json\LocationPatch\Location")
      * @JMS\Type("AppBundle\Model\Api\Json\LocationPatch\Location")
@@ -47,7 +35,7 @@ class StopPoint
     private $currentLocation;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Valid()
      * @Assert\Type("AppBundle\Model\Api\Json\LocationPatch\Location")
      * @JMS\Type("AppBundle\Model\Api\Json\LocationPatch\Location")
@@ -56,7 +44,7 @@ class StopPoint
     private $patchedLocation;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Valid()
      * @Assert\Type("AppBundle\Model\Api\Json\LocationPatch\Gps")
      * @JMS\Type("AppBundle\Model\Api\Json\LocationPatch\Gps")
