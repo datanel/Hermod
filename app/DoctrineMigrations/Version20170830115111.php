@@ -23,6 +23,8 @@ class Version20170830115111 extends AbstractMigration
         $this->addSql('DROP SEQUENCE equipment_status_id_seq CASCADE');
         $this->addSql('CREATE SEQUENCE status_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE location_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE elevator_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE stop_point_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE status (id INT NOT NULL, user_id INT DEFAULT NULL, reported_status VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT \'now()\' NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT \'now()\' NOT NULL, equipment_id INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_7B00651CA76ED395 ON status (user_id)');
         $this->addSql('CREATE INDEX status_equipment_id_idx ON status (equipment_id)');
@@ -52,6 +54,8 @@ class Version20170830115111 extends AbstractMigration
 
         $this->addSql('DROP SEQUENCE status_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE location_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE elevator_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE stop_point_id_seq CASCADE');
         $this->addSql('CREATE SEQUENCE location_patch_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE equipment_status_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE equipment (id INT NOT NULL, code VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, station_id VARCHAR(255) NOT NULL, station_name VARCHAR(255) NOT NULL, location VARCHAR(255) NOT NULL, direction VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT \'now()\' NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT \'now()\' NOT NULL, PRIMARY KEY(id))');
