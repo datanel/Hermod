@@ -30,6 +30,7 @@ services:
     image: postgres:9.6
     volumes:
       - ./docker/postgres/data:/var/lib/postgresql/data:rw
+      - ./docker/postgres/add_uuid_extension.sh:/docker-entrypoint-initdb.d/add_uuid_extension.sh:ro
     env_file:
       - docker/config.env
     networks:
