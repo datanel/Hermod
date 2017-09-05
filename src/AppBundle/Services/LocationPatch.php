@@ -19,7 +19,7 @@ class LocationPatch
         $this->equipmentEntity = null;
     }
 
-    private function createLocation(User $user, $data, bool $withUserLocation)
+    private function createLocation(User $user, $data, bool $withReporterLocation)
     {
         $locationEntity = new LocationEntity();
 
@@ -33,7 +33,7 @@ class LocationPatch
             ->setReporterLat($data->getReporterLocation()->getLocation()->getLat())
             ->setReporterLon($data->getReporterLocation()->getLocation()->getLon())
             ->setReporterAccuracy($data->getReporterLocation()->getAccuracy())
-            ->setUsingReporterGeolocation($withUserLocation)
+            ->setUsingReporterGeolocation($withReporterLocation)
         ;
         $this->em->persist($locationEntity);
     }
@@ -68,7 +68,7 @@ class LocationPatch
         return $elevatorEntity;
     }
 
-    public function create(User $user, $data, bool $withUserLocation = false)
+    public function create(User $user, $data, bool $withReporterLocation = false)
     {
         switch ($data->getType()) {
             case 'stop_point':
@@ -78,7 +78,7 @@ class LocationPatch
                 $this->equipmentEntity = $this->findElevator($data->getElevator());
                 break;
         }
-        $this->createLocation($user, $data, $withUserLocation);
+        $this->createLocation($user, $data, $withReporterLocation);
         $this->em->flush();
     }
 }

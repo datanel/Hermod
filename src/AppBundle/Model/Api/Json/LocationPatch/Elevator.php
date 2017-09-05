@@ -12,7 +12,7 @@ class Elevator
 {
     /**
      * @Assert\NotBlank(message="This field is missing.")
-     * @Assert\Regex("/^elevator/")
+     * @Assert\Choice({"elevator"})
      * @Assert\Type("string")
      * @Jms\Type("string")
      */

@@ -10,7 +10,7 @@ class StopPoint
 {
     /**
      * @Assert\NotBlank(message="This field is missing.")
-     * @Assert\Regex("/^stop_point/")
+     * @Assert\Choice({"stop_point"})
      * @Assert\Type("string")
      * @JMS\Type("string")
      */

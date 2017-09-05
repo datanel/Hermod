@@ -91,10 +91,6 @@ abstract class ApiTestCase extends KernelTestCase
 
     protected function assertResourceCreated(ResponseInterface $response)
     {
-        if ($response->getStatusCode() == 500){
-//            dump($response->getBody()->getContents());
-            die;
-        }
         $this->assertEquals(201, $response->getStatusCode());
     }
 

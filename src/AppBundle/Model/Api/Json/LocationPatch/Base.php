@@ -18,7 +18,7 @@ class Base
 {
     /**
      * @Assert\NotBlank(message="This field is missing.")
-     * @Assert\Regex("/^stop_point|elevator/")
+     * @Assert\Choice({"stop_point", "elevator"})
      * @Assert\Type("string")
      */
     private $type;
