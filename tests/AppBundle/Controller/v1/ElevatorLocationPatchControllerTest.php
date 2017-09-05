@@ -46,12 +46,12 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
             'elevator' => [],
             'current_location' => ['lat' => 0, 'lon' => 0],
             'patched_location' => ['lat' => 42, 'lon' => 21],
-            'reported_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
+            'reporter_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
         ];
         $requiredFields = [
-            'elevator.id',
+            'elevator.code',
             'elevator.name',
-            'elevator.source',
+            'elevator.source'
         ];
         $response = $this->client->request('POST', 'patches/location', ['body' => json_encode($data)]);
         $expectedErrorMessages = array_map(
@@ -68,13 +68,13 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
         $data = [
             'type' => 'elevator',
             'elevator' => [
-                'id' => "ELEVATOR:42",
+                'code' => "ELEVATOR:42",
                 'name' => 'ELEVATOR:42',
                 'source' => []
             ],
             'current_location' => ['lat' => 0, 'lon' => 0],
             'patched_location' => ['lat' => 42, 'lon' => 21],
-            'reported_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
+            'reporter_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
         ];
         $requiredFields = [
             'elevator.source.name'
@@ -94,13 +94,13 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
         $data = [
             'type' => 'elevator',
             'elevator' => [
-                'id' => "ELEVATOR:42",
+                'code' => "ELEVATOR:42",
                 'name' => 'ELEVATOR:42',
                 'source' => ['name' => 'stiff'],
             ],
             'current_location' => ['lat' => 0, 'lon' => 0],
             'patched_location' => ['lat' => 42, 'lon' => 21],
-            'reported_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
+            'reporter_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
         ];
         $response = $this->client->request('POST', 'patches/location', ['body' => json_encode($data)]);
         $this->assertResourceCreated($response);
@@ -115,14 +115,14 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
         $elevator = $this->getEntityManager()->getRepository('AppBundle:Elevator')
             ->find($location->getEquipmentId());
 
-        $this->assertEquals($data['elevator']['id'], $elevator->getCode());
+        $this->assertEquals($data['elevator']['code'], $elevator->getCode());
         $this->assertEquals($data['elevator']['source']['name'], $elevator->getSourceName());
         $this->assertEquals($data['current_location']['lat'], $location->getCurrentLat());
         $this->assertEquals($data['current_location']['lon'], $location->getCurrentLon());
         $this->assertEquals($data['patched_location']['lat'], $location->getPatchedLat());
         $this->assertEquals($data['patched_location']['lon'], $location->getPatchedLon());
-        $this->assertEquals($data['reported_location']['location']['lat'], $location->getReporterLat());
-        $this->assertEquals($data['reported_location']['location']['lon'], $location->getReporterLon());
-        $this->assertEquals($data['reported_location']['accuracy'], $location->getReporterAccuracy());
+        $this->assertEquals($data['reporter_location']['location']['lat'], $location->getReporterLat());
+        $this->assertEquals($data['reporter_location']['location']['lon'], $location->getReporterLon());
+        $this->assertEquals($data['reporter_location']['accuracy'], $location->getReporterAccuracy());
     }
 }

@@ -29,7 +29,7 @@ class Location implements \JsonSerializable
     private $usingReporterGeolocation;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="guid")
      *
      * @var EquipmentId
      */
@@ -113,7 +113,7 @@ class Location implements \JsonSerializable
     /**
      * @return mixed
      */
-    public function getId() : int
+    public function getId() : string
     {
         return $this->id;
     }
@@ -122,7 +122,7 @@ class Location implements \JsonSerializable
      * @param mixed $id
      * @return Location
      */
-    public function setId(int $id) : Location
+    public function setId(string $id) : Location
     {
         $this->id = $id;
         return $this;
@@ -149,7 +149,7 @@ class Location implements \JsonSerializable
     /**
      * @return int
      */
-    public function getEquipmentId(): int
+    public function getEquipmentId(): string
     {
         return $this->equipmentId;
     }
@@ -158,7 +158,7 @@ class Location implements \JsonSerializable
      * @param int $equipmentId
      * @return Location
      */
-    public function setEquipmentId(int $equipmentId): Location
+    public function setEquipmentId(string $equipmentId): Location
     {
         $this->equipmentId = $equipmentId;
         return $this;

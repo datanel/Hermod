@@ -47,9 +47,9 @@ class Elevator
     /**
      * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Valid()
-     * @JMS\SerializedName("reported_location")
      * @Assert\Type("AppBundle\Model\Api\Json\LocationPatch\Gps")
      * @JMS\Type("AppBundle\Model\Api\Json\LocationPatch\Gps")
+     * @JMS\SerializedName("reporter_location")
      */
     private $reporterLocation;
 

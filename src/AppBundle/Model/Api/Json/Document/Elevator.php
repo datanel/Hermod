@@ -12,7 +12,7 @@ class Elevator
      * @Assert\Type("string")
      * @JMS\Type("string")
      */
-    private $id;
+    private $code;
 
     /**
      * @Assert\NotBlank(message="This field is missing.")
@@ -29,14 +29,14 @@ class Elevator
      */
     private $source;
 
-    public function getId() : ?string
+    public function getCode() : ?string
     {
-        return $this->id;
+        return $this->code;
     }
 
-    public function setId($id) : Elevator
+    public function setCode($code) : Elevator
     {
-        $this->id = $id;
+        $this->code = $code;
     }
 
     public function getName() : ?string

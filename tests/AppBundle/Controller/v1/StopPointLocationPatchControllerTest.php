@@ -46,10 +46,10 @@ class StopPointLocationPatchControllerTest extends ApiTestCase
             'stop_point' => [],
             'current_location' => ['lat' => 0, 'lon' => 0],
             'patched_location' => ['lat' => 42, 'lon' => 21],
-            'reported_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
+            'reporter_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
         ];
         $requiredFields = [
-            'stopPoint.id',
+            'stopPoint.code',
             'stopPoint.name',
             'stopPoint.source',
             'stopPoint.route'
@@ -69,14 +69,14 @@ class StopPointLocationPatchControllerTest extends ApiTestCase
         $data = [
             'type' => 'stop_point',
             'stop_point' => [
-                'id' => 42,
+                'code' => 42,
                 'name' => 'STOP_POINT:42',
                 'route' => [],
                 'source' => []
             ],
             'current_location' => ['lat' => 0, 'lon' => 0],
             'patched_location' => ['lat' => 42, 'lon' => 21],
-            'reported_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
+            'reporter_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
         ];
         $requiredFields = [
             'stopPoint.source.name',
@@ -98,14 +98,14 @@ class StopPointLocationPatchControllerTest extends ApiTestCase
         $data = [
             'type' => 'stop_point',
             'stop_point' => [
-                'id' => 42,
+                'code' => 42,
                 'name' => 'STOP_POINT:42',
                 'route' => ['id' => 'string', 'name' => 'string'],
                 'source' => ['name' => 'navitia2'],
             ],
             'current_location' => ['lat' => 0, 'lon' => 0],
             'patched_location' => ['lat' => 42, 'lon' => 21],
-            'reported_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
+            'reporter_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
         ];
         $response = $this->client->request('POST', 'patches/location', ['body' => json_encode($data)]);
 
@@ -120,16 +120,15 @@ class StopPointLocationPatchControllerTest extends ApiTestCase
         $data = [
             'type' => 'stop_point',
             'stop_point' => [
-                'id' => 42,
+                'code' => 42,
                 'name' => 'STOP_POINT:42',
                 'route' => ['id' => 'string', 'name' => 'string'],
                 'source' => ['name' => 'navitia2']
             ],
             'current_location' => ['lat' => 0, 'lon' => 0],
             'patched_location' => ['lat' => 42, 'lon' => 21],
-            'reported_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
+            'reporter_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
         ];
-        dump(json_encode($data));
         $response = $this->client->request(
             'POST',
             'patches/location/from_user_location',
@@ -151,14 +150,14 @@ class StopPointLocationPatchControllerTest extends ApiTestCase
         $this->assertEquals($data['stop_point']['source']['name'], $stopPoint->getSourceName());
         $this->assertEquals($data['stop_point']['route']['id'], $stopPoint->getRouteId());
         $this->assertEquals($data['stop_point']['route']['name'], $stopPoint->getRouteName());
-        $this->assertEquals($data['stop_point']['id'], $stopPoint->getCode());
+        $this->assertEquals($data['stop_point']['code'], $stopPoint->getCode());
         $this->assertEquals($data['stop_point']['name'], $stopPoint->getName());
         $this->assertEquals($data['current_location']['lat'], $location->getCurrentLat());
         $this->assertEquals($data['current_location']['lon'], $location->getCurrentLon());
         $this->assertEquals($data['patched_location']['lat'], $location->getPatchedLat());
         $this->assertEquals($data['patched_location']['lon'], $location->getPatchedLon());
-        $this->assertEquals($data['reported_location']['location']['lat'], $location->getReporterLat());
-        $this->assertEquals($data['reported_location']['location']['lon'], $location->getReporterLon());
-        $this->assertEquals($data['reported_location']['accuracy'], $location->getReporterAccuracy());
+        $this->assertEquals($data['reporter_location']['location']['lat'], $location->getReporterLat());
+        $this->assertEquals($data['reporter_location']['location']['lon'], $location->getReporterLon());
+        $this->assertEquals($data['reporter_location']['accuracy'], $location->getReporterAccuracy());
     }
 }

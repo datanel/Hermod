@@ -41,14 +41,14 @@ class LocationPatch
     private function findOrCreateStopPoint(StopPointDocument $stopPoint)
     {
         $stopPointEntity = $this->em->getRepository('AppBundle:StopPoint')
-            ->findOrCreateByCode($stopPoint->getId())
+            ->findOrCreateByCode($stopPoint->getCode())
         ;
 
         $stopPointEntity
             ->setName($stopPoint->getName())
             ->setRouteId($stopPoint->getRoute()->getId())
             ->setRouteName($stopPoint->getRoute()->getName())
-            ->setCode($stopPoint->getId())
+            ->setCode($stopPoint->getCode())
             ->setSourceName($stopPoint->getSource()->getName())
         ;
         $this->em->persist($stopPointEntity);
@@ -60,7 +60,7 @@ class LocationPatch
     {
         $elevatorEntity = $this->em->getRepository('AppBundle:Elevator')
             ->findOneBy([
-                'code' => $elevator->getId(),
+                'code' => $elevator->getCode(),
                 'sourceName' => $elevator->getSource()->getName()
             ])
         ;

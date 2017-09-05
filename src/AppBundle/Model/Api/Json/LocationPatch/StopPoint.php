@@ -48,7 +48,7 @@ class StopPoint
      * @Assert\Valid()
      * @Assert\Type("AppBundle\Model\Api\Json\LocationPatch\Gps")
      * @JMS\Type("AppBundle\Model\Api\Json\LocationPatch\Gps")
-     * @JMS\SerializedName("reported_location")
+     * @JMS\SerializedName("reporter_location")
      */
     private $reporterLocation;
 

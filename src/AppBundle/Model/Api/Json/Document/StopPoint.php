@@ -12,7 +12,7 @@ class StopPoint
      * @Assert\Type("string")
      * @JMS\Type("string")
      */
-    private $id;
+    private $code;
 
     /**
      * @Assert\NotBlank(message="This field is missing.")
@@ -37,14 +37,14 @@ class StopPoint
      */
     private $route;
 
-    public function getId() : ?string
+    public function getCode() : ?string
     {
-        return $this->id;
+        return $this->code;
     }
 
-    public function setId($id) : StopPoint
+    public function setCode($code) : StopPoint
     {
-        $this->id = $id;
+        $this->code = $code;
     }
 
     public function getName() : ?string

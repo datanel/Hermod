@@ -55,7 +55,7 @@ class Equipment implements EquipmentInterface
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId() : string
     {
         return $this->id;
     }
@@ -100,17 +100,6 @@ class Equipment implements EquipmentInterface
     {
         $this->code = $code;
         return $this;
-    }
-
-    /**
-     * @return array the list of available equipmentId types
-     */
-    public static function getAvailableTypes()
-    {
-        return [
-            self::TYPE_ELEVATOR,
-            self::TYPE_STOP_POINT
-        ];
     }
 
     /**

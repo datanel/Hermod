@@ -2,13 +2,13 @@
 
 namespace Tests\AppBundle\Controller\v1;
 
-use AppBundle\DataFixtures\ORM\LoadElevatorData;
-use AppBundle\Entity\User;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use AppBundle\DataFixtures\ORM\LoadUserData;
+use AppBundle\DataFixtures\ORM\LoadElevatorData;
 
 abstract class ApiTestCase extends KernelTestCase
 {
@@ -37,7 +37,9 @@ abstract class ApiTestCase extends KernelTestCase
         parent::setUp();
 
         $this->purgeDatabase();
-        $this->createUser('bob', 'a2540dc6-5b0b-45b9-8a7d-8c6fcf03e1df');
+
+        $fixture = new LoadUserData();
+        $fixture->load($this->getEntityManager());
 
         $fixture = new LoadElevatorData();
         $fixture->load($this->getEntityManager());
@@ -46,17 +48,6 @@ abstract class ApiTestCase extends KernelTestCase
     private function purgeDatabase()
     {
         (new ORMPurger($this->getEntityManager()))->purge();
-    }
-
-    protected function createUser($username, $token)
-    {
-        $user = new User($username, $token);
-        $user->setUsername($username);
-
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
-
-        return $user;
     }
 
     protected function getService($id)

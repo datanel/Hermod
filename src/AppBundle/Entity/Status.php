@@ -23,7 +23,7 @@ class Status implements \JsonSerializable
      *
      * @var string the reported status, either 'available', 'unavailable', 'coming_soon' or 'disturbed'
      */
-    private $reportedStatus;
+    private $patchedStatus;
 
     /**
      * @ORM\Column(type="string")
@@ -33,7 +33,7 @@ class Status implements \JsonSerializable
     private $currentStatus;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="guid")
      *
      * @var EquipmentId
      */
@@ -75,9 +75,10 @@ class Status implements \JsonSerializable
      * @param mixed $id
      * @return Status
      */
-    public function setId($id)
+    public function setId(string $id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -102,7 +103,7 @@ class Status implements \JsonSerializable
     /**
      * @return int
      */
-    public function getEquipmentId(): int
+    public function getEquipmentId(): string
     {
         return $this->equipmentId;
     }
@@ -111,7 +112,7 @@ class Status implements \JsonSerializable
      * @param int $equipmentId
      * @return Location
      */
-    public function setEquipmentId(int $equipmentId): Status
+    public function setEquipmentId(string $equipmentId): Status
     {
         $this->equipmentId = $equipmentId;
         return $this;
@@ -120,17 +121,17 @@ class Status implements \JsonSerializable
     /**
      * @return string
      */
-    public function getReportedStatus(): string
+    public function getPatchedStatus(): string
     {
-        return $this->reportedStatus;
+        return $this->patchedStatus;
     }
 
     /**
-     * @param string $reportedStatus
+     * @param string $patchedStatus
      */
-    public function setReportedStatus(string $reportedStatus)
+    public function setPatchedStatus(string $patchedStatus)
     {
-        $this->reportedStatus = $reportedStatus;
+        $this->patchedStatus = $patchedStatus;
     }
 
     /**
@@ -144,9 +145,11 @@ class Status implements \JsonSerializable
     /**
      * @param string $currentStatus
      */
-    public function setCurrentStatus(string $currentStatus)
+    public function setCurrentStatus(string $currentStatus) : Status
     {
         $this->currentStatus = $currentStatus;
+
+        return $this;
     }
 
     /**
@@ -203,7 +206,7 @@ class Status implements \JsonSerializable
             'source_name' => $this->sourceName,
             'equipmentId' => $this->equipment,
             'type' => $this->type,
-            'status' => $this->reportedStatus
+            'status' => $this->patchedStatus
         ];
         if ($this->includeUserGeolocation) {
             $return = array_merge(
