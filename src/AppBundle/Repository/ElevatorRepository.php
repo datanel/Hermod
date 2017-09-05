@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Elevator;
+
 /**
  * ElevatorRepository
  *
@@ -10,4 +12,58 @@ namespace AppBundle\Repository;
  */
 class ElevatorRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Saves a collection of equipments in the database.
+     * If the equipment already exists, we update it only if its information differs
+     * from the provided ones. If it does not exist, we just create it
+     *
+     * @param array $equipments
+     *
+     * @return array an associative array containing the created and updated records
+     */
+    private function createOrUpdateEach(array $elevators) : array
+    {
+        $created = $updated = [];
+        $em = $this->getEntityManager();
+        $existingEquipments = $em->createQuery('SELECT e FROM AppBundle:Elevator e INDEX BY e.code')->getResult();
+
+        /** @var Elevator $equipment */
+        foreach ($elevators as $elevator) {
+            /** @var Elevator $elevatorInDb */
+            $elevatorInDb = $existingEquipments[$elevator->getCode()] ?? null;
+
+            if (!is_null($elevatorInDb)) {
+                if (!$elevator->equals($elevatorInDb)) {
+                    $elevator->setId($elevatorInDb->getId());
+                    $elevatorInDb->updateFrom($elevator);
+                    $em->persist($elevatorInDb);
+                    $updated[] = $elevatorInDb;
+                }
+            } else {
+                $em->persist($elevator);
+                $created[] = $elevator;
+            }
+        }
+        $em->flush();
+
+        return ['created' => $created, 'updated' => $updated];
+    }
+
+    public function importFromCsv(array $csv) : array
+    {
+        $elevators = [];
+
+        foreach ($csv as $row) {
+            $elevators[] = (new Elevator())
+                ->setCode($row['code'])
+                ->setStationId($row['station_id'])
+                ->setStationName($row['station_name'])
+                ->setHumanLocation($row['human_location'])
+                ->setDirection($row['direction'])
+                ->setSourceName($row['source_name'])
+            ;
+        }
+
+        return $this->createOrUpdateEach($elevators);
+    }
 }

@@ -63,9 +63,23 @@ class Equipment implements EquipmentInterface
     /**
      * Set sourceName
      *
+     * @param string $id
+     *
+     * @return Equipment
+     */
+    public function setId(string $id) : Equipment
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Set sourceName
+     *
      * @param string $sourceName
      *
-     * @return StopPoint
+     * @return Equipment
      */
     public function setSourceName(string $sourceName) : Equipment
     {
@@ -100,58 +114,6 @@ class Equipment implements EquipmentInterface
     {
         $this->code = $code;
         return $this;
-    }
-
-    /**
-     * Tells whether or not the given equipmentId values are the same as $this.
-     * Some properties (such as the creation datetime)
-     *
-     * @param Equipment $equipment
-     * @return bool
-     */
-    public function equals(self $equipment)
-    {
-        foreach ($this->getObjectVarsWithoutMetadatas($equipment) as $key => $value) {
-            if ($this->$key != $value) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Updates the current instance from the given equipmentId
-     *
-     * @param Equipment $equipment
-     * @return $this
-     */
-    public function updateFrom(self $equipment)
-    {
-        foreach ($this->getObjectVarsWithoutMetadatas($equipment) as $key => $value) {
-            $this->$key = $value;
-        }
-        $this->updatedAt = new \DateTime('now', (new \DateTimeZone('UTC')));
-        return $this;
-    }
-
-    /**
-     * Slightly modified \get_object_vars() to get rid of the property/value we do not want when comparing
-     * two instances, so we are able to tell that two instances of this class are equal even if
-     * the meta-datas we add (such as: createdAt, status) differ
-     *
-     * @param Equipment $equipment
-     * @return array
-     */
-    public function getObjectVarsWithoutMetadatas(self $equipment)
-    {
-        $propsToExclude = ['createdAt', 'updatedAt', 'status'];
-        return array_filter(
-            get_object_vars($equipment),
-            function ($propName) use ($propsToExclude) {
-                return !in_array($propName, $propsToExclude);
-            },
-            ARRAY_FILTER_USE_KEY
-        );
     }
 
     /**

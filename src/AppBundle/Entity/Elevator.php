@@ -192,6 +192,59 @@ class Elevator extends Equipment implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * Tells whether or not the given equipmentId values are the same as $this.
+     * Some properties (such as the creation datetime)
+     *
+     * @param Equipment $equipment
+     * @return bool
+     */
+    public function equals(self $elevator)
+    {
+        foreach ($this->getObjectVarsWithoutMetadatas($elevator) as $key => $value) {
+            if ($this->$key != $value) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Updates the current instance from the given equipmentId
+     *
+     * @param Elevator $elevator
+     * @return $this
+     */
+    public function updateFrom(self $elevator)
+    {
+        foreach ($this->getObjectVarsWithoutMetadatas($elevator) as $key => $value) {
+            $this->$key = $value;
+        }
+        $this->updatedAt = new \DateTime('now', (new \DateTimeZone('UTC')));
+        return $this;
+    }
+
+    /**
+     * Slightly modified \get_object_vars() to get rid of the property/value we do not want when comparing
+     * two instances, so we are able to tell that two instances of this class are equal even if
+     * the meta-datas we add (such as: createdAt, status) differ
+     *
+     * @param Elevator $elevator
+     * @return array
+     */
+    public function getObjectVarsWithoutMetadatas(self $elevator)
+    {
+        $propsToExclude = ['id', 'createdAt', 'updatedAt', 'status', 'locations'];
+
+        return array_filter(
+            get_object_vars($elevator),
+            function ($propName) use ($propsToExclude) {
+                return !in_array($propName, $propsToExclude);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+    }
+
     public function jsonSerialize() : array
     {
         return [
