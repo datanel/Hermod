@@ -12,9 +12,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Status implements \JsonSerializable
 {
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="guid")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     private $id;
 
@@ -24,6 +24,20 @@ class Status implements \JsonSerializable
      * @var string the reported status, either 'available', 'unavailable', 'coming_soon' or 'disturbed'
      */
     private $reportedStatus;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string the current status, either 'available', 'unavailable', 'coming_soon' or 'disturbed'
+     */
+    private $currentStatus;
+
+    /**
+     * @ORM\Column(type="integer")
+     *
+     * @var EquipmentId
+     */
+    private $equipmentId;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="statusPatches")
@@ -50,16 +64,9 @@ class Status implements \JsonSerializable
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="integer")
-     *
-     * @var EquipmentId
-     */
-    private $equipmentId;
-
-    /**
      * @return mixed
      */
-    public function getId()
+    public function getId() : string
     {
         return $this->id;
     }
@@ -72,68 +79,6 @@ class Status implements \JsonSerializable
     {
         $this->id = $id;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSourceName(): string
-    {
-        return $this->sourceName;
-    }
-
-    /**
-     * @param string $sourceName
-     * @return Status
-     */
-    public function setSourceName(string $sourceName): Status
-    {
-        $this->sourceName = $sourceName;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     * @return Status
-     */
-    public function setType(string $type): Status
-    {
-        $this->type = $type;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getReportedStatus(): string
-    {
-        return $this->reportedStatus;
-    }
-
-    /**
-     * @param string $reportedStatus
-     * @return Status
-     */
-    public function setReportedStatus(string $reportedStatus): Status
-    {
-        $this->reportedStatus = $reportedStatus;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isIncludeUserGeolocation(): bool
-    {
-        return $this->includeUserGeolocation;
     }
 
     /**
@@ -154,7 +99,6 @@ class Status implements \JsonSerializable
         return $this;
     }
 
-
     /**
      * @return int
      */
@@ -171,6 +115,38 @@ class Status implements \JsonSerializable
     {
         $this->equipmentId = $equipmentId;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReportedStatus(): string
+    {
+        return $this->reportedStatus;
+    }
+
+    /**
+     * @param string $reportedStatus
+     */
+    public function setReportedStatus(string $reportedStatus)
+    {
+        $this->reportedStatus = $reportedStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentStatus(): string
+    {
+        return $this->currentStatus;
+    }
+
+    /**
+     * @param string $currentStatus
+     */
+    public function setCurrentStatus(string $currentStatus)
+    {
+        $this->currentStatus = $currentStatus;
     }
 
     /**

@@ -13,8 +13,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class User
 {
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;

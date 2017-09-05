@@ -17,8 +17,9 @@ class Equipment implements EquipmentInterface
     const TYPE_STOP_POINT = 'stop_point';
 
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\Column(type="guid")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     protected $id;
 

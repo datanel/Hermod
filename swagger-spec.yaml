@@ -198,13 +198,13 @@ components:
     Elevator:
       type: "object"
       required:
-        - id
+        - code
         - name
         - source
       properties:
-        id:
+        code:
           type: "string"
-          description: "id of elevator"
+          description: "code of elevator"
         name:
           type: "string"
           description: "name of elevator"
@@ -213,14 +213,14 @@ components:
     StopPoint:
       type: "object"
       required:
-        - id
+        - code
         - name
         - route
         - source
       properties:
-        id:
+        code:
           type: "string"
-          description: "id of stop point"
+          description: "code of stop point"
         name:
           type: "string"
           description: "name of stop point"

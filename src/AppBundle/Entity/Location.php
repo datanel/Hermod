@@ -12,9 +12,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Location implements \JsonSerializable
 {
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="guid")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     private $id;
 
