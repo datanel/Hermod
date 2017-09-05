@@ -201,24 +201,12 @@ class Status implements \JsonSerializable
     public function jsonSerialize() : array
     {
         $return = [
-            'created_at' => $this->createdAt->format(\DateTime::ISO8601),
-            'updated_at' => $this->updatedAt->format(\DateTime::ISO8601),
-            'source_name' => $this->sourceName,
-            'equipmentId' => $this->equipment,
-            'type' => $this->type,
-            'status' => $this->patchedStatus
+            'created_at' => $this->getCreatedAt()->format(\DateTime::ISO8601),
+            'updated_at' => $this->getUpdatedAt()->format(\DateTime::ISO8601),
+            'equipment_d' => $this->getEquipmentId(),
+            'current_status' => $this->getCurrentStatus(),
+            'patched_status' => $this->getPatchedStatus()
         ];
-        if ($this->includeUserGeolocation) {
-            $return = array_merge(
-                $return,
-                ['gps' => [
-                    'humanLocation' => [
-                        'lat' => $this->userGeolocationLat,
-                        'lon' => $this->userGeolocationLon
-                    ],
-                    'accuracy' => $this->userGpsAccuracy
-                ]]);
-        }
 
         return $return;
     }
