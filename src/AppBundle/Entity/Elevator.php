@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Elevator
  *
- * @ORM\Table(name="elevator")
+ * @ORM\Table(name="elevator", uniqueConstraints={@ORM\UniqueConstraint(name="elevator_code_source_name_idx", columns={"code", "source_name"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ElevatorRepository")
  */
 class Elevator extends Equipment implements \JsonSerializable
@@ -42,49 +42,25 @@ class Elevator extends Equipment implements \JsonSerializable
     private $direction;
 
     /**
-     * @ORM\OneToMany(targetEntity="Status", mappedBy="equipmentId")
+     * @ORM\OneToMany(targetEntity="StatusPatch", mappedBy="equipmentId")
      *
      * @var ArrayCollection the reported status for this equipmentId
      */
-    private $status;
+    private $statusPatches;
 
     /**
-     * @ORM\OneToMany(targetEntity="Location", mappedBy="equipmentId")
+     * @ORM\OneToMany(targetEntity="LocationPatch", mappedBy="equipmentId")
      *
      * @var ArrayCollection the reported location for this equipmentId
      */
-    private $locations;
+    private $locationPatches;
 
-    public function __construct($id)
+    public function __construct()
     {
-        parent::__construct($id);
-        $this->status = new ArrayCollection();
-        $this->locations = new ArrayCollection();
+        $this->statusPatches = new ArrayCollection();
+        $this->locationPatches = new ArrayCollection();
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Elevator
-     */
-    public function setName(string $name) : Elevator
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName() : string
-    {
-        return $this->name;
-    }
     /**
      * @return string
      */
@@ -160,37 +136,90 @@ class Elevator extends Equipment implements \JsonSerializable
     /**
      * @return ArrayCollection
      */
-    public function getStatus(): ArrayCollection
+    public function getStatusPatch(): ArrayCollection
     {
-        return $this->status;
+        return $this->statusPatches;
     }
 
     /**
      * @param ArrayCollection $status
      * @return Elevator
      */
-    public function setStatus(ArrayCollection $status): Elevator
+    public function setStatusPatches(ArrayCollection $statusPatches): Elevator
     {
-        $this->status = $status;
+        $this->statusPatches = $statusPatches;
         return $this;
     }
 
     /**
      * @return ArrayCollection
      */
-    public function getLocations(): ArrayCollection
+    public function getLocationPatches(): ArrayCollection
     {
-        return $this->locations;
+        return $this->locationPatches;
     }
 
     /**
-     * @param ArrayCollection $locations
+     * @param ArrayCollection $locationPatches
      * @return Elevator
      */
-    public function setLocations(ArrayCollection $locations): Elevator
+    public function setLocationPatches(ArrayCollection $locationPatches): Elevator
     {
-        $this->locations = $locations;
+        $this->locationPatches = $locationPatches;
         return $this;
+    }
+
+    /**
+     * Tells whether or not the given equipmentId values are the same as $this.
+     * Some properties (such as the creation datetime)
+     *
+     * @param Equipment $equipment
+     * @return bool
+     */
+    public function equals(self $elevator)
+    {
+        foreach ($this->getObjectVarsWithoutMetadatas($elevator) as $key => $value) {
+            if ($this->$key != $value) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Updates the current instance from the given equipmentId
+     *
+     * @param Elevator $elevator
+     * @return $this
+     */
+    public function updateFrom(self $elevator)
+    {
+        foreach ($this->getObjectVarsWithoutMetadatas($elevator) as $key => $value) {
+            $this->$key = $value;
+        }
+        $this->updatedAt = new \DateTime('now', (new \DateTimeZone('UTC')));
+        return $this;
+    }
+
+    /**
+     * Slightly modified \get_object_vars() to get rid of the property/value we do not want when comparing
+     * two instances, so we are able to tell that two instances of this class are equal even if
+     * the meta-datas we add (such as: createdAt, status) differ
+     *
+     * @param Elevator $elevator
+     * @return array
+     */
+    public function getObjectVarsWithoutMetadatas(self $elevator)
+    {
+        $propsToExclude = ['id', 'createdAt', 'updatedAt', 'statusPatches', 'locationPatches'];
+
+        return array_filter(
+            get_object_vars($elevator),
+            function ($propName) use ($propsToExclude) {
+                return !in_array($propName, $propsToExclude);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
     public function jsonSerialize() : array

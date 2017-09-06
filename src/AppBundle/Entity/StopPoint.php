@@ -9,18 +9,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * StopPoint
  *
- * @ORM\Table(name="stop_point")
+ * @ORM\Table(name="stop_point", uniqueConstraints={@ORM\UniqueConstraint(name="stop_point_code_source_name_idx", columns={"code", "source_name"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\StopPointRepository")
  */
 class StopPoint extends Equipment implements \JsonSerializable
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
-     */
-    private $name;
-
     /**
      * @var string
      *
@@ -36,58 +29,33 @@ class StopPoint extends Equipment implements \JsonSerializable
     private $routeName;
 
     /**
-     * @ORM\OneToMany(targetEntity="Location", mappedBy="equipmentId")
+     * @ORM\OneToMany(targetEntity="LocationPatch", mappedBy="equipmentId")
      *
      * @var ArrayCollection the reported location for this equipmentId
      */
-    private $locations;
+    private $locationPatches;
 
-    public function __construct($id)
+    public function __construct()
     {
-        parent::__construct($id);
-        $this->locations = new ArrayCollection();
+        $this->locationPatches = new ArrayCollection();
     }
 
     /**
      * @return ArrayCollection
      */
-    public function getLocations(): ArrayCollection
+    public function getLocationPatches(): ArrayCollection
     {
-        return $this->locations;
+        return $this->locationPatches;
     }
 
     /**
-     * @param ArrayCollection $locations
+     * @param ArrayCollection $locationPatches
      * @return Elevator
      */
-    public function setLocations(ArrayCollection $locations): StopPoint
+    public function setLocationPatches(ArrayCollection $locationPatches): StopPoint
     {
-        $this->locations = $locations;
+        $this->locationPatches = $locationPatches;
         return $this;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return StopPoint
-     */
-    public function setName(string $name) : StopPoint
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName() : string
-    {
-        return $this->name;
     }
 
     /**

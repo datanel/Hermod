@@ -7,9 +7,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="location", indexes={@ORM\Index(name="location_equipment_id_idx", columns={"equipment_id"})})
+ * @ORM\Table(name="location_patch", indexes={@ORM\Index(name="location_patch_equipment_id_idx", columns={"equipment_id"})})
  */
-class Location implements \JsonSerializable
+class LocationPatch implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -29,7 +29,7 @@ class Location implements \JsonSerializable
     private $usingReporterGeolocation;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="guid")
      *
      * @var EquipmentId
      */
@@ -78,7 +78,7 @@ class Location implements \JsonSerializable
     private $ReporterLon = 0;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="integer")
      *
      * @var float accuracy (in meters) of the end-user GPS device
      */
@@ -113,16 +113,16 @@ class Location implements \JsonSerializable
     /**
      * @return mixed
      */
-    public function getId() : int
+    public function getId() : string
     {
         return $this->id;
     }
 
     /**
      * @param mixed $id
-     * @return Location
+     * @return LocationPatch
      */
-    public function setId(int $id) : Location
+    public function setId(string $id) : LocationPatch
     {
         $this->id = $id;
         return $this;
@@ -138,9 +138,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param boolean $usingReporterGeolocation
-     * @return Location
+     * @return LocationPatch
      */
-    public function setUsingReporterGeolocation(bool $usingReporterGeolocation): Location
+    public function setUsingReporterGeolocation(bool $usingReporterGeolocation): LocationPatch
     {
         $this->usingReporterGeolocation = $usingReporterGeolocation;
         return $this;
@@ -149,16 +149,16 @@ class Location implements \JsonSerializable
     /**
      * @return int
      */
-    public function getEquipmentId(): int
+    public function getEquipmentId(): string
     {
         return $this->equipmentId;
     }
 
     /**
      * @param int $equipmentId
-     * @return Location
+     * @return LocationPatch
      */
-    public function setEquipmentId(int $equipmentId): Location
+    public function setEquipmentId(string $equipmentId): LocationPatch
     {
         $this->equipmentId = $equipmentId;
         return $this;
@@ -174,9 +174,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $currentLat
-     * @return Location
+     * @return LocationPatch
      */
-    public function setCurrentLat(float $currentLat): Location
+    public function setCurrentLat(float $currentLat): LocationPatch
     {
         $this->currentLat = $currentLat;
         return $this;
@@ -192,9 +192,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $currentLon
-     * @return Location
+     * @return LocationPatch
      */
-    public function setCurrentLon(float $currentLon): Location
+    public function setCurrentLon(float $currentLon): LocationPatch
     {
         $this->currentLon = $currentLon;
         return $this;
@@ -210,9 +210,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $patchedLat
-     * @return Location
+     * @return LocationPatch
      */
-    public function setPatchedLat(float $patchedLat): Location
+    public function setPatchedLat(float $patchedLat): LocationPatch
     {
         $this->patchedLat = $patchedLat;
         return $this;
@@ -228,9 +228,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $patchedLon
-     * @return Location
+     * @return LocationPatch
      */
-    public function setPatchedLon(float $patchedLon): Location
+    public function setPatchedLon(float $patchedLon): LocationPatch
     {
         $this->patchedLon = $patchedLon;
         return $this;
@@ -246,9 +246,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $reporterLat
-     * @return Location
+     * @return LocationPatch
      */
-    public function setReporterLat(float $reporterLat): Location
+    public function setReporterLat(float $reporterLat): LocationPatch
     {
         $this->reporterLat = $reporterLat;
         return $this;
@@ -264,9 +264,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $ReporterLon
-     * @return Location
+     * @return LocationPatch
      */
-    public function setReporterLon(float $ReporterLon): Location
+    public function setReporterLon(float $ReporterLon): LocationPatch
     {
         $this->ReporterLon = $ReporterLon;
         return $this;
@@ -282,9 +282,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $reporterAccuracy
-     * @return Location
+     * @return LocationPatch
      */
-    public function setReporterAccuracy(float $reporterAccuracy): Location
+    public function setReporterAccuracy(float $reporterAccuracy): LocationPatch
     {
         $this->reporterAccuracy = $reporterAccuracy;
         return $this;
@@ -300,9 +300,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param User $user
-     * @return Location
+     * @return LocationPatch
      */
-    public function setUser(User $user): Location
+    public function setUser(User $user): LocationPatch
     {
         $this->user = $user;
         return $this;
@@ -312,7 +312,7 @@ class Location implements \JsonSerializable
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Location
+     * @return LocationPatch
      */
     public function setCreatedAt($createdAt)
     {
@@ -335,7 +335,7 @@ class Location implements \JsonSerializable
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Location
+     * @return LocationPatch
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -359,30 +359,22 @@ class Location implements \JsonSerializable
         return [
             'created_at' => $this->createdAt->format(\DateTime::ISO8601),
             'updated_at' => $this->updatedAt->format(\DateTime::ISO8601),
-            'source_name' => $this->sourceName,
-            'patched_using_geoloc' => $this->usingReporterGeolocation,
-            'stop_point' => [
-                'id' => $this->stopPointId,
-                'name' => $this->stopPointName
+            'patched_using_geoloc' => $this->isUsingReporterGeolocation(),
+            'equipment_id' => $this->getEquipmentId(),
+            'current_location' => [
+                'lat' => $this->getCurrentLat(),
+                'lon' => $this->getCurrentLon(),
             ],
-            'stop_point_current_location' => [
-                'lat' => $this->currentLat,
-                'lon' => $this->currentLon,
+            'patched_location' => [
+                'lat' => $this->getPatchedLat(),
+                'lon' => $this->getPatchedLon(),
             ],
-            'stop_point_patched_location' => [
-                'lat' => $this->patchedLat,
-                'lon' => $this->patchedLon,
-            ],
-            'route' => [
-                'id' => $this->routeId,
-                'name' => $this->routeName
-            ],
-            'gps' => [
-                'humanLocation' => [
-                    'lat' => $this->reporterLat,
-                    'lon' => $this->ReporterLon
+            'reported_location' => [
+                'location' => [
+                    'lat' => $this->getReporterLat(),
+                    'lon' => $this->getReporterLon()
                 ],
-                'accuracy' => $this->reporterAccuracy
+                'accuracy' => $this->getReporterAccuracy()
             ],
         ];
     }

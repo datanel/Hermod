@@ -38,7 +38,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - apiKey: []
-  /v1/patches/location/from_user:
+  /v1/patches/location/from_reporter:
     post:
       tags:
         - "patches"
@@ -48,7 +48,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LocationPatchStopPointFromUser'
+              $ref: '#/components/schemas/LocationPatchStopPointFromReporter'
       responses:
         201:
           description: "Everything went fine"
@@ -171,7 +171,7 @@ components:
           $ref: "#/components/schemas/Coord"
         reporter_location:
           $ref: "#/components/schemas/ReporterLocation"
-    LocationPatchStopPointFromUser:
+    LocationPatchStopPointFromReporter:
       type: "object"
       required:
         - stop_point
@@ -199,15 +199,11 @@ components:
       type: "object"
       required:
         - code
-        - name
         - source
       properties:
         code:
           type: "string"
           description: "code of elevator"
-        name:
-          type: "string"
-          description: "name of elevator"
         source:
           $ref: "#/components/schemas/Source"
     StopPoint:
@@ -254,7 +250,7 @@ components:
           $ref: '#/components/schemas/Coord'
         accuracy:
           type: "number"
-          format: "float"
+          format: "int"
           description: "GPS accuracy (in meters)"
     Coord:
       type: "object"
@@ -291,4 +287,4 @@ components:
           type: "array"
           items:
             type: "string"
-            example: "Some input params are invalid"
+            example: "Error at [type]: This field is missing."

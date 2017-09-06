@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -13,9 +12,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Equipment implements EquipmentInterface
 {
-    const TYPE_ELEVATOR = 'elevator';
-    const TYPE_STOP_POINT = 'stop_point';
-
     /**
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -29,6 +25,13 @@ class Equipment implements EquipmentInterface
      * @ORM\Column(name="code", type="string", length=255, unique=true)
      */
     protected $code;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var name of the equipment
+     */
+    private $name;
 
     /**
      * @var string
@@ -53,15 +56,10 @@ class Equipment implements EquipmentInterface
      */
     protected $updatedAt;
 
-    public function __construct($id)
-    {
-        $this->id = $id;
-    }
-
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId() : string
     {
         return $this->id;
     }
@@ -69,11 +67,49 @@ class Equipment implements EquipmentInterface
     /**
      * Set sourceName
      *
+     * @param string $id
+     *
+     * @return Equipment
+     */
+    public function setId(string $id) : Equipment
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceName
+     *
+     * @return string
+     */
+    public function getName() : ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set sourceName
+     *
+     * @param string $name
+     *
+     * @return Equipment
+     */
+    public function setName($name) : Equipment
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Set sourceName
+     *
      * @param string $sourceName
      *
-     * @return StopPoint
+     * @return Equipment
      */
-    public function setSourceName(string $sourceName) : StopPoint
+    public function setSourceName(string $sourceName) : Equipment
     {
         $this->sourceName = $sourceName;
 
@@ -106,69 +142,6 @@ class Equipment implements EquipmentInterface
     {
         $this->code = $code;
         return $this;
-    }
-
-    /**
-     * @return array the list of available equipmentId types
-     */
-    public static function getAvailableTypes()
-    {
-        return [
-            self::TYPE_ELEVATOR,
-            self::TYPE_STOP_POINT
-        ];
-    }
-
-    /**
-     * Tells whether or not the given equipmentId values are the same as $this.
-     * Some properties (such as the creation datetime)
-     *
-     * @param Equipment $equipment
-     * @return bool
-     */
-    public function equals(self $equipment)
-    {
-        foreach ($this->getObjectVarsWithoutMetadatas($equipment) as $key => $value) {
-            if ($this->$key != $value) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Updates the current instance from the given equipmentId
-     *
-     * @param Equipment $equipment
-     * @return $this
-     */
-    public function updateFrom(self $equipment)
-    {
-        foreach ($this->getObjectVarsWithoutMetadatas($equipment) as $key => $value) {
-            $this->$key = $value;
-        }
-        $this->updatedAt = new \DateTime('now', (new \DateTimeZone('UTC')));
-        return $this;
-    }
-
-    /**
-     * Slightly modified \get_object_vars() to get rid of the property/value we do not want when comparing
-     * two instances, so we are able to tell that two instances of this class are equal even if
-     * the meta-datas we add (such as: createdAt, status) differ
-     *
-     * @param Equipment $equipment
-     * @return array
-     */
-    public function getObjectVarsWithoutMetadatas(self $equipment)
-    {
-        $propsToExclude = ['createdAt', 'updatedAt', 'status'];
-        return array_filter(
-            get_object_vars($equipment),
-            function ($propName) use ($propsToExclude) {
-                return !in_array($propName, $propsToExclude);
-            },
-            ARRAY_FILTER_USE_KEY
-        );
     }
 
     /**

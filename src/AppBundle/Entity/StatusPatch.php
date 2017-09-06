@@ -7,9 +7,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="status", indexes={@ORM\Index(name="status_equipment_id_idx", columns={"equipment_id"})})
+ * @ORM\Table(name="status_patch", indexes={@ORM\Index(name="status_patch_equipment_id_idx", columns={"equipment_id"})})
  */
-class Status implements \JsonSerializable
+class StatusPatch implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -23,7 +23,7 @@ class Status implements \JsonSerializable
      *
      * @var string the reported status, either 'available', 'unavailable', 'coming_soon' or 'disturbed'
      */
-    private $reportedStatus;
+    private $patchedStatus;
 
     /**
      * @ORM\Column(type="string")
@@ -33,7 +33,7 @@ class Status implements \JsonSerializable
     private $currentStatus;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="guid")
      *
      * @var EquipmentId
      */
@@ -73,11 +73,12 @@ class Status implements \JsonSerializable
 
     /**
      * @param mixed $id
-     * @return Status
+     * @return StatusPatch
      */
-    public function setId($id)
+    public function setId(string $id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -91,9 +92,9 @@ class Status implements \JsonSerializable
 
     /**
      * @param User $user
-     * @return Status
+     * @return StatusPatch
      */
-    public function setUser(User $user): Status
+    public function setUser(User $user): StatusPatch
     {
         $this->user = $user;
         return $this;
@@ -102,7 +103,7 @@ class Status implements \JsonSerializable
     /**
      * @return int
      */
-    public function getEquipmentId(): int
+    public function getEquipmentId(): string
     {
         return $this->equipmentId;
     }
@@ -111,7 +112,7 @@ class Status implements \JsonSerializable
      * @param int $equipmentId
      * @return Location
      */
-    public function setEquipmentId(int $equipmentId): Status
+    public function setEquipmentId(string $equipmentId): StatusPatch
     {
         $this->equipmentId = $equipmentId;
         return $this;
@@ -120,17 +121,17 @@ class Status implements \JsonSerializable
     /**
      * @return string
      */
-    public function getReportedStatus(): string
+    public function getPatchedStatus(): string
     {
-        return $this->reportedStatus;
+        return $this->patchedStatus;
     }
 
     /**
-     * @param string $reportedStatus
+     * @param string $patchedStatus
      */
-    public function setReportedStatus(string $reportedStatus)
+    public function setPatchedStatus(string $patchedStatus)
     {
-        $this->reportedStatus = $reportedStatus;
+        $this->patchedStatus = $patchedStatus;
     }
 
     /**
@@ -144,16 +145,18 @@ class Status implements \JsonSerializable
     /**
      * @param string $currentStatus
      */
-    public function setCurrentStatus(string $currentStatus)
+    public function setCurrentStatus(string $currentStatus) : StatusPatch
     {
         $this->currentStatus = $currentStatus;
+
+        return $this;
     }
 
     /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Status
+     * @return StatusPatch
      */
     public function setCreatedAt($createdAt)
     {
@@ -176,7 +179,7 @@ class Status implements \JsonSerializable
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Status
+     * @return StatusPatch
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -198,24 +201,12 @@ class Status implements \JsonSerializable
     public function jsonSerialize() : array
     {
         $return = [
-            'created_at' => $this->createdAt->format(\DateTime::ISO8601),
-            'updated_at' => $this->updatedAt->format(\DateTime::ISO8601),
-            'source_name' => $this->sourceName,
-            'equipmentId' => $this->equipment,
-            'type' => $this->type,
-            'status' => $this->reportedStatus
+            'created_at' => $this->getCreatedAt()->format(\DateTime::ISO8601),
+            'updated_at' => $this->getUpdatedAt()->format(\DateTime::ISO8601),
+            'equipment_id' => $this->getEquipmentId(),
+            'current_status' => $this->getCurrentStatus(),
+            'patched_status' => $this->getPatchedStatus()
         ];
-        if ($this->includeUserGeolocation) {
-            $return = array_merge(
-                $return,
-                ['gps' => [
-                    'humanLocation' => [
-                        'lat' => $this->userGeolocationLat,
-                        'lon' => $this->userGeolocationLon
-                    ],
-                    'accuracy' => $this->userGpsAccuracy
-                ]]);
-        }
 
         return $return;
     }
