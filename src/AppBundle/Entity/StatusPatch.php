@@ -7,9 +7,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="status", indexes={@ORM\Index(name="status_equipment_id_idx", columns={"equipment_id"})})
+ * @ORM\Table(name="status_patch", indexes={@ORM\Index(name="status_patch_equipment_id_idx", columns={"equipment_id"})})
  */
-class Status implements \JsonSerializable
+class StatusPatch implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -73,7 +73,7 @@ class Status implements \JsonSerializable
 
     /**
      * @param mixed $id
-     * @return Status
+     * @return StatusPatch
      */
     public function setId(string $id)
     {
@@ -92,9 +92,9 @@ class Status implements \JsonSerializable
 
     /**
      * @param User $user
-     * @return Status
+     * @return StatusPatch
      */
-    public function setUser(User $user): Status
+    public function setUser(User $user): StatusPatch
     {
         $this->user = $user;
         return $this;
@@ -112,7 +112,7 @@ class Status implements \JsonSerializable
      * @param int $equipmentId
      * @return Location
      */
-    public function setEquipmentId(string $equipmentId): Status
+    public function setEquipmentId(string $equipmentId): StatusPatch
     {
         $this->equipmentId = $equipmentId;
         return $this;
@@ -145,7 +145,7 @@ class Status implements \JsonSerializable
     /**
      * @param string $currentStatus
      */
-    public function setCurrentStatus(string $currentStatus) : Status
+    public function setCurrentStatus(string $currentStatus) : StatusPatch
     {
         $this->currentStatus = $currentStatus;
 
@@ -156,7 +156,7 @@ class Status implements \JsonSerializable
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Status
+     * @return StatusPatch
      */
     public function setCreatedAt($createdAt)
     {
@@ -179,7 +179,7 @@ class Status implements \JsonSerializable
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Status
+     * @return StatusPatch
      */
     public function setUpdatedAt($updatedAt)
     {

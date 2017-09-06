@@ -5,7 +5,7 @@ namespace AppBundle\Services;
 use Doctrine\ORM\EntityManagerInterface;
 use AppBundle\Model\Api\Json\Document\StopPoint as StopPointDocument;
 use AppBundle\Model\Api\Json\Document\Elevator as ElevatorDocument;
-use AppBundle\Entity\Location as LocationEntity;
+use AppBundle\Entity\LocationPatch as LocationPatchEntity;
 use AppBundle\Entity\User;
 
 class LocationPatch
@@ -21,7 +21,7 @@ class LocationPatch
 
     private function createLocation(User $user, $data, bool $withReporterLocation)
     {
-        $locationEntity = new LocationEntity();
+        $locationEntity = new LocationPatchEntity();
 
         $locationEntity
             ->setUser($user)

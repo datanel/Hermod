@@ -25,7 +25,7 @@ class LocationPatchController extends BaseController
     {
         return new JsonResponse(
             $this->getDoctrine()
-                ->getRepository('AppBundle:Location')
+                ->getRepository('AppBundle:LocationPatch')
                 ->findBy(['user' => $this->getUser()])
         );
     }
@@ -44,7 +44,7 @@ class LocationPatchController extends BaseController
     }
 
     /**
-     * @Route("/from_user_location", name="v1_create_location_patch_from_user_location")
+     * @Route("/from_user", name="v1_create_location_patch_from_user_location")
      * @Method("POST")
      */
     public function createPatchFromUser(Request $request, LocationPatchService $locationPatchService)

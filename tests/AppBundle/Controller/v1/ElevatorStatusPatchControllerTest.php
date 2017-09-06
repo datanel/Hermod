@@ -38,7 +38,6 @@ class ElevatorStatusPatchControllerTest extends ApiTestCase
             'type' => 'elevator',
             'elevator' => [
                 'code' => "ELEVATOR:unknown",
-                'name' => 'ELEVATOR:42',
                 'source' => ['name' => 'stiff'],
             ],
             'current_status' => 'unavailable',
@@ -59,8 +58,7 @@ class ElevatorStatusPatchControllerTest extends ApiTestCase
         $data = [
             'type' => 'elevator',
             'elevator' => [
-                'code' => "ELEVATOR:42",
-                'name' => 'ELEVATOR:42',
+                'code' => "4242",
                 'source' => ['name' => 'stiff'],
             ],
             'current_status' => 'unavailable',
@@ -68,8 +66,8 @@ class ElevatorStatusPatchControllerTest extends ApiTestCase
         ];
         $response = $this->client->request('POST', 'patches/status', ['body' => json_encode($data)]);
         $this->assertResourceCreated($response);
-        $this->assertDbCount(1, 'Status');
+        $this->assertDbCount(1, 'StatusPatch');
         $this->client->request('POST', 'patches/status', ['body' => json_encode($data)]);
-        $this->assertDbCount(2, 'Status');
+        $this->assertDbCount(2, 'StatusPatch');
     }
 }

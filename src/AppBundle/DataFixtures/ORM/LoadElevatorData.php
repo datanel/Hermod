@@ -10,7 +10,8 @@ class LoadElevatorData implements FixtureInterface
 {
     private $elevators = [
         [
-            'code' => 'ELEVATOR:42',
+            'code' => '4242',
+            'name' => 'ELEVATOR:42',
             'source_name' => 'stiff',
             'station_id' => 'STATION_ID',
             'station_name' => 'STATION_NAME',
@@ -26,6 +27,7 @@ class LoadElevatorData implements FixtureInterface
 
         $elevator
             ->setCode($data['code'])
+            ->setName($data['name'])
             ->setSourceName($data['source_name'])
             ->setStationId($data['station_id'])
             ->setStationName($data['station_name'])

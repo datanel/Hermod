@@ -7,9 +7,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="location", indexes={@ORM\Index(name="location_equipment_id_idx", columns={"equipment_id"})})
+ * @ORM\Table(name="location_patch", indexes={@ORM\Index(name="location_patch_equipment_id_idx", columns={"equipment_id"})})
  */
-class Location implements \JsonSerializable
+class LocationPatch implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -78,7 +78,7 @@ class Location implements \JsonSerializable
     private $ReporterLon = 0;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="integer")
      *
      * @var float accuracy (in meters) of the end-user GPS device
      */
@@ -120,9 +120,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param mixed $id
-     * @return Location
+     * @return LocationPatch
      */
-    public function setId(string $id) : Location
+    public function setId(string $id) : LocationPatch
     {
         $this->id = $id;
         return $this;
@@ -138,9 +138,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param boolean $usingReporterGeolocation
-     * @return Location
+     * @return LocationPatch
      */
-    public function setUsingReporterGeolocation(bool $usingReporterGeolocation): Location
+    public function setUsingReporterGeolocation(bool $usingReporterGeolocation): LocationPatch
     {
         $this->usingReporterGeolocation = $usingReporterGeolocation;
         return $this;
@@ -156,9 +156,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param int $equipmentId
-     * @return Location
+     * @return LocationPatch
      */
-    public function setEquipmentId(string $equipmentId): Location
+    public function setEquipmentId(string $equipmentId): LocationPatch
     {
         $this->equipmentId = $equipmentId;
         return $this;
@@ -174,9 +174,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $currentLat
-     * @return Location
+     * @return LocationPatch
      */
-    public function setCurrentLat(float $currentLat): Location
+    public function setCurrentLat(float $currentLat): LocationPatch
     {
         $this->currentLat = $currentLat;
         return $this;
@@ -192,9 +192,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $currentLon
-     * @return Location
+     * @return LocationPatch
      */
-    public function setCurrentLon(float $currentLon): Location
+    public function setCurrentLon(float $currentLon): LocationPatch
     {
         $this->currentLon = $currentLon;
         return $this;
@@ -210,9 +210,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $patchedLat
-     * @return Location
+     * @return LocationPatch
      */
-    public function setPatchedLat(float $patchedLat): Location
+    public function setPatchedLat(float $patchedLat): LocationPatch
     {
         $this->patchedLat = $patchedLat;
         return $this;
@@ -228,9 +228,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $patchedLon
-     * @return Location
+     * @return LocationPatch
      */
-    public function setPatchedLon(float $patchedLon): Location
+    public function setPatchedLon(float $patchedLon): LocationPatch
     {
         $this->patchedLon = $patchedLon;
         return $this;
@@ -246,9 +246,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $reporterLat
-     * @return Location
+     * @return LocationPatch
      */
-    public function setReporterLat(float $reporterLat): Location
+    public function setReporterLat(float $reporterLat): LocationPatch
     {
         $this->reporterLat = $reporterLat;
         return $this;
@@ -264,9 +264,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $ReporterLon
-     * @return Location
+     * @return LocationPatch
      */
-    public function setReporterLon(float $ReporterLon): Location
+    public function setReporterLon(float $ReporterLon): LocationPatch
     {
         $this->ReporterLon = $ReporterLon;
         return $this;
@@ -282,9 +282,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param float $reporterAccuracy
-     * @return Location
+     * @return LocationPatch
      */
-    public function setReporterAccuracy(float $reporterAccuracy): Location
+    public function setReporterAccuracy(float $reporterAccuracy): LocationPatch
     {
         $this->reporterAccuracy = $reporterAccuracy;
         return $this;
@@ -300,9 +300,9 @@ class Location implements \JsonSerializable
 
     /**
      * @param User $user
-     * @return Location
+     * @return LocationPatch
      */
-    public function setUser(User $user): Location
+    public function setUser(User $user): LocationPatch
     {
         $this->user = $user;
         return $this;
@@ -312,7 +312,7 @@ class Location implements \JsonSerializable
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Location
+     * @return LocationPatch
      */
     public function setCreatedAt($createdAt)
     {
@@ -335,7 +335,7 @@ class Location implements \JsonSerializable
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Location
+     * @return LocationPatch
      */
     public function setUpdatedAt($updatedAt)
     {

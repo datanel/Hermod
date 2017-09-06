@@ -12,9 +12,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Equipment implements EquipmentInterface
 {
-    const TYPE_ELEVATOR = 'elevator';
-    const TYPE_STOP_POINT = 'stop_point';
-
     /**
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -28,6 +25,13 @@ class Equipment implements EquipmentInterface
      * @ORM\Column(name="code", type="string", length=255, unique=true)
      */
     protected $code;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var name of the equipment
+     */
+    private $name;
 
     /**
      * @var string
@@ -70,6 +74,30 @@ class Equipment implements EquipmentInterface
     public function setId(string $id) : Equipment
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceName
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set sourceName
+     *
+     * @param string $name
+     *
+     * @return Equipment
+     */
+    public function setName($name) : Equipment
+    {
+        $this->name = $name;
 
         return $this;
     }

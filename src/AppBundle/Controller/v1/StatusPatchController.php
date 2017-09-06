@@ -23,7 +23,7 @@ class StatusPatchController extends BaseController
     {
         return $this->json(
             $this->getDoctrine()
-                ->getRepository('AppBundle:Status')
+                ->getRepository('AppBundle:StatusPatch')
                 ->findBy(['user' => $this->getUser()])
         );
     }

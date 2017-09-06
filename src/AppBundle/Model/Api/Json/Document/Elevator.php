@@ -16,13 +16,6 @@ class Elevator
 
     /**
      * @Assert\NotBlank(message="This field is missing.")
-     * @Assert\Type("string")
-     * @JMS\Type("string")
-     */
-    private $name;
-
-    /**
-     * @Assert\NotBlank(message="This field is missing.")
      * @Assert\Valid()
      * @Assert\Type("AppBundle\Model\Api\Json\Document\Source")
      * @JMS\Type("AppBundle\Model\Api\Json\Document\Source")
@@ -37,18 +30,6 @@ class Elevator
     public function setCode($code) : Elevator
     {
         $this->code = $code;
-    }
-
-    public function getName() : ?string
-    {
-        return $this->name;
-    }
-
-    public function setName($name) : Elevator
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getSource()

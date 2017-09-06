@@ -4,7 +4,7 @@ namespace AppBundle\Services;
 
 use Doctrine\ORM\EntityManagerInterface;
 use AppBundle\Model\Api\Json\Document\Elevator as ElevatorDocument;
-use AppBundle\Entity\Status as StatusEntity;
+use AppBundle\Entity\StatusPatch as StatusPatchEntity;
 use AppBundle\Entity\User;
 
 class StatusPatch
@@ -20,7 +20,7 @@ class StatusPatch
 
     private function createStatus(User $user, $data)
     {
-        $statusEntity = new StatusEntity();
+        $statusEntity = new StatusPatchEntity();
 
         $statusEntity
             ->setUser($user)

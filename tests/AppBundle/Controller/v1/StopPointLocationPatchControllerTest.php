@@ -2,7 +2,6 @@
 
 namespace Tests\AppBundle\Controller\v1;
 
-use AppBundle\Entity\Location;
 use AppBundle\Entity\LocationPatch;
 
 class StopPointLocationPatchControllerTest extends ApiTestCase
@@ -110,8 +109,8 @@ class StopPointLocationPatchControllerTest extends ApiTestCase
         $response = $this->client->request('POST', 'patches/location', ['body' => json_encode($data)]);
 
         $this->assertResourceCreated($response);
-        $this->assertDbCount(1, 'Location');
-        $location = $this->getEntityManager()->getRepository('AppBundle:Location')->findAll()[0];
+        $this->assertDbCount(1, 'LocationPatch');
+        $location = $this->getEntityManager()->getRepository('AppBundle:LocationPatch')->findAll()[0];
         $this->assertValidPatch($data, $location);
     }
 
@@ -136,12 +135,12 @@ class StopPointLocationPatchControllerTest extends ApiTestCase
         );
 
         $this->assertResourceCreated($response);
-        $this->assertDbCount(1, 'Location');
-        $location = $this->getEntityManager()->getRepository('AppBundle:Location')->findAll()[0];
+        $this->assertDbCount(1, 'LocationPatch');
+        $location = $this->getEntityManager()->getRepository('AppBundle:LocationPatch')->findAll()[0];
         $this->assertValidPatch($data, $location);
     }
 
-    private function assertValidPatch(array $data, Location $location)
+    private function assertValidPatch(array $data, LocationPatch $location)
     {
         $this->assertDbCount(1, 'StopPoint');
         $stopPoint = $this->getEntityManager()->getRepository('AppBundle:StopPoint')

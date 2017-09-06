@@ -2,7 +2,6 @@
 
 namespace Tests\AppBundle\Controller\v1;
 
-use AppBundle\Entity\Location;
 use AppBundle\Entity\LocationPatch;
 
 class ElevatorLocationPatchControllerTest extends ApiTestCase
@@ -50,7 +49,6 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
         ];
         $requiredFields = [
             'elevator.code',
-            'elevator.name',
             'elevator.source'
         ];
         $response = $this->client->request('POST', 'patches/location', ['body' => json_encode($data)]);
@@ -68,8 +66,7 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
         $data = [
             'type' => 'elevator',
             'elevator' => [
-                'code' => "ELEVATOR:42",
-                'name' => 'ELEVATOR:42',
+                'code' => "4242",
                 'source' => []
             ],
             'current_location' => ['lat' => 0, 'lon' => 0],
@@ -94,8 +91,7 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
         $data = [
             'type' => 'elevator',
             'elevator' => [
-                'code' => "ELEVATOR:42",
-                'name' => 'ELEVATOR:42',
+                'code' => "4242",
                 'source' => ['name' => 'stiff'],
             ],
             'current_location' => ['lat' => 0, 'lon' => 0],
@@ -104,12 +100,12 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
         ];
         $response = $this->client->request('POST', 'patches/location', ['body' => json_encode($data)]);
         $this->assertResourceCreated($response);
-        $this->assertDbCount(1, 'Location');
-        $location = $this->getEntityManager()->getRepository('AppBundle:Location')->findAll()[0];
+        $this->assertDbCount(1, 'LocationPatch');
+        $location = $this->getEntityManager()->getRepository('AppBundle:LocationPatch')->findAll()[0];
         $this->assertValidPatch($data, $location);
     }
 
-    private function assertValidPatch(array $data, Location $location)
+    private function assertValidPatch(array $data, LocationPatch $location)
     {
         $this->assertDbCount(1, 'Elevator');
         $elevator = $this->getEntityManager()->getRepository('AppBundle:Elevator')

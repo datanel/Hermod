@@ -34,14 +34,14 @@ class User
     private $token;
 
     /**
-     * @ORM\OneToMany(targetEntity="Location", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="LocationPatch", mappedBy="user")
      *
      * @var ArrayCollection User locationPatches
      */
     private $locationPatches;
 
     /**
-     * @ORM\OneToMany(targetEntity="Status", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="StatusPatch", mappedBy="user")
      *
      * @var ArrayCollection User status reports
      */

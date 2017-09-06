@@ -55,7 +55,8 @@ class ElevatorRepository extends \Doctrine\ORM\EntityRepository
 
         foreach ($csv as $row) {
             $elevators[] = (new Elevator())
-                ->setCode($row['code'])
+                ->setCode($row['id'])
+                ->setName($row['code'])
                 ->setStationId($row['station_id'])
                 ->setStationName($row['station_name'])
                 ->setHumanLocation($row['human_location'])

@@ -23,7 +23,7 @@ class Elevator
      * @Assert\Valid()
      * @Assert\Type("AppBundle\Model\Api\Json\Document\Elevator")
      * @JMS\Type("AppBundle\Model\Api\Json\Document\Elevator")
-     * @AppAssertElevatorExist
+     * @AppAssertElevatorExist()
      */
     private $elevator;
 

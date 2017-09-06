@@ -7,6 +7,8 @@ use JMS\Serializer\Annotation as JMS;
 use AppBundle\Validator as AppAssert;
 use AppBundle\Model\Api\Json\Document\Elevator as ElevatorDocument;
 use AppBundle\Model\Api\Json\LocationPatch\Gps;
+use AppBundle\Validator\ElevatorExists as AppAssertElevatorExist;
+
 
 class Elevator
 {
@@ -23,6 +25,7 @@ class Elevator
      * @Assert\Valid()
      * @Assert\Type("AppBundle\Model\Api\Json\Document\Elevator")
      * @JMS\Type("AppBundle\Model\Api\Json\Document\Elevator")
+     * @AppAssertElevatorExist()
      */
     private $elevator;
 
