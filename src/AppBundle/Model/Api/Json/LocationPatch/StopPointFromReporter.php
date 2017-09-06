@@ -79,7 +79,7 @@ class StopPointFromReporter
         return $this;
     }
 
-    public function getReporterLocation() : Gps
+    public function getReporterLocation() : ?Gps
     {
         return $this->reporterLocation;
     }

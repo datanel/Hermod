@@ -36,7 +36,7 @@ class Gps
         return $this;
     }
 
-    public function getLocation() : Location
+    public function getLocation() : ?Location
     {
         return $this->location;
     }
