@@ -7,115 +7,87 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="location_patch")
+ * @ORM\Table(name="location_patch", indexes={@ORM\Index(name="location_patch_equipment_id_idx", columns={"equipment_id"})})
  */
 class LocationPatch implements \JsonSerializable
 {
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="guid")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="string")
-     *
-     * @var string The name of the source system
-     */
-    private $sourceName;
 
     /**
      * @ORM\Column(type="boolean")
      *
      * @var boolean the reporting mode used, can be either
-     *  - false if that patch was created by simply giving it a location
-     *  - true if the end-user provided his GPS geolocation to the API to
-     *    indicate the new location of the stop point
+     *  - false if that patch was created by simply giving it a humanLocation
+     *  - true if the reporter provided his GPS geolocation to the API to
+     *    indicate the new humanLocation
      */
-    private $usingUserGeolocation;
+    private $usingReporterGeolocation;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="guid")
      *
-     * @var string the id of the stop point we want to patch
+     * @var EquipmentId
      */
-    private $stopPointId;
-
-    /**
-     * @ORM\Column(type="string")
-     *
-     * @var string the id of the stop point we want to patch
-     */
-    private $stopPointName;
+    private $equipmentId;
 
     /**
      * @ORM\Column(type="float")
      *
-     * @var float the stop point current latitude
+     * @var float the current latitude
      */
-    private $stopPointCurrentLat = 0;
+    private $currentLat = 0;
 
     /**
      * @ORM\Column(type="float")
      *
      * @var float the stop point current longitude
      */
-    private $stopPointCurrentLon = 0;
+    private $currentLon = 0;
 
     /**
      * @ORM\Column(type="float")
      *
      * @var float the suggested latitude
      */
-    private $stopPointPatchedLat = 0;
+    private $patchedLat = 0;
 
     /**
      * @ORM\Column(type="float")
      *
      * @var float the suggested longitude
      */
-    private $stopPointPatchedLon = 0;
-
-    /**
-     * @ORM\Column(type="string")
-     *
-     * @var string the id of the route passing by the stop point to patch
-     */
-    private $routeId;
-
-    /**
-     * @ORM\Column(type="string")
-     *
-     * @var string the id name the route passing by the stop point to patch
-     */
-    private $routeName;
+    private $patchedLon = 0;
 
     /**
      * @ORM\Column(type="float")
      *
      * @var float the end-user geolocation latitude
      */
-    private $userGeolocationLat = 0;
+    private $reporterLat = 0;
 
     /**
      * @ORM\Column(type="float")
      *
      * @var float the end-user geolocation longitude
      */
-    private $userGeolocationLon = 0;
+    private $ReporterLon = 0;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="integer")
      *
      * @var float accuracy (in meters) of the end-user GPS device
      */
-    private $userGpsAccuracy = 0;
+    private $reporterAccuracy = 0;
 
     /**
      * Many Patches have One User.
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="patches")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="locationPatches")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      *
      * @var User The user submitting the patch
@@ -141,7 +113,7 @@ class LocationPatch implements \JsonSerializable
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId() : string
     {
         return $this->id;
     }
@@ -150,243 +122,171 @@ class LocationPatch implements \JsonSerializable
      * @param mixed $id
      * @return LocationPatch
      */
-    public function setId($id)
+    public function setId(string $id) : LocationPatch
     {
         $this->id = $id;
         return $this;
     }
 
     /**
-     * @return string
-     */
-    public function getSourceName(): string
-    {
-        return $this->sourceName;
-    }
-
-    /**
-     * @param string $sourceName
-     * @return LocationPatch
-     */
-    public function setSourceName(string $sourceName): LocationPatch
-    {
-        $this->sourceName = $sourceName;
-        return $this;
-    }
-
-    /**
      * @return boolean
      */
-    public function isUsingUserGeolocation(): bool
+    public function isUsingReporterGeolocation(): bool
     {
-        return $this->usingUserGeolocation;
+        return $this->usingReporterGeolocation;
     }
 
     /**
-     * @param boolean $usingUserGeolocation
+     * @param boolean $usingReporterGeolocation
      * @return LocationPatch
      */
-    public function setUsingUserGeolocation(bool $usingUserGeolocation): LocationPatch
+    public function setUsingReporterGeolocation(bool $usingReporterGeolocation): LocationPatch
     {
-        $this->usingUserGeolocation = $usingUserGeolocation;
+        $this->usingReporterGeolocation = $usingReporterGeolocation;
         return $this;
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getStopPointId(): string
+    public function getEquipmentId(): string
     {
-        return $this->stopPointId;
+        return $this->equipmentId;
     }
 
     /**
-     * @param string $stopPointId
+     * @param int $equipmentId
      * @return LocationPatch
      */
-    public function setStopPointId(string $stopPointId): LocationPatch
+    public function setEquipmentId(string $equipmentId): LocationPatch
     {
-        $this->stopPointId = $stopPointId;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStopPointName(): string
-    {
-        return $this->stopPointName;
-    }
-
-    /**
-     * @param string $stopPointName
-     * @return LocationPatch
-     */
-    public function setStopPointName(string $stopPointName): LocationPatch
-    {
-        $this->stopPointName = $stopPointName;
+        $this->equipmentId = $equipmentId;
         return $this;
     }
 
     /**
      * @return float
      */
-    public function getStopPointCurrentLat(): float
+    public function getCurrentLat(): float
     {
-        return $this->stopPointCurrentLat;
+        return $this->currentLat;
     }
 
     /**
-     * @param float $stopPointCurrentLat
+     * @param float $currentLat
      * @return LocationPatch
      */
-    public function setStopPointCurrentLat(float $stopPointCurrentLat): LocationPatch
+    public function setCurrentLat(float $currentLat): LocationPatch
     {
-        $this->stopPointCurrentLat = $stopPointCurrentLat;
+        $this->currentLat = $currentLat;
         return $this;
     }
 
     /**
      * @return float
      */
-    public function getStopPointCurrentLon(): float
+    public function getCurrentLon(): float
     {
-        return $this->stopPointCurrentLon;
+        return $this->currentLon;
     }
 
     /**
-     * @param float $stopPointCurrentLon
+     * @param float $currentLon
      * @return LocationPatch
      */
-    public function setStopPointCurrentLon(float $stopPointCurrentLon): LocationPatch
+    public function setCurrentLon(float $currentLon): LocationPatch
     {
-        $this->stopPointCurrentLon = $stopPointCurrentLon;
+        $this->currentLon = $currentLon;
         return $this;
     }
 
     /**
      * @return float
      */
-    public function getStopPointPatchedLat(): float
+    public function getPatchedLat(): float
     {
-        return $this->stopPointPatchedLat;
+        return $this->patchedLat;
     }
 
     /**
-     * @param float $stopPointPatchedLat
+     * @param float $patchedLat
      * @return LocationPatch
      */
-    public function setStopPointPatchedLat(float $stopPointPatchedLat): LocationPatch
+    public function setPatchedLat(float $patchedLat): LocationPatch
     {
-        $this->stopPointPatchedLat = $stopPointPatchedLat;
+        $this->patchedLat = $patchedLat;
         return $this;
     }
 
     /**
      * @return float
      */
-    public function getStopPointPatchedLon(): float
+    public function getPatchedLon(): float
     {
-        return $this->stopPointPatchedLon;
+        return $this->patchedLon;
     }
 
     /**
-     * @param float $stopPointPatchedLon
+     * @param float $patchedLon
      * @return LocationPatch
      */
-    public function setStopPointPatchedLon(float $stopPointPatchedLon): LocationPatch
+    public function setPatchedLon(float $patchedLon): LocationPatch
     {
-        $this->stopPointPatchedLon = $stopPointPatchedLon;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRouteId(): string
-    {
-        return $this->routeId;
-    }
-
-    /**
-     * @param string $routeId
-     * @return LocationPatch
-     */
-    public function setRouteId(string $routeId): LocationPatch
-    {
-        $this->routeId = $routeId;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRouteName(): string
-    {
-        return $this->routeName;
-    }
-
-    /**
-     * @param string $routeName
-     * @return LocationPatch
-     */
-    public function setRouteName(string $routeName): LocationPatch
-    {
-        $this->routeName = $routeName;
+        $this->patchedLon = $patchedLon;
         return $this;
     }
 
     /**
      * @return float
      */
-    public function getUserGeolocationLat(): float
+    public function getReporterLat(): float
     {
-        return $this->userGeolocationLat;
+        return $this->reporterLat;
     }
 
     /**
-     * @param float $userGeolocationLat
+     * @param float $reporterLat
      * @return LocationPatch
      */
-    public function setUserGeolocationLat(float $userGeolocationLat): LocationPatch
+    public function setReporterLat(float $reporterLat): LocationPatch
     {
-        $this->userGeolocationLat = $userGeolocationLat;
+        $this->reporterLat = $reporterLat;
         return $this;
     }
 
     /**
      * @return float
      */
-    public function getUserGeolocationLon(): float
+    public function getReporterLon(): float
     {
-        return $this->userGeolocationLon;
+        return $this->ReporterLon;
     }
 
     /**
-     * @param float $userGeolocationLon
+     * @param float $ReporterLon
      * @return LocationPatch
      */
-    public function setUserGeolocationLon(float $userGeolocationLon): LocationPatch
+    public function setReporterLon(float $ReporterLon): LocationPatch
     {
-        $this->userGeolocationLon = $userGeolocationLon;
+        $this->ReporterLon = $ReporterLon;
         return $this;
     }
 
     /**
      * @return float
      */
-    public function getUserGpsAccuracy(): float
+    public function getReporterAccuracy(): float
     {
-        return $this->userGpsAccuracy;
+        return $this->reporterAccuracy;
     }
 
     /**
-     * @param float $userGpsAccuracy
+     * @param float $reporterAccuracy
      * @return LocationPatch
      */
-    public function setUserGpsAccuracy(float $userGpsAccuracy): LocationPatch
+    public function setReporterAccuracy(float $reporterAccuracy): LocationPatch
     {
-        $this->userGpsAccuracy = $userGpsAccuracy;
+        $this->reporterAccuracy = $reporterAccuracy;
         return $this;
     }
 
@@ -459,30 +359,22 @@ class LocationPatch implements \JsonSerializable
         return [
             'created_at' => $this->createdAt->format(\DateTime::ISO8601),
             'updated_at' => $this->updatedAt->format(\DateTime::ISO8601),
-            'source_name' => $this->sourceName,
-            'patched_using_geoloc' => $this->usingUserGeolocation,
-            'stop_point' => [
-                'id' => $this->stopPointId,
-                'name' => $this->stopPointName
+            'patched_using_geoloc' => $this->isUsingReporterGeolocation(),
+            'equipment_id' => $this->getEquipmentId(),
+            'current_location' => [
+                'lat' => $this->getCurrentLat(),
+                'lon' => $this->getCurrentLon(),
             ],
-            'stop_point_current_location' => [
-                'lat' => $this->stopPointCurrentLat,
-                'lon' => $this->stopPointCurrentLon,
+            'patched_location' => [
+                'lat' => $this->getPatchedLat(),
+                'lon' => $this->getPatchedLon(),
             ],
-            'stop_point_patched_location' => [
-                'lat' => $this->stopPointPatchedLat,
-                'lon' => $this->stopPointPatchedLon,
-            ],
-            'route' => [
-                'id' => $this->routeId,
-                'name' => $this->routeName
-            ],
-            'gps' => [
+            'reported_location' => [
                 'location' => [
-                    'lat' => $this->userGeolocationLat,
-                    'lon' => $this->userGeolocationLon
+                    'lat' => $this->getReporterLat(),
+                    'lon' => $this->getReporterLon()
                 ],
-                'accuracy' => $this->userGpsAccuracy
+                'accuracy' => $this->getReporterAccuracy()
             ],
         ];
     }

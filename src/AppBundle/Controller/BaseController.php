@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Http\Exception\BadRequestException;
+use JMS\Serializer\Exception\RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use AppBundle\Http\Exception\BadRequestException;
 
 abstract class BaseController extends Controller
 {
@@ -21,17 +21,35 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Utility method allowing early return in case of bad request from the client.
+     * Utility method deserialize json sent.
      *
      * @param mixed $value the value to validate against the given constraints
-     * @param Constraint|Constraint[] $constraints
-     * @param string[]|null $groups the validation groups to use
      *
      * @throws BadRequestException When the given input value is not valid
      */
-    public function validOr400($value, $constraints, $groups = null)
+    protected function deserializeOr400(string $value, string $model)
     {
-        $violations = $this->get('validator')->validate($value, $constraints, (array)$groups);
+        try {
+            $result = $this->get('jms_serializer')->deserialize($value, $model, 'json');
+        } catch (RuntimeException $e) {
+            throw new BadRequestException($e->getMessage());
+        } catch (\LogicException $e) {
+            throw new BadRequestException('Error at [type]: This field is missing.');
+        }
+        return $result;
+    }
+
+
+    /**
+     * Utility method allowing early return in case of bad request from the client.
+     *
+     * @param mixed $value the value to validate against the given constraints
+     *
+     * @throws BadRequestException When the given input value is not valid
+     */
+    protected function validOr400($value)
+    {
+        $violations = $this->get('validator')->validate($value);
 
         if (count($violations)) {
             throw new BadRequestException($this->flattenViolations($violations), 'invalid_params');
@@ -67,13 +85,13 @@ abstract class BaseController extends Controller
      *
      * @return array
      */
-    private function flattenViolations(ConstraintViolationListInterface $violationList) : array
+    protected function flattenViolations(ConstraintViolationListInterface $violationList) : array
     {
         $errors = array();
         foreach ($violationList as $violation) {
             $errors[] = sprintf(
-                'Error at %s: %s',
-                str_replace('][', '->', $violation->getPropertyPath()),
+                'Error at [%s]: %s',
+                $violation->getPropertyPath(),
                 $violation->getMessage()
             );
         }
