@@ -18,9 +18,11 @@ class ElevatorExistsValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        if (is_null($value) || !($value instanceof ElevatorDocument)) {
+        if (is_null($value) || !($value instanceof ElevatorDocument) ||
+            is_null($value->getCode()) || is_null($value->getSource()->getName())) {
             return;
         }
+
         $elevator = $this->em->getRepository('AppBundle:Elevator')->findOneBy([
             'code' => $value->getCode(),
             'sourceName' => $value->getSource()->getName()

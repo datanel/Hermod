@@ -11,8 +11,8 @@ class Gps
 {
     /**
      * @Assert\NotNull()
-     * @Assert\Type("float")
-     * @JMS\Type("float")
+     * @Assert\Type("int")
+     * @JMS\Type("int")
      */
     private $accuracy;
 

@@ -8,7 +8,7 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
 {
     public function testPostLocationPatchesWithoutAuthorization()
     {
-        $this->assertSecured('POST', 'patches/location/from_user_location');
+        $this->assertSecured('POST', 'patches/location/from_reporter');
     }
 
     public function testPostLocationPatchesWithoutType()

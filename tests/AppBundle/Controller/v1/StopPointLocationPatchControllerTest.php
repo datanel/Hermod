@@ -8,7 +8,7 @@ class StopPointLocationPatchControllerTest extends ApiTestCase
 {
     public function testPostLocationPatchesWithoutAuthorization()
     {
-        $this->assertSecured('POST', 'patches/location/from_user_location');
+        $this->assertSecured('POST', 'patches/location/from_reporter');
     }
 
     public function testPostLocationPatchesWithoutType()
@@ -114,7 +114,7 @@ class StopPointLocationPatchControllerTest extends ApiTestCase
         $this->assertValidPatch($data, $location);
     }
 
-    public function testPostLocationPatchesFromUserLocation()
+    public function testPostLocationPatchesFromReporterLocation()
     {
         $data = [
             'type' => 'stop_point',
@@ -125,12 +125,11 @@ class StopPointLocationPatchControllerTest extends ApiTestCase
                 'source' => ['name' => 'navitia2']
             ],
             'current_location' => ['lat' => 0, 'lon' => 0],
-            'patched_location' => ['lat' => 42, 'lon' => 21],
             'reporter_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
         ];
         $response = $this->client->request(
             'POST',
-            'patches/location/from_user_location',
+            'patches/location/from_reporter',
             ['body' => json_encode($data)]
         );
 

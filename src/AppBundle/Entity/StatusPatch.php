@@ -203,7 +203,7 @@ class StatusPatch implements \JsonSerializable
         $return = [
             'created_at' => $this->getCreatedAt()->format(\DateTime::ISO8601),
             'updated_at' => $this->getUpdatedAt()->format(\DateTime::ISO8601),
-            'equipment_d' => $this->getEquipmentId(),
+            'equipment_id' => $this->getEquipmentId(),
             'current_status' => $this->getCurrentStatus(),
             'patched_status' => $this->getPatchedStatus()
         ];

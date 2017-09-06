@@ -28,13 +28,18 @@ class LocationPatch
             ->setEquipmentId($this->equipmentEntity->getId())
             ->setCurrentLat($data->getCurrentLocation()->getLat())
             ->setCurrentLon($data->getCurrentLocation()->getLon())
-            ->setPatchedLat($data->getPatchedLocation()->getLat())
-            ->setPatchedLon($data->getPatchedLocation()->getLon())
             ->setReporterLat($data->getReporterLocation()->getLocation()->getLat())
             ->setReporterLon($data->getReporterLocation()->getLocation()->getLon())
             ->setReporterAccuracy($data->getReporterLocation()->getAccuracy())
             ->setUsingReporterGeolocation($withReporterLocation)
         ;
+        if ($withReporterLocation === false) {
+            $locationEntity
+                ->setPatchedLat($data->getPatchedLocation()->getLat())
+                ->setPatchedLon($data->getPatchedLocation()->getLon())
+            ;
+
+        }
         $this->em->persist($locationEntity);
     }
 

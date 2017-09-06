@@ -10,7 +10,8 @@ use AppBundle\Controller\BaseController;
 use AppBundle\Http\ResourceCreatedResponse;
 use AppBundle\Services\LocationPatch as LocationPatchService;
 use AppBundle\Model\Api\Json\LocationPatch\Base as LocationPatchModel;
-use AppBundle\Model\Api\Json\LocationPatch\StopPoint as StopPointLocationPatchModel;
+use AppBundle\Model\Api\Json\LocationPatch\StopPointFromReporter as StopPointLocationPatchFromReporterModel;
+
 
 /**
  * @Route("/patches/location")
@@ -44,12 +45,12 @@ class LocationPatchController extends BaseController
     }
 
     /**
-     * @Route("/from_user", name="v1_create_location_patch_from_user_location")
+     * @Route("/from_reporter", name="v1_create_location_patch_from_reporter")
      * @Method("POST")
      */
-    public function createPatchFromUser(Request $request, LocationPatchService $locationPatchService)
+    public function createPatchFromReporter(Request $request, LocationPatchService $locationPatchService)
     {
-        $result = $this->deserializeOr400($request->getContent(), StopPointLocationPatchModel::class);
+        $result = $this->deserializeOr400($request->getContent(), StopPointLocationPatchFromReporterModel::class);
         $this->validOr400($result);
         $locationPatchService->create($this->getUser(), $result, true);
 
