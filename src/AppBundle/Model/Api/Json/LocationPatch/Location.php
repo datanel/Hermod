@@ -14,8 +14,8 @@ class Location
      * @Assert\Range(
      *      min = -90,
      *      max = 90,
-     *      minMessage = "Your latitude 'lat' is not a valid WGS84 (must be greater than {{ limit }})",
-     *      maxMessage = "Your latitude 'lat' is not a valid WGS84 (must be smaller than {{ limit }})"
+     *      minMessage = "Your latitude 'lat' is not a valid WGS84 (must be at least {{ limit }})",
+     *      maxMessage = "Your latitude 'lat' is not a valid WGS84 (must be at most {{ limit }})"
      * )
      * @JMS\Type("float")
      */
@@ -27,8 +27,8 @@ class Location
      * @Assert\Range(
      *      min = -180,
      *      max = 180,
-     *      minMessage = "Your longitude 'lon' is not a valid WGS84 (must be greater than {{ limit }})",
-     *      maxMessage = "Your longitude 'lon' is not a valid WGS84 (must be smaller than {{ limit }})"
+     *      minMessage = "Your longitude 'lon' is not a valid WGS84 (must be at least {{ limit }})",
+     *      maxMessage = "Your longitude 'lon' is not a valid WGS84 (must be at most {{ limit }})"
      * )
      * @JMS\Type("float")
      */
