@@ -1,6 +1,10 @@
 # Hermod
 Crowd sourcing API for Navitia
 
+## Documentation
+
+[Swagger](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/CanalTP/Hermod/master/swagger-spec.yaml)
+
 ## Docker
 
 ## For development env
