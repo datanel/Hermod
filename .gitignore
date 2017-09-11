@@ -14,10 +14,10 @@
 junit.xml
 
 # configuration
-app/config/parameters.yml
+/app/config/parameters.yml
 
 # assets
-web/bundles/
+/web/bundles/
 
 # vendors
 /vendor/
