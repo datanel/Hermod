@@ -6,11 +6,11 @@ stage("Unit tests") {
 
         wrap([$class: 'AnsiColorBuildWrapper']) {
             sh '''
-            HERMOD_CONTAINER="hermod_test_$BUILD_NUMBER"
+            HERMOD_DOCKER_PROJECT="hermod_${BRANCH_NAME}_${BUILD_NUMBER}"
             export UID=$(id -u)
             export GID=$(id -g)
 
-            DOCKER_COMPOSE="docker-compose -p "$HERMOD_CONTAINER" -f docker/docker-compose.test.yml"
+            DOCKER_COMPOSE="docker-compose -p "$HERMOD_DOCKER_PROJECT" -f docker/docker-compose.test.yml"
 
             cp docker/config.env.dist docker/config_test.env
             echo "SYMFONY_ENV=dev" >> docker/config_test.env
