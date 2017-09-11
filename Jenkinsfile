@@ -10,15 +10,16 @@ stage("Unit tests") {
             export UID=$(id -u)
             export GID=$(id -g)
 
+            DOCKER_COMPOSE="docker-compose -p "$HERMOD_CONTAINER" -f docker/docker-compose.test.yml"
+
             cp docker/config.env.dist docker/config_test.env
             echo "SYMFONY_ENV=dev" >> docker/config_test.env
-            docker-compose -f docker/docker-compose.test.yml run composer_install
-            docker-compose -f docker/docker-compose.test.yml build
-            docker-compose -f docker/docker-compose.test.yml run --name $HERMOD_CONTAINER hermod_api
-            docker-compose -f docker/docker-compose.test.yml down --remove-orphans
+            $DOCKER_COMPOSE run composer_install
+            $DOCKER_COMPOSE build
+            $DOCKER_COMPOSE run hermod_api
+            $DOCKER_COMPOSE down --remove-orphans
             '''
             junit 'junit.xml'
         }
     }
 }
-
