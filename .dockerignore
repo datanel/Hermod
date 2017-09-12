@@ -3,3 +3,7 @@ docker/postgres/data
 .gitignore
 .dockerignore
 junit.xml
+app/config/parameters.yml
+var/logs/*
+var/cache/*
+var/sessions/*
