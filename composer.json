@@ -56,6 +56,9 @@
         ],
         "post-update-cmd": [
             "@symfony-scripts"
+        ],
+        "build-parameters": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
         ]
     },
     "config": {
@@ -69,7 +72,10 @@
         "symfony-tests-dir": "tests",
         "symfony-assets-install": "copy",
         "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
+            "file": "app/config/parameters.yml",
+            "env-map": {
+                "version": "VERSION"
+            }
         },
         "branch-alias": null
     },

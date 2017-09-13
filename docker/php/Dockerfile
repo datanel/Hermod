@@ -2,6 +2,9 @@ FROM php:7.1-fpm
 
 WORKDIR /srv/hermod
 
+ENV SYMFONY_ENV prod
+ARG VERSION
+
 # Install pdo extension for Postgre
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
     libpq-dev \
@@ -38,6 +41,19 @@ RUN echo 'opcache.max_accelerated_files = 20000' >> /usr/local/etc/php/conf.d/do
 
 COPY . /srv/hermod/
 COPY docker/php/www.conf  /usr/local/etc/php-fpm.d/www.conf
+
+# Run composer
+RUN curl -sS https://getcomposer.org/installer | \
+    php -- --install-dir=/usr/bin/ --filename=composer \
+    && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+    unzip \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get autoremove -y \
+    && export $(cat docker/config.env | xargs) \
+    && composer install --no-interaction --prefer-dist --no-scripts --no-dev \
+    && composer run-script --no-dev build-parameters \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false unzip \
+    && rm -f /usr/bin/composer
 
 RUN useradd --home-dir /srv/hermod/ hermod
 RUN chown -R hermod:hermod /srv/hermod/

@@ -12,5 +12,7 @@ class AppControllerTest extends ApiTestCase
         $data = $this->getBody($response);
         $this->assertArrayHasKey('status', $data);
         $this->assertEquals($data['status'], 'OK');
+        $this->assertArrayHasKey('version', $data);
+        $this->assertEquals($data['version'], 'dev');
     }
 }
