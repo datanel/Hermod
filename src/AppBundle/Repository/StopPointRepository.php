@@ -12,8 +12,8 @@ use AppBundle\Entity\StopPoint;
  */
 class StopPointRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findOrCreateByCode($code) {
-        $stopPoint = $this->findOneByCode($code);
+    public function findOrCreate(string $code, string $source) : StopPoint {
+        $stopPoint = $this->findOneBy(['code' => $code, 'sourceName' => $source]);
 
         return is_null($stopPoint) ? new StopPoint() : $stopPoint;
     }

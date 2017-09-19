@@ -17,8 +17,7 @@ class UpdateUserRoleCommand extends ContainerAwareCommand
         'ROLE_ROOT',
         'ROLE_V1_STATUS_PATCH_CREATE_EQUIPMENT_STATUS',
         'ROLE_V1_LOCATION_PATCH_CREATE',
-        'ROLE_V1_LOCATION_PATCH_CREATE_FROM_REPORTER',
-        'ROLE_V1_ELEVATOR_IMPORT_CSV'
+        'ROLE_V1_LOCATION_PATCH_CREATE_FROM_REPORTER'
     ];
 
     protected function configure()

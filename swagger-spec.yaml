@@ -12,8 +12,6 @@ info:
 tags:
   - name: patches
     description: Suggest patches to improve information
-  - name: elevators
-    description: Specific API for elevators
   - name: status
     description: Verify the API status
 paths:
@@ -80,30 +78,6 @@ paths:
           description: Everything went fine
         '400':
           $ref: '#/components/responses/InvalidRequestError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-      security:
-        - apiKey: []
-  /v1/elevators/import/csv:
-    post:
-      tags:
-        - elevators
-      summary: Import elevators informations
-      requestBody:
-        required: true
-        content:
-          text/csv:
-            schema:
-              type: string
-              example: >-
-                id;code;station_id;station_name;human_location;direction;source_name
-      responses:
-        '201':
-          description: Everything went fine
-        '400':
-          $ref: '#/components/responses/BadRequestError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '403':
@@ -253,14 +227,29 @@ components:
     Elevator:
       type: object
       required:
+        - name
+        - human_location
+        - direction
         - code
         - source
+        - station
       properties:
+        name:
+          type: string
+          description: name of elevator
+        human_location:
+          type: string
+          description: Human location of elevator
+        direction:
+          type: string
+          description: direction of elevator
         code:
           type: string
           description: code of elevator
         source:
           $ref: '#/components/schemas/Source'
+        station:
+          $ref: '#/components/schemas/Station'
     StopPoint:
       type: object
       required:
@@ -288,6 +277,18 @@ components:
           type: string
           description: Name of repository containing object references
           example: navitia2
+    Station:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: Station id
+        name:
+          type: string
+          description: Station name
     Route:
       type: object
       required:

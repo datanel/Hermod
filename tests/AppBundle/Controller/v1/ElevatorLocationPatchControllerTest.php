@@ -48,6 +48,10 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
             'reporter_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
         ];
         $requiredFields = [
+            'elevator.name',
+            'elevator.direction',
+            'elevator.humanLocation',
+            'elevator.station',
             'elevator.code',
             'elevator.source'
         ];
@@ -66,6 +70,10 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
         $data = [
             'type' => 'elevator',
             'elevator' => [
+                'name' => 'elevator_name',
+                'direction' => 'elevator_direction',
+                'human_location' => 'elevator_human_location',
+                'station' => [],
                 'code' => "4242",
                 'source' => []
             ],
@@ -74,6 +82,8 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
             'reporter_location' => ['location' => ['lat' => 42, 'lon' => 21], 'accuracy' => 5]
         ];
         $requiredFields = [
+            'elevator.station.id',
+            'elevator.station.name',
             'elevator.source.name'
         ];
         $response = $this->client->request('POST', 'patches/location', ['body' => json_encode($data)]);
@@ -91,8 +101,12 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
         $data = [
             'type' => 'elevator',
             'elevator' => [
+                'name' => 'elevator_name',
+                'direction' => 'elevator_direction',
+                'human_location' => 'elevator_human_location',
+                'station' => ['id' => 'station_id', 'name' => 'station_name'],
                 'code' => "4242",
-                'source' => ['name' => 'stiff'],
+                'source' => ['name' => 'stiff']
             ],
             'current_location' => ['lat' => 0, 'lon' => 0],
             'patched_location' => ['lat' => 42, 'lon' => 21],
@@ -111,6 +125,11 @@ class ElevatorLocationPatchControllerTest extends ApiTestCase
         $elevator = $this->getEntityManager()->getRepository('AppBundle:Elevator')
             ->find($location->getEquipmentId());
 
+        $this->assertEquals($data['elevator']['name'], $elevator->getName());
+        $this->assertEquals($data['elevator']['direction'], $elevator->getDirection());
+        $this->assertEquals($data['elevator']['human_location'], $elevator->getHumanLocation());
+        $this->assertEquals($data['elevator']['station']['id'], $elevator->getStationId());
+        $this->assertEquals($data['elevator']['station']['name'], $elevator->getStationName());
         $this->assertEquals($data['elevator']['code'], $elevator->getCode());
         $this->assertEquals($data['elevator']['source']['name'], $elevator->getSourceName());
         $this->assertEquals($data['current_location']['lat'], $location->getCurrentLat());
