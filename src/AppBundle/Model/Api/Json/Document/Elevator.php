@@ -12,6 +12,36 @@ class Elevator
      * @Assert\Type("string")
      * @JMS\Type("string")
      */
+    private $name;
+
+    /**
+     * @Assert\NotBlank(message="This field is missing.")
+     * @Assert\Type("string")
+     * @JMS\Type("string")
+     */
+    private $direction;
+
+    /**
+     * @Assert\NotBlank(message="This field is missing.")
+     * @Assert\Type("string")
+     * @JMS\Type("string")
+     * @JMS\SerializedName("human_location")
+     */
+    private $humanLocation;
+
+    /**
+     * @Assert\NotBlank(message="This field is missing.")
+     * @Assert\Valid()
+     * @Assert\Type("AppBundle\Model\Api\Json\Document\Station")
+     * @JMS\Type("AppBundle\Model\Api\Json\Document\Station")
+     */
+    private $station;
+
+    /**
+     * @Assert\NotBlank(message="This field is missing.")
+     * @Assert\Type("string")
+     * @JMS\Type("string")
+     */
     private $code;
 
     /**
@@ -22,6 +52,45 @@ class Elevator
      */
     private $source;
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getDirection()
+    {
+        return $this->direction;
+    }
+
+    public function setDirection($direction)
+    {
+        $this->direction = $direction;
+    }
+
+    public function getHumanLocation()
+    {
+        return $this->humanLocation;
+    }
+
+    public function setHumanLocation($humanLocation)
+    {
+        $this->humanLocation = $humanLocation;
+    }
+
+    public function getStation()
+    {
+        return $this->station;
+    }
+
+    public function setStation($station)
+    {
+        $this->station = $station;
+    }
     public function getCode() : ?string
     {
         return $this->code;

@@ -3,7 +3,6 @@
 namespace AppBundle\Services;
 
 use Doctrine\ORM\EntityManagerInterface;
-use AppBundle\Model\Api\Json\Document\Elevator as ElevatorDocument;
 use AppBundle\Entity\StatusPatch as StatusPatchEntity;
 use AppBundle\Entity\User;
 
@@ -11,11 +10,13 @@ class StatusPatch
 {
     private $em;
     private $equipmentEntity;
+    private $elevatorManager;
 
-    function __construct(EntityManagerInterface $em)
+    function __construct(EntityManagerInterface $em, ElevatorManager $elevatorManager)
     {
         $this->em = $em;
         $this->equipmentEntity = null;
+        $this->elevatorManager = $elevatorManager;
     }
 
     private function createStatus(User $user, $data)
@@ -31,26 +32,15 @@ class StatusPatch
         $this->em->persist($statusEntity);
     }
 
-    private function findElevator(ElevatorDocument $elevator)
-    {
-        $elevatorEntity = $this->em->getRepository('AppBundle:Elevator')
-            ->findOneBy([
-                'code' => $elevator->getCode(),
-                'sourceName' => $elevator->getSource()->getName()
-            ])
-        ;
-
-        return $elevatorEntity;
-    }
-
     public function create(User $user, $data)
     {
         switch ($data->getType()) {
             case 'elevator':
-                $this->equipmentEntity = $this->findElevator($data->getElevator());
+                $this->equipmentEntity = $this->elevatorManager->findOrCreate($data->getElevator());
                 break;
         }
         $this->createStatus($user, $data);
+
         $this->em->flush();
     }
 }

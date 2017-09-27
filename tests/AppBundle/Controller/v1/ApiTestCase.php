@@ -8,7 +8,6 @@ use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use AppBundle\DataFixtures\ORM\LoadUserData;
-use AppBundle\DataFixtures\ORM\LoadElevatorData;
 
 abstract class ApiTestCase extends KernelTestCase
 {
@@ -39,9 +38,6 @@ abstract class ApiTestCase extends KernelTestCase
         $this->purgeDatabase();
 
         $fixture = new LoadUserData();
-        $fixture->load($this->getEntityManager());
-
-        $fixture = new LoadElevatorData();
         $fixture->load($this->getEntityManager());
     }
 
