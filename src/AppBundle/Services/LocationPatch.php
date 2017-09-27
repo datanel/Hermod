@@ -58,4 +58,30 @@ class LocationPatch
         $this->createLocation($user, $data, $withReporterLocation);
         $this->em->flush();
     }
+
+    public function getCsvReportByPeriod()
+    {
+        $locationPatches = $this->em->getRepository('AppBundle:LocationPatch')->findByPeriod(7);
+        $csv = "username;equipment_name;equipment_code;equipment_source_name;using_reporter_geolocation;current_lat;current_lon;patched_lat;patched_lon;";
+        $csv .= "reporter_lat;reporter_lon;reporter_accuracy;created_at\n";
+
+        foreach ($locationPatches as $locationPatch) {
+            $csv .= $locationPatch[0]->getUser()->getUsername() . ';';
+            $csv .= $locationPatch['equipment_name'] . ';';
+            $csv .= $locationPatch['equipment_code'] . ';';
+            $csv .= $locationPatch['equipment_source_name'] . ';';
+            $csv .= $locationPatch[0]->isUsingReporterGeolocation() ? 'yes;' : 'no;';
+            $csv .= $locationPatch[0]->getCurrentLat() . ';';
+            $csv .= $locationPatch[0]->getCurrentLon() . ';';
+            $csv .= $locationPatch[0]->getPatchedLat() . ';';
+            $csv .= $locationPatch[0]->getPatchedLon() . ';';
+            $csv .= $locationPatch[0]->getReporterLat() . ';';
+            $csv .= $locationPatch[0]->getReporterLon() . ';';
+            $csv .= $locationPatch[0]->getReporterAccuracy() . ';';
+            $csv .= $locationPatch[0]->getCreatedAt()->format('d/m/Y') . ';';
+            $csv .= "\n";
+        }
+
+        return $csv;
+    }
 }

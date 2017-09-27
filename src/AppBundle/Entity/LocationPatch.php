@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\LocationPatchRepository")
  * @ORM\Table(name="location_patch", indexes={@ORM\Index(name="location_patch_equipment_id_idx", columns={"equipment_id"})})
  */
 class LocationPatch implements \JsonSerializable
