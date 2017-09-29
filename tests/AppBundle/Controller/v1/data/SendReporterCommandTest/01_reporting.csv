@@ -1,0 +1,8 @@
+username;equipment_name;equipment_code;equipment_source_name;using_reporter_geolocation;current_lat;current_lon;patched_lat;patched_lon;reporter_lat;reporter_lon;reporter_accuracy;created_at
+test;STOP_POINT:42;42;navitia2;no;1;1;0;0;42;21;5;29/09/2017;
+test;STOP_POINT:42;43;navitia2;no;2;2;0;0;42;21;5;28/09/2017;
+test;STOP_POINT:42;44;navitia2;no;3;2;0;0;42;21;5;27/09/2017;
+test;STOP_POINT:42;45;navitia2;no;4;2;0;0;42;21;5;26/09/2017;
+test;STOP_POINT:42;46;navitia2;no;5;2;0;0;42;21;5;25/09/2017;
+test;STOP_POINT:42;47;navitia2;no;6;2;0;0;42;21;5;24/09/2017;
+test;STOP_POINT:42;48;navitia2;no;7;2;0;0;42;21;5;23/09/2017;

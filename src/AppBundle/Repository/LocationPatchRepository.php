@@ -20,8 +20,8 @@ class LocationPatchRepository extends \Doctrine\ORM\EntityRepository
         $query = $qb
             ->select('lp, u, e.name AS equipment_name, e.code AS equipment_code, e.sourceName AS equipment_source_name')
             ->from($equipment, 'e')
-            ->where($qb->expr()->gte('lp.createdAt', ':date'))
-            ->andWhere($qb->expr()->gte('lp.equipmentId', 'e.id'))
+            ->where($qb->expr()->gt('lp.createdAt', ':date'))
+            ->andWhere($qb->expr()->eq('lp.equipmentId', 'e.id'))
             ->join('lp.user', 'u', Expr\Join::WITH, $qb->expr()->eq('u.id', 'lp.user'))
             ->orderBy('lp.createdAt', 'DESC')
             ->setParameter('date', $date)

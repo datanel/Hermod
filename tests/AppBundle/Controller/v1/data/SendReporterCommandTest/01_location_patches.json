@@ -1,0 +1,13 @@
+[
+  {"type":"stop_point","stop_point":{"code":42,"name":"STOP_POINT:42","route":{"id":"string","name":"string"},"source":{"name":"navitia2"}},"current_location":{"lat":1,"lon":1},"reporter_location":{"location":{"lat":42,"lon":21},"accuracy":5}},
+  {"type":"stop_point","stop_point":{"code":43,"name":"STOP_POINT:42","route":{"id":"string","name":"string"},"source":{"name":"navitia2"}},"current_location":{"lat":2,"lon":2},"reporter_location":{"location":{"lat":42,"lon":21},"accuracy":5}},
+  {"type":"stop_point","stop_point":{"code":44,"name":"STOP_POINT:42","route":{"id":"string","name":"string"},"source":{"name":"navitia2"}},"current_location":{"lat":3,"lon":2},"reporter_location":{"location":{"lat":42,"lon":21},"accuracy":5}},
+  {"type":"stop_point","stop_point":{"code":45,"name":"STOP_POINT:42","route":{"id":"string","name":"string"},"source":{"name":"navitia2"}},"current_location":{"lat":4,"lon":2},"reporter_location":{"location":{"lat":42,"lon":21},"accuracy":5}},
+  {"type":"stop_point","stop_point":{"code":46,"name":"STOP_POINT:42","route":{"id":"string","name":"string"},"source":{"name":"navitia2"}},"current_location":{"lat":5,"lon":2},"reporter_location":{"location":{"lat":42,"lon":21},"accuracy":5}},
+  {"type":"stop_point","stop_point":{"code":47,"name":"STOP_POINT:42","route":{"id":"string","name":"string"},"source":{"name":"navitia2"}},"current_location":{"lat":6,"lon":2},"reporter_location":{"location":{"lat":42,"lon":21},"accuracy":5}},
+  {"type":"stop_point","stop_point":{"code":48,"name":"STOP_POINT:42","route":{"id":"string","name":"string"},"source":{"name":"navitia2"}},"current_location":{"lat":7,"lon":2},"reporter_location":{"location":{"lat":42,"lon":21},"accuracy":5}},
+  {"type":"stop_point","stop_point":{"code":49,"name":"STOP_POINT:42","route":{"id":"string","name":"string"},"source":{"name":"navitia2"}},"current_location":{"lat":8,"lon":2},"reporter_location":{"location":{"lat":42,"lon":21},"accuracy":5}},
+  {"type":"stop_point","stop_point":{"code":50,"name":"STOP_POINT:42","route":{"id":"string","name":"string"},"source":{"name":"navitia2"}},"current_location":{"lat":9,"lon":2},"reporter_location":{"location":{"lat":42,"lon":21},"accuracy":5}},
+  {"type":"stop_point","stop_point":{"code":51,"name":"STOP_POINT:42","route":{"id":"string","name":"string"},"source":{"name":"navitia2"}},"current_location":{"lat":10,"lon":2},"reporter_location":{"location":{"lat":42,"lon":21},"accuracy":5}},
+  {"type":"stop_point","stop_point":{"code":52,"name":"STOP_POINT:42","route":{"id":"string","name":"string"},"source":{"name":"navitia2"}},"current_location":{"lat":11,"lon":2},"reporter_location":{"location":{"lat":42,"lon":21},"accuracy":5}}
+]

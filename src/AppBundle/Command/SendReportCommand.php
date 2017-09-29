@@ -37,7 +37,7 @@ class SendReportCommand extends ContainerAwareCommand
 
         return (new \Swift_Message())
             ->setSubject('[HERMOD] - Export des signalements d\'arrêt')
-            ->setFrom(['hermod@canaltp.fr' => 'Hermod team'])
+            ->setFrom(['hermod@kisio.org' => 'Hermod team'])
             ->setTo($to)
             ->setCc($cc)
             ->setBody(

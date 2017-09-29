@@ -143,6 +143,7 @@ class LocationPatch implements \JsonSerializable
     public function setUsingReporterGeolocation(bool $usingReporterGeolocation): LocationPatch
     {
         $this->usingReporterGeolocation = $usingReporterGeolocation;
+
         return $this;
     }
 
