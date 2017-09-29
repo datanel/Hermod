@@ -68,7 +68,7 @@ class SendReportCommandTest extends ApiTestCase
         $this->insertLocationPatches();
         $rootDir = $this->getService('kernel')->getRootDir();
         $csvExpected = file_get_contents($rootDir.'/../tests/AppBundle/Controller/v1/data/SendReporterCommandTest/01_reporting.csv');
-        $csv = $this->getService('AppBundle\Services\LocationPatch')->getCsvReportByPeriod();
+        $csv = $this->getService('AppBundle\Services\LocationPatch')->getCsvReportByPeriod(7);
 
         $this->assertEquals($csv, $csvExpected);
     }
