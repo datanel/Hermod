@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\Query\Expr;
 use AppBundle\Entity\Elevator;
 
 /**
