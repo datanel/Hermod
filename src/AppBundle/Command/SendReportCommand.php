@@ -22,10 +22,13 @@ class SendReportCommand extends ContainerAwareCommand
 
     private function getCsvReport()
     {
-        $report = $this->getContainer()->get('AppBundle\Services\LocationPatch')->getCsvReportByPeriod(7);
+        $date = new \DateTime();
+        $endDate  = $date->format('Y-m-d');
+        $startDate = $date->modify('-7 days')->format('Y-m-d');
+        $report = $this->getContainer()->get('AppBundle\Services\LocationPatch')->getCsvReportByPeriod($startDate, $endDate);
 
         return (new \Swift_Attachment())
-            ->setFilename('reporting_location_patch_' . date("Y_m_d") . '.csv')
+            ->setFilename('reporting_location_patch_between_' . $startDate . '_and_' . $endDate . '.csv')
             ->setContentType('text/csv')
             ->setBody($report)
         ;
@@ -56,6 +59,6 @@ class SendReportCommand extends ContainerAwareCommand
         $message = $this->getMessage($to, $cc);
 
         $mailer->send($message);
-        $io->success('[' . date("Y-m-d h:i:s") . '] - Message sended to: "'. $to .' cc: "'. implode(', ', $cc) .'"');
+        $io->success('[' . date("Y-m-d h:i:s") . '] - Message sended to: "'. $to .'" cc: "'. implode(', ', $cc) .'"');
     }
 }

@@ -59,9 +59,9 @@ class LocationPatch
         $this->em->flush();
     }
 
-    public function getCsvReportByPeriod(int $day)
+    public function getCsvReportByPeriod(string $startDate, string $endDate)
     {
-        $locationPatches = $this->em->getRepository('AppBundle:LocationPatch')->findByPeriod($day);
+        $locationPatches = $this->em->getRepository('AppBundle:LocationPatch')->findByPeriod($startDate, $endDate);
         $csv = "username;equipment_name;equipment_code;equipment_source_name;using_reporter_geolocation;current_lat;current_lon;patched_lat;patched_lon;";
         $csv .= "reporter_lat;reporter_lon;reporter_accuracy;created_at\n";
 

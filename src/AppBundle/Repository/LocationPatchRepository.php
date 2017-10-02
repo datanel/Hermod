@@ -3,6 +3,8 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\Query\Expr;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Parameter;
 
 /**
  * LocationPatchRepository
@@ -12,19 +14,22 @@ use Doctrine\ORM\Query\Expr;
  */
 class LocationPatchRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findByPeriod(int $day) : array
+    public function findByPeriod(string $startDate, string $endDate) : array
     {
         $equipment = 'AppBundle\Entity\StopPoint';
-        $date = date("Y-m-d",strtotime('-' . $day . ' day'));
         $qb = $this->createQueryBuilder('lp');
         $query = $qb
             ->select('lp, u, e.name AS equipment_name, e.code AS equipment_code, e.sourceName AS equipment_source_name')
             ->from($equipment, 'e')
-            ->where($qb->expr()->gt('lp.createdAt', ':date'))
+            ->where($qb->expr()->gte('lp.createdAt', ':startDate'))
+            ->andWhere($qb->expr()->lt('lp.createdAt', ':endDate'))
             ->andWhere($qb->expr()->eq('lp.equipmentId', 'e.id'))
             ->join('lp.user', 'u', Expr\Join::WITH, $qb->expr()->eq('u.id', 'lp.user'))
             ->orderBy('lp.createdAt', 'DESC')
-            ->setParameter('date', $date)
+            ->setParameters(new ArrayCollection([
+                new Parameter('startDate', $startDate),
+                new Parameter('endDate', $endDate)
+            ]))
             ->getQuery()
         ;
 

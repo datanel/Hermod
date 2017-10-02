@@ -13,7 +13,6 @@ class SendReportCommandTest extends ApiTestCase
 
     private function createLocationPatch(\stdClass $data)
     {
-        $createdAt = date("Y-m-d",strtotime('-' . $this->day++ . ' day'));
         $stopPointEntity = new StopPoint();
         $locationPatchEntity = new LocationPatch();
 
@@ -34,7 +33,7 @@ class SendReportCommandTest extends ApiTestCase
             ->setReporterLon($data->reporter_location->location->lon)
             ->setReporterAccuracy($data->reporter_location->accuracy)
             ->setUsingReporterGeolocation(false)
-            ->setCreatedAt(new \DateTime($createdAt))
+            ->setCreatedAt(new \DateTime($data->created_at))
         ;
         $this->getEntityManager()->persist($locationPatchEntity);
         $this->getEntityManager()->flush();
@@ -49,7 +48,7 @@ class SendReportCommandTest extends ApiTestCase
         foreach ($locationsPatches as $locationsPatch) {
             $this->createLocationPatch($locationsPatch);
         }
-        $this->assertDbCount(11, 'LocationPatch');
+        $this->assertDbCount(15, 'LocationPatch');
     }
 
     public function testFindByPeriodLocationPatches()
@@ -58,7 +57,7 @@ class SendReportCommandTest extends ApiTestCase
         while ($this->day > 0)
         {
             $locationPatchRepository = $this->getEntityManager()->getRepository('AppBundle:LocationPatch');
-            $locationsPatches = $locationPatchRepository->findByPeriod($this->day);
+            $locationsPatches = $locationPatchRepository->findByPeriod('2017-09-23', '2017-09-30');
             $this->assertCount($this->day--, $locationsPatches);
         }
     }
@@ -68,7 +67,7 @@ class SendReportCommandTest extends ApiTestCase
         $this->insertLocationPatches();
         $rootDir = $this->getService('kernel')->getRootDir();
         $csvExpected = file_get_contents($rootDir.'/../tests/AppBundle/Controller/v1/data/SendReporterCommandTest/01_reporting.csv');
-        $csv = $this->getService('AppBundle\Services\LocationPatch')->getCsvReportByPeriod(7);
+        $csv = $this->getService('AppBundle\Services\LocationPatch')->getCsvReportByPeriod('2017-09-23', '2017-09-30');
 
         $this->assertEquals($csv, $csvExpected);
     }
