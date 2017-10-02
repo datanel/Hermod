@@ -104,6 +104,14 @@ If you want to change a user's role :
 bin/console hermod:user:role <username>
 ```
 
+## Reporting 
+
+You can send a report (csv) by mail 
+
+```
+bin/console hermod:report:send <to> [<cc>]...
+```
+
 ## License
 
 This application is under [AGPL-3.0](LICENSE).
