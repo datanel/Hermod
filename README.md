@@ -1,5 +1,6 @@
 # Hermod
-Crowd sourcing API for Navitia
+
+Crowdsourcing API about state of public transport equipments (stop point, elevators, ...) 
 
 ## Documentation
 

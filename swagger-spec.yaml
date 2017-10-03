@@ -10,11 +10,26 @@ info:
     name: MIT
     url: 'https://opensource.org/licenses/MIT'
 tags:
+  - name: elevators
+    description: Show elevators info
   - name: patches
     description: Suggest patches to improve information
   - name: status
     description: Verify the API status
 paths:
+  /v1/elevators/:
+    get:
+      summary: Show lastest patches for elevators
+      tags:
+        - elevators
+      responses:
+        '200':
+          description: The API is reachable
+          $ref: '#/components/responses/GetElevator'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+      security:
+        - apiKey: []
   /v1/patches/location:
     post:
       requestBody:
@@ -136,6 +151,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/InvalidRequestError'
+    GetElevator:
+      description: List of elevator status
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              $ref: '#/components/schemas/GetElevator'
   schemas:
     StatusPatchElevator:
       type: object
@@ -157,6 +181,16 @@ components:
           $ref: '#/components/schemas/Status'
         patched_status:
           $ref: '#/components/schemas/Status'
+    GetStatusPatchElevator:
+      type: object
+      properties:
+        current_status:
+          $ref: '#/components/schemas/Status'
+        patched_status:
+          $ref: '#/components/schemas/Status'
+        created_at:
+          type: string
+          format: date-time
     LocationPatchElevator:
       type: object
       required:
@@ -175,6 +209,20 @@ components:
           $ref: '#/components/schemas/Coord'
         reporter_location:
           $ref: '#/components/schemas/ReporterLocation'
+    GetLocationPatchElevator:
+      type: object
+      properties:
+        patched_using_geoloc:
+          type: boolean
+        current_location:
+          $ref: '#/components/schemas/Coord'
+        patched_location:
+          $ref: '#/components/schemas/Coord'
+        reporter_location:
+          $ref: '#/components/schemas/ReporterLocation'
+        created_at:
+          type: string
+          format: date-time
     LocationPatchStopPoint:
       type: object
       required:
@@ -332,6 +380,39 @@ components:
         - unavailable
         - coming_soon
         - disturbed
+    GetElevator:
+      type: object
+      properties:
+        name:
+          type: string
+          description: name of elevator
+        human_location:
+          type: string
+          description: Human location of elevator
+        direction:
+          type: string
+          description: direction of elevator
+        code:
+          type: string
+          description: code of elevator
+        source:
+          $ref: '#/components/schemas/Source'
+        station:
+          $ref: '#/components/schemas/Station'
+        status_patches:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetStatusPatchElevator'
+        location_patches:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetLocationPatchElevator'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     UnauthorizedError:
       properties:
         error:
