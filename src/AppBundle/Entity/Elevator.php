@@ -136,7 +136,7 @@ class Elevator extends Equipment implements \JsonSerializable
     /**
      * @return ArrayCollection
      */
-    public function getStatusPatch(): ArrayCollection
+    public function getStatusPatches() : array
     {
         return $this->statusPatches;
     }
@@ -145,7 +145,7 @@ class Elevator extends Equipment implements \JsonSerializable
      * @param ArrayCollection $status
      * @return Elevator
      */
-    public function setStatusPatches(ArrayCollection $statusPatches): Elevator
+    public function setStatusPatches(array $statusPatches) : Elevator
     {
         $this->statusPatches = $statusPatches;
         return $this;
@@ -154,7 +154,7 @@ class Elevator extends Equipment implements \JsonSerializable
     /**
      * @return ArrayCollection
      */
-    public function getLocationPatches(): ArrayCollection
+    public function getLocationPatches() : array
     {
         return $this->locationPatches;
     }
@@ -163,7 +163,7 @@ class Elevator extends Equipment implements \JsonSerializable
      * @param ArrayCollection $locationPatches
      * @return Elevator
      */
-    public function setLocationPatches(ArrayCollection $locationPatches): Elevator
+    public function setLocationPatches(array $locationPatches) : Elevator
     {
         $this->locationPatches = $locationPatches;
         return $this;
@@ -226,6 +226,17 @@ class Elevator extends Equipment implements \JsonSerializable
     {
         return [
             'id' => $this->id,
+            'code' => $this->getCode(),
+            'name' => $this->getName(),
+            'human_location' => $this->getHumanLocation(),
+            'direction' => $this->getDirection(),
+            'source' => ['name' => $this->getSourceName()],
+            'station' => [
+                'id' => $this->getStationId(),
+                'name' => $this->getStationName()
+            ],
+            'status_patches' => $this->getStatusPatches(),
+            'location_patches' => $this->getLocationPatches(),
             'created_at' => $this->createdAt->format(\DateTime::ISO8601),
             'updated_at' => $this->updatedAt->format(\DateTime::ISO8601)
         ];

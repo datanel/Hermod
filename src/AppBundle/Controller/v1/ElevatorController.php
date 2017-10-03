@@ -3,12 +3,10 @@
 namespace AppBundle\Controller\v1;
 
 use AppBundle\Controller\BaseController;
-use AppBundle\Entity\Elevator;
-use AppBundle\Http\Exception\BadRequestException;
+use AppBundle\Services\ElevatorManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/elevators")
@@ -16,14 +14,12 @@ use Symfony\Component\HttpFoundation\Request;
 class ElevatorController extends BaseController
 {
     /**
-     * @Security("has_role('ROLE_ROOT')")
-     * @Route("/_all")
+     * @Security("has_role('ROLE_V1_GET_EQUIPMENTS')")
+     * @Route("/")
      * @Method("GET")
      */
-    public function getAllAction()
+    public function getAllAction(ElevatorManager $elevatorManager)
     {
-        return $this->json(
-            $this->getDoctrine()->getRepository('AppBundle:Elevator')->findAll()
-        );
+        return $this->json($elevatorManager->findAll());
     }
 }

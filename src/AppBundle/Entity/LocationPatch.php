@@ -358,10 +358,7 @@ class LocationPatch implements \JsonSerializable
     public function jsonSerialize() : array
     {
         return [
-            'created_at' => $this->createdAt->format(\DateTime::ISO8601),
-            'updated_at' => $this->updatedAt->format(\DateTime::ISO8601),
             'patched_using_geoloc' => $this->isUsingReporterGeolocation(),
-            'equipment_id' => $this->getEquipmentId(),
             'current_location' => [
                 'lat' => $this->getCurrentLat(),
                 'lon' => $this->getCurrentLon(),
@@ -377,6 +374,7 @@ class LocationPatch implements \JsonSerializable
                 ],
                 'accuracy' => $this->getReporterAccuracy()
             ],
+            'created_at' => $this->createdAt->format(\DateTime::ISO8601)
         ];
     }
 }
