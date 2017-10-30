@@ -2,7 +2,7 @@ version: '3'
 
 services:
   nginx:
-    image: hermod_nginx:${VERSION}
+    image: kisiodigital/hermod_nginx:${VERSION}
     depends_on:
       - php-fpm
     networks:
@@ -25,7 +25,7 @@ services:
       replicas: 2
 
   php-fpm:
-    image: hermod_php:${VERSION}
+    image: kisiodigital/hermod_php:${VERSION}
     env_file:
       - docker/config.env
     environment:
