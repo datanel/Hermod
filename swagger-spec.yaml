@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/elevators/:
     get:
-      summary: Show lastest patches for elevators
+      summary: Show the last patch of all elevators
       tags:
         - elevators
       responses:
@@ -308,7 +308,7 @@ components:
       properties:
         code:
           type: string
-          description: code of stop point
+          description: code of stop point (from the source)
         name:
           type: string
           description: name of stop point
