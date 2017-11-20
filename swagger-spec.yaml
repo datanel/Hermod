@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/elevators/:
     get:
-      summary: Show the last patch of all elevators
+      summary: Show all the elevators and all the patches for each of them
       tags:
         - elevators
       responses:
@@ -43,7 +43,7 @@ paths:
               $ref: '#/components/schemas/LocationPatchElevator'
       tags:
         - patches
-      summary: Update the location information
+      summary: Update the location information of the specified object (only stop_point at the moment)
       responses:
         '201':
           description: Everything went fine
@@ -59,7 +59,7 @@ paths:
     post:
       tags:
         - patches
-      summary: Update the location information with reporter location
+      summary: Update the location information of the specified object using the reporter location
       requestBody:
         required: true
         content:
@@ -81,7 +81,7 @@ paths:
     post:
       tags:
         - patches
-      summary: Update the status information
+      summary: Update the status of a spectified object (only elevator at the moment)
       requestBody:
         required: true
         content:
@@ -152,7 +152,7 @@ components:
           schema:
             $ref: '#/components/schemas/InvalidRequestError'
     GetElevator:
-      description: List of elevator status
+      description: List of all elevators status containing all the patches (location or status)
       content:
         application/json:
           schema:
@@ -275,25 +275,25 @@ components:
     Elevator:
       type: object
       required:
+        - code
         - name
         - human_location
         - direction
-        - code
         - source
         - station
       properties:
-        name:
-          type: string
-          description: name of elevator
-        human_location:
-          type: string
-          description: Human location of elevator
-        direction:
-          type: string
-          description: direction of elevator
         code:
           type: string
-          description: code of elevator
+          description: Identification code of the elevator
+        name:
+          type: string
+          description: Name associated to the elevator
+        human_location:
+          type: string
+          description: Description of the location of the user when sending the patch
+        direction:
+          type: string
+          description: Text providing indications of the connected pateform
         source:
           $ref: '#/components/schemas/Source'
         station:
@@ -323,7 +323,7 @@ components:
       properties:
         name:
           type: string
-          description: Name of repository containing object references
+          description: Name of the source referencing system containing object references
           example: navitia2
     Station:
       type: object
@@ -333,22 +333,23 @@ components:
       properties:
         id:
           type: string
-          description: Station id
+          description: Identifier of the station in the source referencing system
         name:
           type: string
-          description: Station name
+          description: Name of the station
     Route:
       type: object
+      description: The direction of the public transport line
       required:
         - id
         - name
       properties:
         id:
           type: string
-          description: Route id
+          description: Identifier of the route in the source referencing system
         name:
           type: string
-          description: Route name
+          description: Name of the route
     ReporterLocation:
       type: object
       required:
