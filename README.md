@@ -86,6 +86,19 @@ docker stop traefik
 docker network rm traefik-net
 ```
 
+## Without docker
+
+### Reqirements
+
+- (Postgresql)[https://www.postgresql.org/]
+- (Nginx)[https://nginx.org/en/]
+- (Composer)[https://getcomposer.org/]
+- Some knowledge to set up a symfony web service (you should analyse the scripts in the `docker` folder if you can't do it)
+
+### Settings
+
+You should use the script `docker/php/init_vars.sh` for initiating the environment variables or set it directly in the `app/config` folder.
+
 ## Authentication 
 
 You need to be authenticated to use this API. We are using a token authentication.
