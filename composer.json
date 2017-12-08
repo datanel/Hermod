@@ -74,8 +74,7 @@
         "incenteev-parameters": {
             "file": "app/config/parameters.yml",
             "env-map": {
-                "version": "VERSION",
-                "mailer_host": "MAILER_HOST"
+                "version": "VERSION"
             }
         },
         "branch-alias": null
